@@ -21,7 +21,7 @@
 		<ActiveObjectClass>
 			<Id>1689246676490</Id>
 			<Name><![CDATA[Main_A]]></Name>
-			<Description><![CDATA[Holds and handles logic scenarios, database in & out POJOs, and UI dashboards
+			<Description><![CDATA[Holds and handles the model (logic scenarios, database in & out POJOs, and UI dashboards).
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
@@ -378,7 +378,7 @@
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Main_A: holds and handles logic scenarios, database in & out POJOs, and UI dashboards]]></Text>
+					<Text><![CDATA[Main_A: holds and handles the model (logic scenarios, database in & out POJOs, and UI dashboards)]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
