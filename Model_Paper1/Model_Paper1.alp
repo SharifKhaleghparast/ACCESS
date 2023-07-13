@@ -395,8 +395,8 @@
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689250862796</Id>
-			<Name><![CDATA[Sample_A]]></Name>
-			<Description><![CDATA[This is a sample agent type that can be used to create new agent types in style.
+			<Name><![CDATA[Template_A]]></Name>
+			<Description><![CDATA[This is a Template agent type that can be used to create new agent types in style.
 Holds and handles ...
 @author Sharif_Khaleghparast
 @since 13_July_2023
