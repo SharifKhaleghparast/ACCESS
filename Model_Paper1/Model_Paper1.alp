@@ -14,7 +14,7 @@
 @see Github_repository
 ]]></Description>
 	<EngineVersion>6</EngineVersion>
-	<JavaPackageName><![CDATA[paper1_model]]></JavaPackageName>
+	<JavaPackageName><![CDATA[model_paper1]]></JavaPackageName>
 	<ModelTimeUnit><![CDATA[Minute]]></ModelTimeUnit>
 	<ActiveObjectClasses>
 		<!--   =========   Active Object Class   ========  -->
