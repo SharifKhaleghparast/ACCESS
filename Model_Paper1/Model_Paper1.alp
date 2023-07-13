@@ -4627,7 +4627,7 @@ Holds and handles ...
 		<JavaClass>
 			<Id>1689264100926</Id>
 			<Name><![CDATA[DB_In_C_01POJOs]]></Name>
-			<Description><![CDATA[Holds and handles database POJO classes for the input data of agents and classes in this POJOs class.  
+			<Description><![CDATA[Holds and handles database POJO classes for the input data of agents and classes in this POJOs holder class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
@@ -4671,6 +4671,254 @@ public class DB_Out_C_01POJOs implements Serializable {
      * Default constructor
      */
     public DB_Out_C_01POJOs() {
+    }
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689267819650</Id>
+			<Name><![CDATA[DB_In_C_Community]]></Name>
+			<Description><![CDATA[Holds and handles database POJO classes for the input data of a community in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * DB_In_C_Community
+ */	
+public class DB_In_C_Community implements Serializable {
+
+    /**
+     * Default constructor
+     */
+    public DB_In_C_Community() {
+    }
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689267982610</Id>
+			<Name><![CDATA[DB_In_C_ElectricityGrid]]></Name>
+			<Description><![CDATA[Holds and handles database POJO classes for the input data of an electricity grid in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * DB_In_C_ElectricityGrid
+ */	
+public class DB_In_C_ElectricityGrid implements Serializable {
+
+    /**
+     * Default constructor
+     */
+    public DB_In_C_ElectricityGrid() {
+    }
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689268204129</Id>
+			<Name><![CDATA[DB_In_C_ElectricityGridOperator]]></Name>
+			<Description><![CDATA[Holds and handles database POJO classes for the input data of an electricity grid operator in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * DB_In_C_ElectricityGridOperator
+ */	
+public class DB_In_C_ElectricityGridOperator implements Serializable {
+
+    /**
+     * Default constructor
+     */
+    public DB_In_C_ElectricityGridOperator() {
+    }
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689268300353</Id>
+			<Name><![CDATA[DB_In_C_Household]]></Name>
+			<Description><![CDATA[Holds and handles database POJO classes for the input data of a household in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * DB_In_C_Household
+ */	
+public class DB_In_C_Household implements Serializable {
+
+    /**
+     * Default constructor
+     */
+    public DB_In_C_Household() {
+    }
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689268386722</Id>
+			<Name><![CDATA[DB_Out_C_Community]]></Name>
+			<Description><![CDATA[Holds and handles database POJO classes for the output data of a community in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * DB_Out_C_Community
+ */	
+public class DB_Out_C_Community implements Serializable {
+
+    /**
+     * Default constructor
+     */
+    public DB_Out_C_Community() {
+    }
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689268386789</Id>
+			<Name><![CDATA[DB_Out_C_ElectricityGrid]]></Name>
+			<Description><![CDATA[Holds and handles database POJO classes for the output data of an electricity grid in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * DB_Out_C_ElectricityGrid
+ */	
+public class DB_Out_C_ElectricityGrid implements Serializable {
+
+    /**
+     * Default constructor
+     */
+    public DB_Out_C_ElectricityGrid() {
+    }
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689268386814</Id>
+			<Name><![CDATA[DB_Out_C_ElectricityGridOperator]]></Name>
+			<Description><![CDATA[Holds and handles database POJO classes for the output data of an electricity grid operator in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * DB_Out_C_ElectricityGridOperator
+ */	
+public class DB_Out_C_ElectricityGridOperator implements Serializable {
+
+    /**
+     * Default constructor
+     */
+    public DB_Out_C_ElectricityGridOperator() {
+    }
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689268386829</Id>
+			<Name><![CDATA[DB_Out_C_Household]]></Name>
+			<Description><![CDATA[Holds and handles database POJO classes for the output data of a household in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * DB_Out_C_Household
+ */	
+public class DB_Out_C_Household implements Serializable {
+
+    /**
+     * Default constructor
+     */
+    public DB_Out_C_Household() {
     }
 
 	@Override
