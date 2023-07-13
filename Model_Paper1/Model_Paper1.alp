@@ -7,7 +7,7 @@
 <AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.3.202304281224" AlpVersion="8.7.7">
 <Model>
 	<Id>1689246676487</Id>
-	<Name><![CDATA[Paper1_Model]]></Name>
+	<Name><![CDATA[Model_Paper1]]></Name>
 	<Description><![CDATA[This model comprise all the scenarios I want to discuss in my first Ph.D. paper. It is associated with a 3-layer architecture and naming convention. 
 @author Sharif_Khaleghparast
 @since 13_July_2023
