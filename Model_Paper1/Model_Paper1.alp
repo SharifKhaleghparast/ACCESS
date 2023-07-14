@@ -4937,6 +4937,34 @@ public class DB_Out_C_Household implements Serializable {
 
 }]]></Text>
 		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689325203759</Id>
+			<Name><![CDATA[Enum_GridUserType]]></Name>
+			<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * Enum_GridUserType
+ */	
+public enum Enum_GridUserType implements Serializable {
+
+	CONSUMER,
+	PROSUMER,
+	PRODUCER;
+	
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
 	</JavaClasses>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.modules.markup_descriptors]]></LibraryName>
