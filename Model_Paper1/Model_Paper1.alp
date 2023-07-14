@@ -9,6 +9,9 @@
 	<Id>1689246676487</Id>
 	<Name><![CDATA[Model_Paper1]]></Name>
 	<Description><![CDATA[This model comprise all the scenarios I want to discuss in my first Ph.D. paper. It is associated with a 3-layer architecture and naming convention. 
+
+Model purpose: showing the effect of bottom-up collaboration on the grid status.
+
 @author Sharif_Khaleghparast
 @since 13_July_2023
 @see Github_repository
@@ -25,6 +28,11 @@
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
+			<StartupCode><![CDATA[//First: load data from the Anylogic database
+//DB_In_C_01POJOs scenarioInputData = new DB_In_C_01POJOs(,,,);
+
+//Second: create the model
+//f_CreateModel(scenarioInputData, v_isDashboardEnabled);]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689246676496</Id>
@@ -116,6 +124,58 @@
 			</ScaleRuler>
 			<CurrentLevel>1689246676497</CurrentLevel>
 			<ConnectionsId>1689246676491</ConnectionsId>
+			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689350236236</Id>
+					<Name><![CDATA[v_isDashboardEnabled]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[boolean]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[true]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1689349242260</Id>
+					<Name><![CDATA[f_CreateModel]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[scenarioInputData]]></Name>
+						<Type><![CDATA[DB_In_C_01POJOs]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[isDashboardEnabled]]></Name>
+						<Type><![CDATA[boolean]]></Type>
+					</Parameter>
+					<Body><![CDATA[//Create initial embedded objects
+
+//Scenario setup
+Logic_A_01Scenario scenario = add_pop01_01Scenarios(scenarioInputData);
+
+//Dashboard setup
+if (isDashboardEnabled) {
+	UI_A_01Dashboard dashboard = add_pop01_01Dashboards(scenario);
+	dashboard._origin_VA.navigateTo();
+} 
+else {
+	scenario._origin_VA.navigateTo();
+}
+]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689246676491</Id>
@@ -138,6 +198,140 @@
 				</AgentLink>
 			</AgentLinks>
 
+			<EmbeddedObjects>
+				<EmbeddedObject>
+					<Id>1689326573229</Id>
+					<Name><![CDATA[pop01_01Scenarios]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+							<ItemName><![CDATA[1689252665124]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+				<EmbeddedObject>
+					<Id>1689327412871</Id>
+					<Name><![CDATA[pop01_01Dashboards]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+							<ItemName><![CDATA[1689252963333]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+			</EmbeddedObjects>
 
 			<Presentation>
 				<Level>
@@ -867,6 +1061,60 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689252665131</CurrentLevel>
 			<ConnectionsId>1689252665155</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689346312586</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[DB_In_C_01POJOs]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689346312584</Id>
+							<Label><![CDATA[p_InputData]]></Label>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1689346698198</Id>
+					<Name><![CDATA[f_CreateScenario]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[//Create initial embedded objects
+
+for (DB_In_C_Household currHouseholdData : p_InputData.get_list_DB_In_pop01_Households()) {
+	add_pop01_Logic_Households(currHouseholdData);
+}
+
+for (DB_In_C_Community currCommunityData : p_InputData.get_list_DB_In_pop01_EnergyCommunities()) {
+	add_pop01_Logic_EnergyCommunities(currCommunityData);
+}
+
+for (DB_In_C_ElectricityGridOperator currElectricityGridOperatorData : p_InputData.get_list_DB_In_pop01_DistributionSystemOperators()) {
+	add_pop01_Logic_DistributionSystemOperators(currElectricityGridOperatorData);
+}
+
+for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_In_pop01_LVDistributionFeeders()) {
+	add_pop01_Logic_LVDistributionFeeders(currElectricityGridData);
+}]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689252665155</Id>
@@ -889,6 +1137,288 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689326574859</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
+			<EmbeddedObjects>
+				<EmbeddedObject>
+					<Id>1689328688914</Id>
+					<Name><![CDATA[pop01_Logic_EnergyCommunities]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>130</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Logic_A_Community]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[Logic_A_Community]]></ClassName>
+							<ItemName><![CDATA[1689260380175]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+				<EmbeddedObject>
+					<Id>1689338285603</Id>
+					<Name><![CDATA[pop01_Logic_Households]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Logic_A_Household]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[Logic_A_Household]]></ClassName>
+							<ItemName><![CDATA[1689260063075]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+				<EmbeddedObject>
+					<Id>1689338607676</Id>
+					<Name><![CDATA[pop01_Logic_LVDistributionFeeders]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>170</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Logic_A_ElectricityGrid]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[Logic_A_ElectricityGrid]]></ClassName>
+							<ItemName><![CDATA[1689260704426]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+				<EmbeddedObject>
+					<Id>1689338725847</Id>
+					<Name><![CDATA[pop01_Logic_DistributionSystemOperators]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>150</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Logic_A_ElectricityGridOperator]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[Logic_A_ElectricityGridOperator]]></ClassName>
+							<ItemName><![CDATA[1689261067003]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+			</EmbeddedObjects>
 
 			<Presentation>
 				<Level>
@@ -1129,7 +1659,7 @@ Holds and handles ...
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Logic_A_Scenario01: holds and handles the logic agents, classes, and interfaces for this scenario]]></Text>
+					<Text><![CDATA[Logic_A_01Scenario: holds and handles the logic agents, classes, and interfaces for this scenario]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -1242,6 +1772,60 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689252963340</CurrentLevel>
 			<ConnectionsId>1689252963364</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689352743394</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[Logic_A_01Scenario]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689352743392</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1689353056488</Id>
+					<Name><![CDATA[f_CreateDashboard]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[//Create initial embedded objects
+
+for (Logic_A_Household currHousehold : p_InputData.pop01_Logic_Households) {
+	add_pop01_UI_Households(currHousehold);
+}
+
+for (Logic_A_Community currCommunity : p_InputData.pop01_Logic_EnergyCommunities) {
+	add_pop01_UI_EnergyCommunities(currCommunity);
+}
+
+for (Logic_A_ElectricityGridOperator currElectricityGridOperator : p_InputData.pop01_Logic_DistributionSystemOperators) {
+	add_pop01_UI_DistributionSystemOperators(currElectricityGridOperator);
+}
+
+for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDistributionFeeders) {
+	add_pop01_UI_LVDistributionFeeders(currElectricityGrid);
+}
+]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689252963364</Id>
@@ -1264,6 +1848,288 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689327416018</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
+			<EmbeddedObjects>
+				<EmbeddedObject>
+					<Id>1689339322507</Id>
+					<Name><![CDATA[pop01_UI_Households]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[UI_A_Household]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[UI_A_Household]]></ClassName>
+							<ItemName><![CDATA[1689262886721]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+				<EmbeddedObject>
+					<Id>1689339979352</Id>
+					<Name><![CDATA[pop01_UI_EnergyCommunities]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>130</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[UI_A_Community]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[UI_A_Community]]></ClassName>
+							<ItemName><![CDATA[1689262721824]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+				<EmbeddedObject>
+					<Id>1689340118574</Id>
+					<Name><![CDATA[pop01_UI_DistributionSystemOperators]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>150</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[UI_A_ElectricityGridOperator]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[UI_A_ElectricityGridOperator]]></ClassName>
+							<ItemName><![CDATA[1689262910843]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+				<EmbeddedObject>
+					<Id>1689340161374</Id>
+					<Name><![CDATA[pop01_UI_LVDistributionFeeders]]></Name>
+					<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+					<X>50</X><Y>170</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[UI_A_ElectricityGrid]]></ClassName>
+					</ActiveObjectClass>
+					<GenericParameterSubstitute>
+						<GenericParameterSubstituteReference>
+							<PackageName><![CDATA[model_paper1]]></PackageName>
+							<ClassName><![CDATA[UI_A_ElectricityGrid]]></ClassName>
+							<ItemName><![CDATA[1689262892370]]></ItemName>
+						</GenericParameterSubstituteReference>
+					</GenericParameterSubstitute>
+					<Parameters>
+						<Parameter>
+							<Name><![CDATA[p_InputData]]></Name>
+						</Parameter>
+					</Parameters>
+					<ReplicationFlag>true</ReplicationFlag>
+					<Replication Class="CodeValue">
+						<Code><![CDATA[100]]></Code>
+					</Replication>
+					<CollectionType>ARRAY_LIST_BASED</CollectionType>
+					<InEnvironment>true</InEnvironment>	
+					<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+					<XCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</XCode>
+					<YCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</YCode>
+					<ZCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ZCode>
+					<ColumnCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</ColumnCode>
+					<RowCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</RowCode>
+					<LatitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LatitudeCode>
+					<LongitudeCode Class="CodeValue">
+						<Code><![CDATA[0]]></Code>
+					</LongitudeCode>
+					<LocationNameCode Class="CodeValue">
+						<Code><![CDATA[""]]></Code>
+					</LocationNameCode>
+					<InitializationType>EMPTY</InitializationType>
+					<InitializationDatabaseTableQuery>
+						<TableReference>
+						</TableReference>
+					</InitializationDatabaseTableQuery>
+					<InitializationDatabaseType>ONE_AGENT_PER_DATABASE_RECORD</InitializationDatabaseType>
+					<QuantityColumn>
+					</QuantityColumn>
+				</EmbeddedObject>
+			</EmbeddedObjects>
 
 			<Presentation>
 				<Level>
@@ -1504,7 +2370,7 @@ Holds and handles ...
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[UI_A_Dashboards01: holds and handles UI agents and classes for this dashboard]]></Text>
+					<Text><![CDATA[UI_A_01Dashboard: holds and handles UI agents and classes for this dashboard]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -1617,6 +2483,29 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689260063082</CurrentLevel>
 			<ConnectionsId>1689260063106</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689348892437</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[DB_In_C_Household]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689348892435</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689260063106</Id>
@@ -1639,6 +2528,36 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689338288544</Id>
+					<Name><![CDATA[logic_A_01Scenario]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>60</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+				<ContainerLink>
+					<Id>1689338288549</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
 
 			<Presentation>
 				<Level>
@@ -1992,6 +2911,29 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689260380182</CurrentLevel>
 			<ConnectionsId>1689260380206</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689349020070</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[DB_In_C_Community]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689349020068</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689260380206</Id>
@@ -2014,6 +2956,34 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689328691574</Id>
+					<Name><![CDATA[logic_A_01Scenario]]></Name>
+					<X>60</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+				<ContainerLink>
+					<Id>1689328691578</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
 
 			<Presentation>
 				<Level>
@@ -2367,6 +3337,29 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689260704433</CurrentLevel>
 			<ConnectionsId>1689260704457</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689349141511</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[DB_In_C_ElectricityGrid]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689349141509</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689260704457</Id>
@@ -2389,6 +3382,34 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689338612789</Id>
+					<Name><![CDATA[logic_A_01Scenario]]></Name>
+					<X>60</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+				<ContainerLink>
+					<Id>1689338612791</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
 
 			<Presentation>
 				<Level>
@@ -2742,6 +3763,29 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689261067010</CurrentLevel>
 			<ConnectionsId>1689261067034</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689349083557</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[DB_In_C_ElectricityGridOperator]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689349083555</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689261067034</Id>
@@ -2764,6 +3808,34 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689338728772</Id>
+					<Name><![CDATA[logic_A_01Scenario]]></Name>
+					<X>60</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+				<ContainerLink>
+					<Id>1689338728774</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
 
 			<Presentation>
 				<Level>
@@ -3117,6 +4189,29 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689262721831</CurrentLevel>
 			<ConnectionsId>1689262721855</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689353774313</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[Logic_A_Community]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689353774311</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262721855</Id>
@@ -3139,6 +4234,36 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689339981054</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+				<ContainerLink>
+					<Id>1689339981056</Id>
+					<Name><![CDATA[uI_A_01Dashboard]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>60</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
 
 			<Presentation>
 				<Level>
@@ -3492,6 +4617,29 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689262886728</CurrentLevel>
 			<ConnectionsId>1689262886752</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689353686385</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[Logic_A_Household]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689353686383</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262886752</Id>
@@ -3514,6 +4662,36 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689339323418</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+				<ContainerLink>
+					<Id>1689339323420</Id>
+					<Name><![CDATA[uI_A_01Dashboard]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>60</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
 
 			<Presentation>
 				<Level>
@@ -3867,6 +5045,29 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689262892377</CurrentLevel>
 			<ConnectionsId>1689262892401</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689353919928</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[Logic_A_ElectricityGrid]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689353919926</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262892401</Id>
@@ -3889,6 +5090,36 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689340162477</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+				<ContainerLink>
+					<Id>1689340162479</Id>
+					<Name><![CDATA[uI_A_01Dashboard]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>60</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
 
 			<Presentation>
 				<Level>
@@ -4242,6 +5473,29 @@ Holds and handles ...
 			</ScaleRuler>
 			<CurrentLevel>1689262910850</CurrentLevel>
 			<ConnectionsId>1689262910874</ConnectionsId>
+			<Variables>
+				<Variable Class="Parameter">
+					<Id>1689353865001</Id>
+					<Name><![CDATA[p_InputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[Logic_A_ElectricityGridOperator]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1689353864999</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+			</Variables>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262910874</Id>
@@ -4264,6 +5518,36 @@ Holds and handles ...
 				</AgentLink>
 			</AgentLinks>
 
+			<ContainerLinks>
+				<ContainerLink>
+					<Id>1689340120435</Id>
+					<Name><![CDATA[main_A]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>50</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[Main_A]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+				<ContainerLink>
+					<Id>1689340120437</Id>
+					<Name><![CDATA[uI_A_01Dashboard]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>60</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<ActiveObjectClass>
+						<PackageName><![CDATA[model_paper1]]></PackageName>
+						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+					</ActiveObjectClass>
+				</ContainerLink>
+			</ContainerLinks>
 
 			<Presentation>
 				<Level>
@@ -4635,17 +5919,52 @@ Holds and handles ...
  */	
 public class DB_In_C_01POJOs implements Serializable {
 
-    /**
-     * Default constructor
+    // **********DB_In_C_POJOs LISTS**********
+	private List<DB_In_C_Household> list_DB_In_pop01_Households;
+	private List<DB_In_C_Community> list_DB_In_pop01_EnergyCommunities;
+	private List<DB_In_C_ElectricityGridOperator> list_DB_In_pop01_DistributionSystemOperators;
+	private List<DB_In_C_ElectricityGrid> list_DB_In_pop01_LVDistributionFeeders;
+	
+	// **********CONSTRUCTORS**********
+     /**
+     * Create an instance of the model input by POJOs
+     * @param list_DB_In_pop01_Households: A list of DB_In_C_Household POJOs
+     * @param list_DB_In_pop01_EnergyCommunities: A list of DB_In_C_Community POJOs
+     * @param list_DB_In_pop01_DistributionSystemOperators: A list of DB_In_C_ElectricityGridOperator POJOs
+     * @param list_DB_In_pop01_LVDistributionFeeders: A list of DB_In_C_ElectricityGrid POJOs
      */
-    public DB_In_C_01POJOs() {
+    public DB_In_C_01POJOs (List<DB_In_C_Household> list_DB_In_pop01_Households,
+    					    List<DB_In_C_Community> list_DB_In_pop01_EnergyCommunities,
+    					    List<DB_In_C_ElectricityGridOperator> list_DB_In_pop01_DistributionSystemOperators,
+    					    List<DB_In_C_ElectricityGrid> list_DB_In_pop01_LVDistributionFeeders) {
+    	this.list_DB_In_pop01_Households = list_DB_In_pop01_Households;
+    	this.list_DB_In_pop01_EnergyCommunities = list_DB_In_pop01_EnergyCommunities;
+    	this.list_DB_In_pop01_DistributionSystemOperators = list_DB_In_pop01_DistributionSystemOperators;
+    	this.list_DB_In_pop01_LVDistributionFeeders = list_DB_In_pop01_LVDistributionFeeders;
     }
 
+    // **********GETTERS**********
+    public List<DB_In_C_Household> get_list_DB_In_pop01_Households() {
+    	return list_DB_In_pop01_Households;
+    }
+    
+    public List<DB_In_C_Community> get_list_DB_In_pop01_EnergyCommunities() {
+    	return list_DB_In_pop01_EnergyCommunities;
+    }
+    
+    public List<DB_In_C_ElectricityGridOperator> get_list_DB_In_pop01_DistributionSystemOperators() {
+    	return list_DB_In_pop01_DistributionSystemOperators;
+    }
+    
+    public List<DB_In_C_ElectricityGrid> get_list_DB_In_pop01_LVDistributionFeeders() {
+    	return list_DB_In_pop01_LVDistributionFeeders;
+    }
+    
 	@Override
 	public String toString() {
 		return super.toString();
 	}
-
+	
 	/**
 	 * This number is here for model snapshot storing purpose<br>
 	 * It needs to be changed when this class gets changed
@@ -4663,15 +5982,49 @@ public class DB_In_C_01POJOs implements Serializable {
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
  * DB_Out_C_01POJOs
- * 
  */	
 public class DB_Out_C_01POJOs implements Serializable {
 
-    /**
-     * Default constructor
-     */
-    public DB_Out_C_01POJOs() {
-    }
+	// **********DB_Out_C_POJOs LISTS**********
+	private List<DB_Out_C_Household> list_DB_Out_pop01_Households;
+	private List<DB_Out_C_Community> list_DB_Out_pop01_EnergyCommunities;
+	private List<DB_Out_C_ElectricityGridOperator> list_DB_Out_pop01_DistributionSystemOperators;
+	private List<DB_Out_C_ElectricityGrid> list_DB_Out_pop01_LVDistributionFeeders;
+		
+	// **********CONSTRUCTORS**********
+	 /**
+	 * Create an instance of the model output by POJOs
+	 * @param list_DB_Out_pop01_Households: A list of DB_Out_C_Household POJOs 
+	 * @param list_DB_Out_pop01_EnergyCommunities: A list of DB_Out_C_Community POJOs
+	 * @param list_DB_Out_pop01_DistributionSystemOperators: A list of DB_Out_C_ElectricityGridOperator POJOs
+	 * @param list_DB_Out_pop01_LVDistributionFeeders: A list of DB_Out_C_ElectricityGrid POJOs
+	 */
+	public DB_Out_C_01POJOs (List<DB_Out_C_Household> list_DB_Out_pop01_Households,
+	    					 List<DB_Out_C_Community> list_DB_Out_pop01_EnergyCommunities,
+	    					 List<DB_Out_C_ElectricityGridOperator> list_DB_Out_pop01_DistributionSystemOperators,
+	    					 List<DB_Out_C_ElectricityGrid> list_DB_Out_pop01_LVDistributionFeeders) {
+	    this.list_DB_Out_pop01_Households = list_DB_Out_pop01_Households;
+	    this.list_DB_Out_pop01_EnergyCommunities = list_DB_Out_pop01_EnergyCommunities;
+	    this.list_DB_Out_pop01_DistributionSystemOperators = list_DB_Out_pop01_DistributionSystemOperators;
+	    this.list_DB_Out_pop01_LVDistributionFeeders = list_DB_Out_pop01_LVDistributionFeeders;
+	}
+
+	// **********GETTERS**********
+	public List<DB_Out_C_Household> get_list_DB_Out_pop01_Households() {
+	    return list_DB_Out_pop01_Households;
+	}
+	    
+	public List<DB_Out_C_Community> get_list_DB_Out_pop01_EnergyCommunities() {
+	    return list_DB_Out_pop01_EnergyCommunities;
+	}
+	    
+	public List<DB_Out_C_ElectricityGridOperator> get_list_DB_Out_pop01_DistributionSystemOperators() {
+	    return list_DB_Out_pop01_DistributionSystemOperators;
+	}
+	    
+	public List<DB_Out_C_ElectricityGrid> get_list_DB_Out_pop01_LVDistributionFeeders() {
+	    return list_DB_Out_pop01_LVDistributionFeeders;
+	}
 
 	@Override
 	public String toString() {
@@ -4921,6 +6274,61 @@ public class DB_Out_C_Household implements Serializable {
     public DB_Out_C_Household() {
     }
 
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689325203759</Id>
+			<Name><![CDATA[Enum_GridUserType]]></Name>
+			<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * Enum_GridUserType
+ */	
+public enum Enum_GridUserType implements Serializable {
+
+	CONSUMER,
+	PROSUMER,
+	PRODUCER;
+	
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689325995413</Id>
+			<Name><![CDATA[Enum_CommunityMemberType]]></Name>
+			<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * Enum_CommunityMemberType
+ */	
+public enum Enum_CommunityMemberType implements Serializable {
+
+	NON_COLLABORATIVE,
+	COLLABORATIVE;
+	
 	@Override
 	public String toString() {
 		return super.toString();
