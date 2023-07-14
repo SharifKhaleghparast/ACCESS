@@ -9,6 +9,9 @@
 	<Id>1689246676487</Id>
 	<Name><![CDATA[Model_Paper1]]></Name>
 	<Description><![CDATA[This model comprise all the scenarios I want to discuss in my first Ph.D. paper. It is associated with a 3-layer architecture and naming convention. 
+
+Model purpose: showing the effect of bottom-up collaboration on the grid status.
+
 @author Sharif_Khaleghparast
 @since 13_July_2023
 @see Github_repository
