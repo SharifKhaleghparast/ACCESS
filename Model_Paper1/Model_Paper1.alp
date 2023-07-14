@@ -4965,6 +4965,33 @@ public enum Enum_GridUserType implements Serializable {
 
 }]]></Text>
 		</JavaClass>
+		<!--   =========   Java Class   ========  -->
+		<JavaClass>
+			<Id>1689325995413</Id>
+			<Name><![CDATA[Enum_CommunityMemberType]]></Name>
+			<Description><![CDATA[@author Sharif_Khaleghparast
+@since 14_July_2023]]></Description>
+			<Text><![CDATA[/**
+ * Enum_CommunityMemberType
+ */	
+public enum Enum_CommunityMemberType implements Serializable {
+
+	NON_COLLABORATIVE,
+	COLLABORATIVE;
+	
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
+	/**
+	 * This number is here for model snapshot storing purpose<br>
+	 * It needs to be changed when this class gets changed
+	 */ 
+	private static final long serialVersionUID = 1L;
+
+}]]></Text>
+		</JavaClass>
 	</JavaClasses>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.modules.markup_descriptors]]></LibraryName>
