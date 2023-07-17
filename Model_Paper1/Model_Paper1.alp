@@ -153,7 +153,7 @@ f_CreateModel(f_GetScenarioInputData(), f_GetDashboardStatus());]]></StartupCode
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
-						<Type><![CDATA[C_DB_In__POJOs]]></Type>        
+						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>        
 					</Properties>
 				</Variable>
 			</Variables>
@@ -170,7 +170,7 @@ f_CreateModel(f_GetScenarioInputData(), f_GetDashboardStatus());]]></StartupCode
 					<ShowLabel>true</ShowLabel>
 					<Parameter>
 						<Name><![CDATA[arg_ScenarioInputData]]></Name>
-						<Type><![CDATA[C_DB_In__POJOs]]></Type>
+						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>
 					</Parameter>
 					<Parameter>
 						<Name><![CDATA[arg_DashboardStatus]]></Name>
@@ -197,7 +197,7 @@ A_UI__Dashboard dashboard = add_pop_Dashboards(scenario, arg_DashboardStatus);
 					<ShowLabel>true</ShowLabel>
 					<Parameter>
 						<Name><![CDATA[arg_ScenarioInputData]]></Name>
-						<Type><![CDATA[C_DB_In__POJOs]]></Type>
+						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>
 					</Parameter>
 					<Body><![CDATA[v_ScenarioInputData = arg_ScenarioInputData;
 
@@ -235,7 +235,7 @@ A_UI__Dashboard dashboard = add_pop_Dashboards(scenario, arg_DashboardStatus);
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[C_DB_In__POJOs]]></ReturnType>
+					<ReturnType><![CDATA[C_DB_In__POJOContainer]]></ReturnType>
 					<Id>1689597431007</Id>
 					<Name><![CDATA[f_GetScenarioInputData]]></Name>
 					<X>770</X><Y>130</Y>
@@ -247,7 +247,7 @@ A_UI__Dashboard dashboard = add_pop_Dashboards(scenario, arg_DashboardStatus);
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[C_DB_In__POJOs]]></ReturnType>
+					<ReturnType><![CDATA[C_DB_In__POJOContainer]]></ReturnType>
 					<Id>1689601155743</Id>
 					<Name><![CDATA[f_LoadScenarioInputData]]></Name>
 					<Description><![CDATA[Load input data for a scenario from the Anylogic database]]></Description>
@@ -257,7 +257,7 @@ A_UI__Dashboard dashboard = add_pop_Dashboards(scenario, arg_DashboardStatus);
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[// TODO After the database is designed, give the arguments.
-//v_ScenarioInputData = new C_DB_In_01POJOs(,,,);
+//ScenarioInputData = new C_DB_Out_POJOContainer(,,,);
 return null;]]></Body>
 				</Function>
 			</Functions>
@@ -1160,7 +1160,7 @@ Holds and handles ...
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
-						<Type><![CDATA[C_DB_In__POJOs]]></Type>        
+						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>        
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -1172,7 +1172,7 @@ Holds and handles ...
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[C_DB_In__POJOs]]></Type>
+						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -1199,7 +1199,7 @@ Holds and handles ...
 					<ShowLabel>true</ShowLabel>
 					<Parameter>
 						<Name><![CDATA[arg_InputData]]></Name>
-						<Type><![CDATA[C_DB_In__POJOs]]></Type>
+						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>
 					</Parameter>
 					<Body><![CDATA[//Create initial embedded objects
 
@@ -6189,14 +6189,14 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689264100926</Id>
-			<Name><![CDATA[C_DB_In__POJOs]]></Name>
+			<Name><![CDATA[C_DB_In__POJOContainer]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the input data of agents and classes in this POJOs holder class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * C_DB_In__POJOs
+ * C_DB_In__POJOContainer
  */	
-public class C_DB_In__POJOs implements Serializable {
+public class C_DB_In__POJOContainer implements Serializable {
 
     // **********LIST FIELDS**********
 	private List<C_DB_In_Household> col_DB_In_Households;
@@ -6212,7 +6212,7 @@ public class C_DB_In__POJOs implements Serializable {
      * @param p_DB_In_DistributionSystemOperators A list of C_DB_In_ElectricityGridOperator POJOs
      * @param p_DB_In_LVDistributionFeeders A list of C_DB_In_ElectricityGrid POJOs
      */
-    public C_DB_In__POJOs (List<C_DB_In_Household> p_DB_In_Households,
+    public C_DB_In__POJOContainer (List<C_DB_In_Household> p_DB_In_Households,
     					    List<C_DB_In_Community> p_DB_In_EnergyCommunities,
     					    List<C_DB_In_ElectricityGridOperator> p_DB_In_DistributionSystemOperators,
     					    List<C_DB_In_ElectricityGrid> p_DB_In_LVDistributionFeeders) {
@@ -6255,16 +6255,16 @@ public class C_DB_In__POJOs implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689264269520</Id>
-			<Name><![CDATA[C_DB_Out__POJOs]]></Name>
+			<Name><![CDATA[C_DB_Out__POJOContainer]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the output data of agents and classes in this POJOs class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * C_DB_Out__POJOs
+ * C_DB_Out__POJOContainer
  */	
-public class C_DB_Out__POJOs implements Serializable {
+public class C_DB_Out__POJOContainer implements Serializable {
 
-	// **********C_DB_Out_POJOs LISTS**********
+	// **********C_DB_Out_POJOContainer LISTS**********
 	private List<C_DB_Out_Household> col_DB_Out_Households;
 	private List<C_DB_Out_Community> col_DB_Out_EnergyCommunities;
 	private List<C_DB_Out_ElectricityGridOperator> col_DB_Out_DistributionSystemOperators;
@@ -6278,7 +6278,7 @@ public class C_DB_Out__POJOs implements Serializable {
 	 * @param p_DB_Out_DistributionSystemOperators A list of C_DB_Out_ElectricityGridOperator POJOs
 	 * @param p_DB_Out_LVDistributionFeeders A list of C_DB_Out_ElectricityGrid POJOs
 	 */
-	public C_DB_Out__POJOs (List<C_DB_Out_Household> p_DB_Out_Households,
+	public C_DB_Out__POJOContainer (List<C_DB_Out_Household> p_DB_Out_Households,
 	    					 List<C_DB_Out_Community> p_DB_Out_EnergyCommunities,
 	    					 List<C_DB_Out_ElectricityGridOperator> p_DB_Out_DistributionSystemOperators,
 	    					 List<C_DB_Out_ElectricityGrid> p_DB_Out_LVDistributionFeeders) {
