@@ -1027,7 +1027,7 @@ Holds and handles ...
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
-			<StartupCode><![CDATA[f_CreateScenario(v_InputData);]]></StartupCode>
+			<StartupCode><![CDATA[f_CreateScenario( f_GetInputData() );]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689252665124</Id>
@@ -1161,7 +1161,7 @@ Holds and handles ...
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689346698198</Id>
 					<Name><![CDATA[f_CreateScenario]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1187,6 +1187,18 @@ for (C_DB_In_ElectricityGridOperator currElectricityGridOperatorData : arg_Input
 for (C_DB_In_ElectricityGrid currElectricityGridData : arg_InputData.f_Get_DB_In_LVDistributionFeeders()) {
 	add_pop_Logic_LVDistributionFeeders(currElectricityGridData);
 }]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In__POJOContainer]]></ReturnType>
+					<Id>1689673620224</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -1755,7 +1767,7 @@ for (C_DB_In_ElectricityGrid currElectricityGridData : arg_InputData.f_Get_DB_In
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
-			<StartupCode><![CDATA[f_CreateDashboard(v_ScenarioInputData);
+			<StartupCode><![CDATA[f_CreateDashboard( f_GetScenarioInputData() );
 	
 // TODO Later check that where it should exactly navigate to.
 this.viewArea_Overview.navigateTo();
@@ -1892,7 +1904,7 @@ this.viewArea_Overview.navigateTo();
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689353056488</Id>
 					<Name><![CDATA[f_CreateDashboard]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1919,6 +1931,18 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 	add_pop_UI_LVDistributionFeeders(currElectricityGrid);
 }
 ]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic__Scenario]]></ReturnType>
+					<Id>1689673799720</Id>
+					<Name><![CDATA[f_GetScenarioInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_ScenarioInputData;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -2627,6 +2651,20 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In_Household]]></ReturnType>
+					<Id>1689674194520</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689260063106</Id>
@@ -3067,6 +3105,20 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In_Community]]></ReturnType>
+					<Id>1689674307837</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689260380206</Id>
@@ -3505,6 +3557,20 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In_ElectricityGrid]]></ReturnType>
+					<Id>1689674354963</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689260704457</Id>
@@ -3943,6 +4009,20 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In_ElectricityGridOperator]]></ReturnType>
+					<Id>1689674334101</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689261067034</Id>
@@ -4381,6 +4461,20 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic_Community]]></ReturnType>
+					<Id>1689674067219</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262721855</Id>
@@ -4821,6 +4915,20 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic_Household]]></ReturnType>
+					<Id>1689673991713</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262886752</Id>
@@ -5261,6 +5369,20 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic_ElectricityGrid]]></ReturnType>
+					<Id>1689674136947</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262892401</Id>
@@ -5701,6 +5823,20 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic_ElectricityGridOperator]]></ReturnType>
+					<Id>1689674102390</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262910874</Id>
@@ -6125,10 +6261,10 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 public class C_DB_In__POJOContainer implements Serializable {
 
     // **********LIST FIELDS**********
-	private List<C_DB_In_Household> col_DB_In_Households;
-	private List<C_DB_In_Community> col_DB_In_EnergyCommunities;
-	private List<C_DB_In_ElectricityGridOperator> col_DB_In_DistributionSystemOperators;
-	private List<C_DB_In_ElectricityGrid> col_DB_In_LVDistributionFeeders;
+	private final List<C_DB_In_Household> col_DB_In_Households;
+	private final List<C_DB_In_Community> col_DB_In_EnergyCommunities;
+	private final List<C_DB_In_ElectricityGridOperator> col_DB_In_DistributionSystemOperators;
+	private final List<C_DB_In_ElectricityGrid> col_DB_In_LVDistributionFeeders;
 	
 	// **********CONSTRUCTORS**********
     /**
@@ -6191,10 +6327,10 @@ public class C_DB_In__POJOContainer implements Serializable {
 public class C_DB_Out__POJOContainer implements Serializable {
 
 	// **********C_DB_Out_POJOContainer LISTS**********
-	private List<C_DB_Out_Household> col_DB_Out_Households;
-	private List<C_DB_Out_Community> col_DB_Out_EnergyCommunities;
-	private List<C_DB_Out_ElectricityGridOperator> col_DB_Out_DistributionSystemOperators;
-	private List<C_DB_Out_ElectricityGrid> col_DB_Out_LVDistributionFeeders;
+	private final List<C_DB_Out_Household> col_DB_Out_Households;
+	private final List<C_DB_Out_Community> col_DB_Out_EnergyCommunities;
+	private final List<C_DB_Out_ElectricityGridOperator> col_DB_Out_DistributionSystemOperators;
+	private final List<C_DB_Out_ElectricityGrid> col_DB_Out_LVDistributionFeeders;
 		
 	// **********CONSTRUCTORS**********
 	 /**
