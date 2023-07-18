@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.3.202304281224" AlpVersion="8.7.7">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.4.202307131101" AlpVersion="8.8.2">
 <Model>
 	<Id>1689246676487</Id>
 	<Name><![CDATA[Model_Paper1]]></Name>
@@ -19,20 +19,58 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 	<EngineVersion>6</EngineVersion>
 	<JavaPackageName><![CDATA[model_paper1]]></JavaPackageName>
 	<ModelTimeUnit><![CDATA[Minute]]></ModelTimeUnit>
+	<OptionLists>
+		<OptionList>
+			<Id>1689703136117</Id>
+			<Name><![CDATA[OL_CommunityMemberType]]></Name>
+			<Description><![CDATA[@author Sharif_Khaleghparast
+@since 18_July_2023]]></Description>
+			<Option>
+				<Id>1689703136119</Id>
+				<Name><![CDATA[COLLABORATIVE]]></Name>
+			</Option>
+			<Option>
+				<Id>1689703136121</Id>
+				<Name><![CDATA[NON_COLLABORATIVE]]></Name>
+			</Option>
+			<Option>
+				<Id>1689703215915</Id>
+				<Name><![CDATA[NON_MEMBER]]></Name>
+			</Option>
+		</OptionList>
+		<OptionList>
+			<Id>1689703148874</Id>
+			<Name><![CDATA[OL_GridUserType]]></Name>
+			<Description><![CDATA[@author Sharif_Khaleghparast
+@since 18_July_2023]]></Description>
+			<Option>
+				<Id>1689703148876</Id>
+				<Name><![CDATA[CONSUMER]]></Name>
+			</Option>
+			<Option>
+				<Id>1689703148878</Id>
+				<Name><![CDATA[PROSUMER]]></Name>
+			</Option>
+			<Option>
+				<Id>1689703189750</Id>
+				<Name><![CDATA[PRODUCER]]></Name>
+			</Option>
+		</OptionList>
+	</OptionLists>
 	<ActiveObjectClasses>
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689246676490</Id>
-			<Name><![CDATA[Main_A]]></Name>
+			<Name><![CDATA[A___ModelCreator]]></Name>
 			<Description><![CDATA[Holds and handles the model (logic scenarios, database in & out POJOs, and UI dashboards).
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
-			<StartupCode><![CDATA[//First: load data from the Anylogic database
-//DB_In_C_01POJOs scenarioInputData = new DB_In_C_01POJOs(,,,);
+			<StartupCode><![CDATA[//FIRST: set input data for a scenario
+f_SetScenarioInputData(f_LoadScenarioInputData());
 
-//Second: create the model
-//f_CreateModel(scenarioInputData, v_isDashboardEnabled);]]></StartupCode>
+//SECOND: create a model
+f_CreateModel(f_GetScenarioInputData());]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689246676496</Id>
@@ -125,20 +163,20 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 			<CurrentLevel>1689246676497</CurrentLevel>
 			<ConnectionsId>1689246676491</ConnectionsId>
 			<Variables>
-				<Variable Class="PlainVariable">
-					<Id>1689350236236</Id>
-					<Name><![CDATA[v_isDashboardEnabled]]></Name>
+				<Variable Class="CollectionVariable">
+					<Id>1689615183021</Id>
+					<Name><![CDATA[col_ScenarioInputData]]></Name>
 					<X>530</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
-						<Type><![CDATA[boolean]]></Type>        
-						<InitialValue Class="CodeValue">
-							<Code><![CDATA[true]]></Code>
-						</InitialValue>
+					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
+						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
+						<ElementClass><![CDATA[C_DB_In__POJOContainer]]></ElementClass>
+						<ValueElementClass><![CDATA[String]]></ValueElementClass>
 					</Properties>
+
 				</Variable>
 			</Variables>
 			<Functions>
@@ -147,33 +185,73 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689349242260</Id>
 					<Name><![CDATA[f_CreateModel]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>150</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Parameter>
-						<Name><![CDATA[scenarioInputData]]></Name>
-						<Type><![CDATA[DB_In_C_01POJOs]]></Type>
-					</Parameter>
-					<Parameter>
-						<Name><![CDATA[isDashboardEnabled]]></Name>
-						<Type><![CDATA[boolean]]></Type>
+						<Name><![CDATA[arg_ScenarioInputData]]></Name>
+						<Type><![CDATA[ArrayList<C_DB_In__POJOContainer>]]></Type>
 					</Parameter>
 					<Body><![CDATA[//Create initial embedded objects
 
-//Scenario setup
-Logic_A_01Scenario scenario = add_pop01_01Scenarios(scenarioInputData);
+for(C_DB_In__POJOContainer s: arg_ScenarioInputData) {
+	
+	//FIRST: Scenario setup
+	A_Logic__Scenario scenario = add_pop_Scenarios(s);
 
-//Dashboard setup
-if (isDashboardEnabled) {
-	UI_A_01Dashboard dashboard = add_pop01_01Dashboards(scenario);
-	dashboard._origin_VA.navigateTo();
-} 
-else {
-	scenario._origin_VA.navigateTo();
-}
-]]></Body>
+	//SECOND: Dashboard setup
+	A_UI__Dashboard dashboard = add_pop_Dashboards(scenario);
+}]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[DB_In_C_01POJOs]]></ReturnType>
+					<Id>1689593773288</Id>
+					<Name><![CDATA[f_SetScenarioInputData]]></Name>
+					<X>770</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ScenarioInputData]]></Name>
+						<Type><![CDATA[ArrayList<C_DB_In__POJOContainer>]]></Type>
+					</Parameter>
+					<Body><![CDATA[col_ScenarioInputData = arg_ScenarioInputData;]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ArrayList<C_DB_In__POJOContainer>]]></ReturnType>
+					<Id>1689597431007</Id>
+					<Name><![CDATA[f_GetScenarioInputData]]></Name>
+					<X>770</X><Y>130</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return col_ScenarioInputData;]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ArrayList<C_DB_In__POJOContainer>]]></ReturnType>
+					<Id>1689601155743</Id>
+					<Name><![CDATA[f_LoadScenarioInputData]]></Name>
+					<Description><![CDATA[Load input data for a scenario from the Anylogic database]]></Description>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[// TODO After the database is designed, give the arguments.
+
+//for(C_DB_In_Household h: ) {
+//	
+//}
+//ArrayList<C_DB_In__POJOContainer> c = new ArrayList<C_DB_In__POJOContainer>(,,,);
+//col_ScenarioInputData.add(new C_DB_Out_POJOContainer(,,,));
+return null;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -201,7 +279,7 @@ else {
 			<EmbeddedObjects>
 				<EmbeddedObject>
 					<Id>1689326573229</Id>
-					<Name><![CDATA[pop01_01Scenarios]]></Name>
+					<Name><![CDATA[pop_Scenarios]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>90</Y>
@@ -211,12 +289,12 @@ else {
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+						<ClassName><![CDATA[A_Logic__Scenario]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+							<ClassName><![CDATA[A_Logic__Scenario]]></ClassName>
 							<ItemName><![CDATA[1689252665124]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -267,7 +345,7 @@ else {
 				</EmbeddedObject>
 				<EmbeddedObject>
 					<Id>1689327412871</Id>
-					<Name><![CDATA[pop01_01Dashboards]]></Name>
+					<Name><![CDATA[pop_Dashboards]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>110</Y>
@@ -277,18 +355,18 @@ else {
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+							<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
 							<ItemName><![CDATA[1689252963333]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
 					<Parameters>
 						<Parameter>
-							<Name><![CDATA[p_InputData]]></Name>
+							<Name><![CDATA[p_ScenarioInputData]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>true</ReplicationFlag>
@@ -572,7 +650,7 @@ else {
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Main_A: holds and handles the model (logic scenarios, database in & out POJOs, and UI dashboards)]]></Text>
+					<Text><![CDATA[A___ModelCreator: holds and handles the model (logic scenarios, database in & out POJOs, and UI dashboards)]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -580,6 +658,28 @@ else {
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1689622781504</Id>
+					<Name><![CDATA[button]]></Name>
+					<Description><![CDATA[@todo  Complete the action.]]></Description>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>810</X><Y>180</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="30">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>true</Enabled>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[Create Model]]></LabelText>
+					</ExtendedProperties>
+				</Control>
 			</Presentation>
 
 				</Level>
@@ -589,7 +689,7 @@ else {
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689250862796</Id>
-			<Name><![CDATA[ZeroTemplate_A]]></Name>
+			<Name><![CDATA[A_ZeroTemplate]]></Name>
 			<Description><![CDATA[This is a Template agent type that can be used to create new agent types in style.
 Holds and handles ...
 @author Sharif_Khaleghparast
@@ -965,11 +1065,12 @@ Holds and handles ...
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689252665129</Id>
-			<Name><![CDATA[Logic_A_01Scenario]]></Name>
+			<Name><![CDATA[A_Logic__Scenario]]></Name>
 			<Description><![CDATA[Holds and handles the logic agents, classes, and interfaces for this scenario.
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
+			<StartupCode><![CDATA[f_CreateScenario( f_GetInputData() );]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689252665124</Id>
@@ -1062,6 +1163,21 @@ Holds and handles ...
 			<CurrentLevel>1689252665131</CurrentLevel>
 			<ConnectionsId>1689252665155</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689442134270</Id>
+					<Name><![CDATA[v_InputData]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689346312586</Id>
 					<Name><![CDATA[p_InputData]]></Name>
@@ -1071,7 +1187,7 @@ Holds and handles ...
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[DB_In_C_01POJOs]]></Type>
+						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -1091,28 +1207,44 @@ Holds and handles ...
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689346698198</Id>
 					<Name><![CDATA[f_CreateScenario]]></Name>
+					<X>770</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_InputData]]></Name>
+						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>
+					</Parameter>
+					<Body><![CDATA[//Create initial embedded objects
+
+for (C_DB_In_Household currHouseholdData : arg_InputData.f_Get_DB_In_Households()) {
+	add_pop_Logic_Households(currHouseholdData);
+}
+
+for (C_DB_In_Community currCommunityData : arg_InputData.f_Get_DB_In_EnergyCommunities()) {
+	add_pop_Logic_EnergyCommunities(currCommunityData);
+}
+
+for (C_DB_In_ElectricityGridOperator currElectricityGridOperatorData : arg_InputData.f_Get_DB_In_DistributionSystemOperators()) {
+	add_pop_Logic_DistributionSystemOperators(currElectricityGridOperatorData);
+}
+
+for (C_DB_In_ElectricityGrid currElectricityGridData : arg_InputData.f_Get_DB_In_LVDistributionFeeders()) {
+	add_pop_Logic_LVDistributionFeeders(currElectricityGridData);
+}]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In__POJOContainer]]></ReturnType>
+					<Id>1689673620224</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
 					<X>770</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[//Create initial embedded objects
-
-for (DB_In_C_Household currHouseholdData : p_InputData.get_list_DB_In_pop01_Households()) {
-	add_pop01_Logic_Households(currHouseholdData);
-}
-
-for (DB_In_C_Community currCommunityData : p_InputData.get_list_DB_In_pop01_EnergyCommunities()) {
-	add_pop01_Logic_EnergyCommunities(currCommunityData);
-}
-
-for (DB_In_C_ElectricityGridOperator currElectricityGridOperatorData : p_InputData.get_list_DB_In_pop01_DistributionSystemOperators()) {
-	add_pop01_Logic_DistributionSystemOperators(currElectricityGridOperatorData);
-}
-
-for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_In_pop01_LVDistributionFeeders()) {
-	add_pop01_Logic_LVDistributionFeeders(currElectricityGridData);
-}]]></Body>
+					<Body><![CDATA[return v_InputData;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -1140,7 +1272,7 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689326574859</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -1149,14 +1281,14 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
 			<EmbeddedObjects>
 				<EmbeddedObject>
 					<Id>1689328688914</Id>
-					<Name><![CDATA[pop01_Logic_EnergyCommunities]]></Name>
+					<Name><![CDATA[pop_Logic_EnergyCommunities]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>130</Y>
@@ -1166,12 +1298,12 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Logic_A_Community]]></ClassName>
+						<ClassName><![CDATA[A_Logic_Community]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[Logic_A_Community]]></ClassName>
+							<ClassName><![CDATA[A_Logic_Community]]></ClassName>
 							<ItemName><![CDATA[1689260380175]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -1222,7 +1354,7 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 				</EmbeddedObject>
 				<EmbeddedObject>
 					<Id>1689338285603</Id>
-					<Name><![CDATA[pop01_Logic_Households]]></Name>
+					<Name><![CDATA[pop_Logic_Households]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>110</Y>
@@ -1232,12 +1364,12 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Logic_A_Household]]></ClassName>
+						<ClassName><![CDATA[A_Logic_Household]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[Logic_A_Household]]></ClassName>
+							<ClassName><![CDATA[A_Logic_Household]]></ClassName>
 							<ItemName><![CDATA[1689260063075]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -1288,7 +1420,7 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 				</EmbeddedObject>
 				<EmbeddedObject>
 					<Id>1689338607676</Id>
-					<Name><![CDATA[pop01_Logic_LVDistributionFeeders]]></Name>
+					<Name><![CDATA[pop_Logic_LVDistributionFeeders]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>170</Y>
@@ -1298,12 +1430,12 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Logic_A_ElectricityGrid]]></ClassName>
+						<ClassName><![CDATA[A_Logic_ElectricityGrid]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[Logic_A_ElectricityGrid]]></ClassName>
+							<ClassName><![CDATA[A_Logic_ElectricityGrid]]></ClassName>
 							<ItemName><![CDATA[1689260704426]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -1354,7 +1486,7 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 				</EmbeddedObject>
 				<EmbeddedObject>
 					<Id>1689338725847</Id>
-					<Name><![CDATA[pop01_Logic_DistributionSystemOperators]]></Name>
+					<Name><![CDATA[pop_Logic_DistributionSystemOperators]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>150</Y>
@@ -1364,12 +1496,12 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Logic_A_ElectricityGridOperator]]></ClassName>
+						<ClassName><![CDATA[A_Logic_ElectricityGridOperator]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[Logic_A_ElectricityGridOperator]]></ClassName>
+							<ClassName><![CDATA[A_Logic_ElectricityGridOperator]]></ClassName>
 							<ItemName><![CDATA[1689261067003]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -1659,7 +1791,7 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Logic_A_01Scenario: holds and handles the logic agents, classes, and interfaces for this scenario]]></Text>
+					<Text><![CDATA[A_Logic__Scenario: holds and handles the logic agents, classes, and interfaces for this scenario]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -1676,11 +1808,16 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689252963338</Id>
-			<Name><![CDATA[UI_A_01Dashboard]]></Name>
+			<Name><![CDATA[A_UI__Dashboard]]></Name>
 			<Description><![CDATA[Holds and handles UI agents and classes for this dashboard.
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
+			<StartupCode><![CDATA[f_CreateDashboard( f_GetScenarioInputData() );
+	
+// TODO Later check that where it should exactly navigate to.
+this.viewArea_Overview.navigateTo();
+]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689252963333</Id>
@@ -1773,16 +1910,31 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 			<CurrentLevel>1689252963340</CurrentLevel>
 			<ConnectionsId>1689252963364</ConnectionsId>
 			<Variables>
-				<Variable Class="Parameter">
-					<Id>1689352743394</Id>
-					<Name><![CDATA[p_InputData]]></Name>
-					<X>290</X><Y>90</Y>
+				<Variable Class="PlainVariable">
+					<Id>1689442334638</Id>
+					<Name><![CDATA[v_ScenarioInputData]]></Name>
+					<X>530</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[A_Logic__Scenario]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_ScenarioInputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="Parameter">
+					<Id>1689352743394</Id>
+					<Name><![CDATA[p_ScenarioInputData]]></Name>
+					<X>290</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[Logic_A_01Scenario]]></Type>
+						<Type><![CDATA[A_Logic__Scenario]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -1801,29 +1953,45 @@ for (DB_In_C_ElectricityGrid currElectricityGridData : p_InputData.get_list_DB_I
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689353056488</Id>
 					<Name><![CDATA[f_CreateDashboard]]></Name>
+					<X>770</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ScenarioInputData]]></Name>
+						<Type><![CDATA[A_Logic__Scenario]]></Type>
+					</Parameter>
+					<Body><![CDATA[// Create initial embedded objects
+
+for (A_Logic_Household currHousehold : arg_ScenarioInputData.pop_Logic_Households) {
+	add_pop_UI_Households(currHousehold);
+}
+
+for (A_Logic_Community currCommunity : arg_ScenarioInputData.pop_Logic_EnergyCommunities) {
+	add_pop_UI_EnergyCommunities(currCommunity);
+}
+
+for (A_Logic_ElectricityGridOperator currElectricityGridOperator : arg_ScenarioInputData.pop_Logic_DistributionSystemOperators) {
+	add_pop_UI_DistributionSystemOperators(currElectricityGridOperator);
+}
+
+for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Logic_LVDistributionFeeders) {
+	add_pop_UI_LVDistributionFeeders(currElectricityGrid);
+}
+]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic__Scenario]]></ReturnType>
+					<Id>1689673799720</Id>
+					<Name><![CDATA[f_GetScenarioInputData]]></Name>
 					<X>770</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[//Create initial embedded objects
-
-for (Logic_A_Household currHousehold : p_InputData.pop01_Logic_Households) {
-	add_pop01_UI_Households(currHousehold);
-}
-
-for (Logic_A_Community currCommunity : p_InputData.pop01_Logic_EnergyCommunities) {
-	add_pop01_UI_EnergyCommunities(currCommunity);
-}
-
-for (Logic_A_ElectricityGridOperator currElectricityGridOperator : p_InputData.pop01_Logic_DistributionSystemOperators) {
-	add_pop01_UI_DistributionSystemOperators(currElectricityGridOperator);
-}
-
-for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDistributionFeeders) {
-	add_pop01_UI_LVDistributionFeeders(currElectricityGrid);
-}
-]]></Body>
+					<Body><![CDATA[return v_ScenarioInputData;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -1851,7 +2019,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689327416018</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -1860,14 +2028,14 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
 			<EmbeddedObjects>
 				<EmbeddedObject>
 					<Id>1689339322507</Id>
-					<Name><![CDATA[pop01_UI_Households]]></Name>
+					<Name><![CDATA[pop_UI_Households]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>110</Y>
@@ -1877,12 +2045,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[UI_A_Household]]></ClassName>
+						<ClassName><![CDATA[A_UI_Household]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[UI_A_Household]]></ClassName>
+							<ClassName><![CDATA[A_UI_Household]]></ClassName>
 							<ItemName><![CDATA[1689262886721]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -1933,7 +2101,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 				</EmbeddedObject>
 				<EmbeddedObject>
 					<Id>1689339979352</Id>
-					<Name><![CDATA[pop01_UI_EnergyCommunities]]></Name>
+					<Name><![CDATA[pop_UI_EnergyCommunities]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>130</Y>
@@ -1943,12 +2111,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[UI_A_Community]]></ClassName>
+						<ClassName><![CDATA[A_UI_Community]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[UI_A_Community]]></ClassName>
+							<ClassName><![CDATA[A_UI_Community]]></ClassName>
 							<ItemName><![CDATA[1689262721824]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -1999,7 +2167,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 				</EmbeddedObject>
 				<EmbeddedObject>
 					<Id>1689340118574</Id>
-					<Name><![CDATA[pop01_UI_DistributionSystemOperators]]></Name>
+					<Name><![CDATA[pop_UI_DistributionSystemOperators]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>150</Y>
@@ -2009,12 +2177,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[UI_A_ElectricityGridOperator]]></ClassName>
+						<ClassName><![CDATA[A_UI_ElectricityGridOperator]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[UI_A_ElectricityGridOperator]]></ClassName>
+							<ClassName><![CDATA[A_UI_ElectricityGridOperator]]></ClassName>
 							<ItemName><![CDATA[1689262910843]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -2065,7 +2233,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 				</EmbeddedObject>
 				<EmbeddedObject>
 					<Id>1689340161374</Id>
-					<Name><![CDATA[pop01_UI_LVDistributionFeeders]]></Name>
+					<Name><![CDATA[pop_UI_LVDistributionFeeders]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>170</Y>
@@ -2075,12 +2243,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[UI_A_ElectricityGrid]]></ClassName>
+						<ClassName><![CDATA[A_UI_ElectricityGrid]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[UI_A_ElectricityGrid]]></ClassName>
+							<ClassName><![CDATA[A_UI_ElectricityGrid]]></ClassName>
 							<ItemName><![CDATA[1689262892370]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
@@ -2370,7 +2538,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[UI_A_01Dashboard: holds and handles UI agents and classes for this dashboard]]></Text>
+					<Text><![CDATA[A_UI__Dashboard: holds and handles UI agents and classes for this dashboard]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -2382,12 +2550,26 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1689449334613</Id>
+					<Name><![CDATA[viewArea_Overview]]></Name>
+					<X>0</X><Y>600</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689260063080</Id>
-			<Name><![CDATA[Logic_A_Household]]></Name>
+			<Name><![CDATA[A_Logic_Household]]></Name>
 			<Description><![CDATA[Holds and handles the logic of a household.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -2484,6 +2666,21 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<CurrentLevel>1689260063082</CurrentLevel>
 			<ConnectionsId>1689260063106</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689447675142</Id>
+					<Name><![CDATA[v_InputData]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[C_DB_In_Household]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689348892437</Id>
 					<Name><![CDATA[p_InputData]]></Name>
@@ -2493,7 +2690,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[DB_In_C_Household]]></Type>
+						<Type><![CDATA[C_DB_In_Household]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -2506,6 +2703,20 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In_Household]]></ReturnType>
+					<Id>1689674194520</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689260063106</Id>
@@ -2531,7 +2742,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689338288544</Id>
-					<Name><![CDATA[logic_A_01Scenario]]></Name>
+					<Name><![CDATA[a_Logic__Scenario]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>60</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -2540,12 +2751,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+						<ClassName><![CDATA[A_Logic__Scenario]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689338288549</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -2554,7 +2765,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -2798,7 +3009,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Logic_A_Household: Holds and handles the logic of a household]]></Text>
+					<Text><![CDATA[A_Logic_Household: Holds and handles the logic of a household]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -2815,7 +3026,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689260380180</Id>
-			<Name><![CDATA[Logic_A_Community]]></Name>
+			<Name><![CDATA[A_Logic_Community]]></Name>
 			<Description><![CDATA[Holds and handles the logic of a community.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -2912,6 +3123,21 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<CurrentLevel>1689260380182</CurrentLevel>
 			<ConnectionsId>1689260380206</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689447894646</Id>
+					<Name><![CDATA[v_InputData]]></Name>
+					<X>535</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[C_DB_In_Community]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689349020070</Id>
 					<Name><![CDATA[p_InputData]]></Name>
@@ -2921,7 +3147,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[DB_In_C_Community]]></Type>
+						<Type><![CDATA[C_DB_In_Community]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -2934,6 +3160,20 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In_Community]]></ReturnType>
+					<Id>1689674307837</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689260380206</Id>
@@ -2959,7 +3199,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689328691574</Id>
-					<Name><![CDATA[logic_A_01Scenario]]></Name>
+					<Name><![CDATA[a_Logic__Scenario]]></Name>
 					<X>60</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -2967,12 +3207,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+						<ClassName><![CDATA[A_Logic__Scenario]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689328691578</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -2980,7 +3220,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -3224,7 +3464,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Logic_A_Community: holds and handles the logic of a community]]></Text>
+					<Text><![CDATA[A_Logic_Community: holds and handles the logic of a community]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -3241,7 +3481,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689260704431</Id>
-			<Name><![CDATA[Logic_A_ElectricityGrid]]></Name>
+			<Name><![CDATA[A_Logic_ElectricityGrid]]></Name>
 			<Description><![CDATA[Holds and handles the logic of an electricity grid.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -3338,6 +3578,21 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<CurrentLevel>1689260704433</CurrentLevel>
 			<ConnectionsId>1689260704457</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689448015375</Id>
+					<Name><![CDATA[v_InputData]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[C_DB_In_ElectricityGrid]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689349141511</Id>
 					<Name><![CDATA[p_InputData]]></Name>
@@ -3347,7 +3602,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[DB_In_C_ElectricityGrid]]></Type>
+						<Type><![CDATA[C_DB_In_ElectricityGrid]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -3360,6 +3615,20 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In_ElectricityGrid]]></ReturnType>
+					<Id>1689674354963</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689260704457</Id>
@@ -3385,7 +3654,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689338612789</Id>
-					<Name><![CDATA[logic_A_01Scenario]]></Name>
+					<Name><![CDATA[a_Logic__Scenario]]></Name>
 					<X>60</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -3393,12 +3662,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+						<ClassName><![CDATA[A_Logic__Scenario]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689338612791</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -3406,7 +3675,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -3650,7 +3919,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Logic_A_ElectricityGrid: holds and handles the logic of an electricity grid]]></Text>
+					<Text><![CDATA[A_Logic_ElectricityGrid: holds and handles the logic of an electricity grid]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -3667,7 +3936,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689261067008</Id>
-			<Name><![CDATA[Logic_A_ElectricityGridOperator]]></Name>
+			<Name><![CDATA[A_Logic_ElectricityGridOperator]]></Name>
 			<Description><![CDATA[Holds and handles the logic of an electricity grid operator.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -3764,6 +4033,21 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<CurrentLevel>1689261067010</CurrentLevel>
 			<ConnectionsId>1689261067034</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689447967144</Id>
+					<Name><![CDATA[v_InputData]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[C_DB_In_ElectricityGridOperator]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689349083557</Id>
 					<Name><![CDATA[p_InputData]]></Name>
@@ -3773,7 +4057,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[DB_In_C_ElectricityGridOperator]]></Type>
+						<Type><![CDATA[C_DB_In_ElectricityGridOperator]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -3786,6 +4070,20 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_DB_In_ElectricityGridOperator]]></ReturnType>
+					<Id>1689674334101</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689261067034</Id>
@@ -3811,7 +4109,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689338728772</Id>
-					<Name><![CDATA[logic_A_01Scenario]]></Name>
+					<Name><![CDATA[a_Logic__Scenario]]></Name>
 					<X>60</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -3819,12 +4117,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Logic_A_01Scenario]]></ClassName>
+						<ClassName><![CDATA[A_Logic__Scenario]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689338728774</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -3832,7 +4130,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -4076,7 +4374,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Logic_A_ElectricityGridOperator: holds and handles the logic of an electricity grid operator]]></Text>
+					<Text><![CDATA[A_Logic_ElectricityGridOperator: holds and handles the logic of an electricity grid operator]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -4093,7 +4391,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689262721829</Id>
-			<Name><![CDATA[UI_A_Community]]></Name>
+			<Name><![CDATA[A_UI_Community]]></Name>
 			<Description><![CDATA[Holds and handles the UI of a community.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -4190,6 +4488,21 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<CurrentLevel>1689262721831</CurrentLevel>
 			<ConnectionsId>1689262721855</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689448121306</Id>
+					<Name><![CDATA[v_InputData]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[A_Logic_Community]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689353774313</Id>
 					<Name><![CDATA[p_InputData]]></Name>
@@ -4199,7 +4512,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[Logic_A_Community]]></Type>
+						<Type><![CDATA[A_Logic_Community]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -4212,6 +4525,20 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic_Community]]></ReturnType>
+					<Id>1689674067219</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262721855</Id>
@@ -4237,7 +4564,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689339981054</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -4246,12 +4573,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689339981056</Id>
-					<Name><![CDATA[uI_A_01Dashboard]]></Name>
+					<Name><![CDATA[a_UI__Dashboard]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>60</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -4260,7 +4587,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -4504,7 +4831,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[UI_A_Community: holds and handles the UI of a community]]></Text>
+					<Text><![CDATA[A_UI_Community: holds and handles the UI of a community]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -4521,7 +4848,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689262886726</Id>
-			<Name><![CDATA[UI_A_Household]]></Name>
+			<Name><![CDATA[A_UI_Household]]></Name>
 			<Description><![CDATA[Holds and handles the UI of a household.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -4618,6 +4945,21 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<CurrentLevel>1689262886728</CurrentLevel>
 			<ConnectionsId>1689262886752</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689448065113</Id>
+					<Name><![CDATA[v_InputData]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[A_Logic_Household]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689353686385</Id>
 					<Name><![CDATA[p_InputData]]></Name>
@@ -4627,7 +4969,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[Logic_A_Household]]></Type>
+						<Type><![CDATA[A_Logic_Household]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -4640,6 +4982,20 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic_Household]]></ReturnType>
+					<Id>1689673991713</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262886752</Id>
@@ -4665,7 +5021,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689339323418</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -4674,12 +5030,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689339323420</Id>
-					<Name><![CDATA[uI_A_01Dashboard]]></Name>
+					<Name><![CDATA[a_UI__Dashboard]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>60</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -4688,7 +5044,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -4932,7 +5288,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[UI_A_Household: holds and handles the UI of a household]]></Text>
+					<Text><![CDATA[A_UI_Household: holds and handles the UI of a household]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -4949,7 +5305,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689262892375</Id>
-			<Name><![CDATA[UI_A_ElectricityGrid]]></Name>
+			<Name><![CDATA[A_UI_ElectricityGrid]]></Name>
 			<Description><![CDATA[Holds and handles the UI of an electricity grid.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -5046,6 +5402,21 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<CurrentLevel>1689262892377</CurrentLevel>
 			<ConnectionsId>1689262892401</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689448173137</Id>
+					<Name><![CDATA[v_InputData]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[A_Logic_ElectricityGrid]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689353919928</Id>
 					<Name><![CDATA[p_InputData]]></Name>
@@ -5055,7 +5426,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[Logic_A_ElectricityGrid]]></Type>
+						<Type><![CDATA[A_Logic_ElectricityGrid]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -5068,6 +5439,20 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic_ElectricityGrid]]></ReturnType>
+					<Id>1689674136947</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262892401</Id>
@@ -5093,7 +5478,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689340162477</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -5102,12 +5487,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689340162479</Id>
-					<Name><![CDATA[uI_A_01Dashboard]]></Name>
+					<Name><![CDATA[a_UI__Dashboard]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>60</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -5116,7 +5501,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -5360,7 +5745,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[UI_A_ElectricityGrid: holds and handles the UI of an electricity grid]]></Text>
+					<Text><![CDATA[A_UI_ElectricityGrid: holds and handles the UI of an electricity grid]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -5377,7 +5762,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689262910848</Id>
-			<Name><![CDATA[UI_A_ElectricityGridOperator]]></Name>
+			<Name><![CDATA[A_UI_ElectricityGridOperator]]></Name>
 			<Description><![CDATA[Holds and handles the UI of an electricity grid operator.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -5474,6 +5859,21 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<CurrentLevel>1689262910850</CurrentLevel>
 			<ConnectionsId>1689262910874</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689448158688</Id>
+					<Name><![CDATA[v_InputData]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[A_Logic_ElectricityGridOperator]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689353865001</Id>
 					<Name><![CDATA[p_InputData]]></Name>
@@ -5483,7 +5883,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[Logic_A_ElectricityGridOperator]]></Type>
+						<Type><![CDATA[A_Logic_ElectricityGridOperator]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -5496,6 +5896,20 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					</Properties>                 
 				</Variable>
 			</Variables>
+			<Functions>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[A_Logic_ElectricityGridOperator]]></ReturnType>
+					<Id>1689674102390</Id>
+					<Name><![CDATA[f_GetInputData]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_InputData;]]></Body>
+				</Function>
+			</Functions>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1689262910874</Id>
@@ -5521,7 +5935,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689340120435</Id>
-					<Name><![CDATA[main_A]]></Name>
+					<Name><![CDATA[a___ModelCreator]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -5530,12 +5944,12 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[Main_A]]></ClassName>
+						<ClassName><![CDATA[A___ModelCreator]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689340120437</Id>
-					<Name><![CDATA[uI_A_01Dashboard]]></Name>
+					<Name><![CDATA[a_UI__Dashboard]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>60</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -5544,7 +5958,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[UI_A_01Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -5788,7 +6202,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[UI_A_ElectricityGridOperator: holds and handles the UI of an electricity grid operator]]></Text>
+					<Text><![CDATA[A_UI_ElectricityGridOperator: holds and handles the UI of an electricity grid operator]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -5876,7 +6290,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-12490271</Color>
-					<Text><![CDATA[Paper1_Model]]></Text>
+					<Text><![CDATA[Model_Paper1]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>24</Size>
@@ -5893,7 +6307,7 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 				<ExecutionMode><![CDATA[realTimeScaled]]></ExecutionMode>
 				<Title><![CDATA[Paper1_Model : Simulation]]></Title>	
 				<EnableDeveloperPanel>true</EnableDeveloperPanel>
-				<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
+				<ShowDeveloperPanelOnStart>true</ShowDeveloperPanelOnStart>
 				<RealTimeScale>1.0</RealTimeScale>
 			</PresentationProperties>
 			<ModelTimeProperties>
@@ -5910,54 +6324,61 @@ for (Logic_A_ElectricityGrid currElectricityGrid : p_InputData.pop01_Logic_LVDis
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689264100926</Id>
-			<Name><![CDATA[DB_In_C_01POJOs]]></Name>
+			<Name><![CDATA[C_DB_In__POJOContainer]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the input data of agents and classes in this POJOs holder class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_In_C_01POJOs
+ * C_DB_In__POJOContainer
  */	
-public class DB_In_C_01POJOs implements Serializable {
+public class C_DB_In__POJOContainer implements Serializable {
 
-    // **********DB_In_C_POJOs LISTS**********
-	private List<DB_In_C_Household> list_DB_In_pop01_Households;
-	private List<DB_In_C_Community> list_DB_In_pop01_EnergyCommunities;
-	private List<DB_In_C_ElectricityGridOperator> list_DB_In_pop01_DistributionSystemOperators;
-	private List<DB_In_C_ElectricityGrid> list_DB_In_pop01_LVDistributionFeeders;
+    // **********LIST FIELDS**********
+	private List<C_DB_In_Household> col_DB_In_Households;
+	private List<C_DB_In_Community> col_DB_In_EnergyCommunities;
+	private List<C_DB_In_ElectricityGridOperator> col_DB_In_DistributionSystemOperators;
+	private List<C_DB_In_ElectricityGrid> col_DB_In_LVDistributionFeeders;
 	
 	// **********CONSTRUCTORS**********
-     /**
-     * Create an instance of the model input by POJOs
-     * @param list_DB_In_pop01_Households: A list of DB_In_C_Household POJOs
-     * @param list_DB_In_pop01_EnergyCommunities: A list of DB_In_C_Community POJOs
-     * @param list_DB_In_pop01_DistributionSystemOperators: A list of DB_In_C_ElectricityGridOperator POJOs
-     * @param list_DB_In_pop01_LVDistributionFeeders: A list of DB_In_C_ElectricityGrid POJOs
-     */
-    public DB_In_C_01POJOs (List<DB_In_C_Household> list_DB_In_pop01_Households,
-    					    List<DB_In_C_Community> list_DB_In_pop01_EnergyCommunities,
-    					    List<DB_In_C_ElectricityGridOperator> list_DB_In_pop01_DistributionSystemOperators,
-    					    List<DB_In_C_ElectricityGrid> list_DB_In_pop01_LVDistributionFeeders) {
-    	this.list_DB_In_pop01_Households = list_DB_In_pop01_Households;
-    	this.list_DB_In_pop01_EnergyCommunities = list_DB_In_pop01_EnergyCommunities;
-    	this.list_DB_In_pop01_DistributionSystemOperators = list_DB_In_pop01_DistributionSystemOperators;
-    	this.list_DB_In_pop01_LVDistributionFeeders = list_DB_In_pop01_LVDistributionFeeders;
-    }
+    /**
+     * Create an instance of a scenario input
+     */    
+    public C_DB_In__POJOContainer () {
 
+    }
+    
+	/**
+     * Create an instance of a scenario input
+     * @param p_DB_In_Households A list of C_DB_In_Household POJOs
+     * @param p_DB_In_EnergyCommunities A list of C_DB_In_Community POJOs
+     * @param p_DB_In_DistributionSystemOperators A list of C_DB_In_ElectricityGridOperator POJOs
+     * @param p_DB_In_LVDistributionFeeders A list of C_DB_In_ElectricityGrid POJOs
+     */
+    public C_DB_In__POJOContainer (List<C_DB_In_Household> p_DB_In_Households,
+    							   List<C_DB_In_Community> p_DB_In_EnergyCommunities,
+    							   List<C_DB_In_ElectricityGridOperator> p_DB_In_DistributionSystemOperators,
+    							   List<C_DB_In_ElectricityGrid> p_DB_In_LVDistributionFeeders) {
+    	this.col_DB_In_Households = p_DB_In_Households;
+    	this.col_DB_In_EnergyCommunities = p_DB_In_EnergyCommunities;
+    	this.col_DB_In_DistributionSystemOperators = p_DB_In_DistributionSystemOperators;
+    	this.col_DB_In_LVDistributionFeeders = p_DB_In_LVDistributionFeeders;
+    }
+    
     // **********GETTERS**********
-    public List<DB_In_C_Household> get_list_DB_In_pop01_Households() {
-    	return list_DB_In_pop01_Households;
+    public List<C_DB_In_Household> f_Get_DB_In_Households() {
+    	return col_DB_In_Households;
     }
     
-    public List<DB_In_C_Community> get_list_DB_In_pop01_EnergyCommunities() {
-    	return list_DB_In_pop01_EnergyCommunities;
+    public List<C_DB_In_Community> f_Get_DB_In_EnergyCommunities() {
+    	return col_DB_In_EnergyCommunities;
     }
     
-    public List<DB_In_C_ElectricityGridOperator> get_list_DB_In_pop01_DistributionSystemOperators() {
-    	return list_DB_In_pop01_DistributionSystemOperators;
+    public List<C_DB_In_ElectricityGridOperator> f_Get_DB_In_DistributionSystemOperators() {
+    	return col_DB_In_DistributionSystemOperators;
     }
     
-    public List<DB_In_C_ElectricityGrid> get_list_DB_In_pop01_LVDistributionFeeders() {
-    	return list_DB_In_pop01_LVDistributionFeeders;
+    public List<C_DB_In_ElectricityGrid> f_Get_DB_In_LVDistributionFeeders() {
+    	return col_DB_In_LVDistributionFeeders;
     }
     
 	@Override
@@ -5976,54 +6397,60 @@ public class DB_In_C_01POJOs implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689264269520</Id>
-			<Name><![CDATA[DB_Out_C_01POJOs]]></Name>
+			<Name><![CDATA[C_DB_Out__POJOContainer]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the output data of agents and classes in this POJOs class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_Out_C_01POJOs
+ * C_DB_Out__POJOContainer
  */	
-public class DB_Out_C_01POJOs implements Serializable {
+public class C_DB_Out__POJOContainer implements Serializable {
 
-	// **********DB_Out_C_POJOs LISTS**********
-	private List<DB_Out_C_Household> list_DB_Out_pop01_Households;
-	private List<DB_Out_C_Community> list_DB_Out_pop01_EnergyCommunities;
-	private List<DB_Out_C_ElectricityGridOperator> list_DB_Out_pop01_DistributionSystemOperators;
-	private List<DB_Out_C_ElectricityGrid> list_DB_Out_pop01_LVDistributionFeeders;
+	// **********C_DB_Out_POJOContainer LISTS**********
+	private List<C_DB_Out_Household> col_DB_Out_Households;
+	private List<C_DB_Out_Community> col_DB_Out_EnergyCommunities;
+	private List<C_DB_Out_ElectricityGridOperator> col_DB_Out_DistributionSystemOperators;
+	private List<C_DB_Out_ElectricityGrid> col_DB_Out_LVDistributionFeeders;
 		
 	// **********CONSTRUCTORS**********
-	 /**
+    /**
+     * Create an instance of a scenario output
+     */    
+    public C_DB_Out__POJOContainer () {
+    }
+    
+	/**
 	 * Create an instance of the model output by POJOs
-	 * @param list_DB_Out_pop01_Households: A list of DB_Out_C_Household POJOs 
-	 * @param list_DB_Out_pop01_EnergyCommunities: A list of DB_Out_C_Community POJOs
-	 * @param list_DB_Out_pop01_DistributionSystemOperators: A list of DB_Out_C_ElectricityGridOperator POJOs
-	 * @param list_DB_Out_pop01_LVDistributionFeeders: A list of DB_Out_C_ElectricityGrid POJOs
+	 * @param p_DB_Out_Households A list of C_DB_Out_Household POJOs 
+	 * @param p_DB_Out_EnergyCommunities A list of C_DB_Out_Community POJOs
+	 * @param p_DB_Out_DistributionSystemOperators A list of C_DB_Out_ElectricityGridOperator POJOs
+	 * @param p_DB_Out_LVDistributionFeeders A list of C_DB_Out_ElectricityGrid POJOs
 	 */
-	public DB_Out_C_01POJOs (List<DB_Out_C_Household> list_DB_Out_pop01_Households,
-	    					 List<DB_Out_C_Community> list_DB_Out_pop01_EnergyCommunities,
-	    					 List<DB_Out_C_ElectricityGridOperator> list_DB_Out_pop01_DistributionSystemOperators,
-	    					 List<DB_Out_C_ElectricityGrid> list_DB_Out_pop01_LVDistributionFeeders) {
-	    this.list_DB_Out_pop01_Households = list_DB_Out_pop01_Households;
-	    this.list_DB_Out_pop01_EnergyCommunities = list_DB_Out_pop01_EnergyCommunities;
-	    this.list_DB_Out_pop01_DistributionSystemOperators = list_DB_Out_pop01_DistributionSystemOperators;
-	    this.list_DB_Out_pop01_LVDistributionFeeders = list_DB_Out_pop01_LVDistributionFeeders;
+	public C_DB_Out__POJOContainer (List<C_DB_Out_Household> p_DB_Out_Households,
+	    					 List<C_DB_Out_Community> p_DB_Out_EnergyCommunities,
+	    					 List<C_DB_Out_ElectricityGridOperator> p_DB_Out_DistributionSystemOperators,
+	    					 List<C_DB_Out_ElectricityGrid> p_DB_Out_LVDistributionFeeders) {
+	    this.col_DB_Out_Households = p_DB_Out_Households;
+	    this.col_DB_Out_EnergyCommunities = p_DB_Out_EnergyCommunities;
+	    this.col_DB_Out_DistributionSystemOperators = p_DB_Out_DistributionSystemOperators;
+	    this.col_DB_Out_LVDistributionFeeders = p_DB_Out_LVDistributionFeeders;
 	}
 
 	// **********GETTERS**********
-	public List<DB_Out_C_Household> get_list_DB_Out_pop01_Households() {
-	    return list_DB_Out_pop01_Households;
+	public List<C_DB_Out_Household> f_Get_DB_Out_Households() {
+	    return col_DB_Out_Households;
 	}
 	    
-	public List<DB_Out_C_Community> get_list_DB_Out_pop01_EnergyCommunities() {
-	    return list_DB_Out_pop01_EnergyCommunities;
+	public List<C_DB_Out_Community> f_Get_DB_Out_EnergyCommunities() {
+	    return col_DB_Out_EnergyCommunities;
 	}
 	    
-	public List<DB_Out_C_ElectricityGridOperator> get_list_DB_Out_pop01_DistributionSystemOperators() {
-	    return list_DB_Out_pop01_DistributionSystemOperators;
+	public List<C_DB_Out_ElectricityGridOperator> f_Get_DB_Out_DistributionSystemOperators() {
+	    return col_DB_Out_DistributionSystemOperators;
 	}
 	    
-	public List<DB_Out_C_ElectricityGrid> get_list_DB_Out_pop01_LVDistributionFeeders() {
-	    return list_DB_Out_pop01_LVDistributionFeeders;
+	public List<C_DB_Out_ElectricityGrid> f_Get_DB_Out_LVDistributionFeeders() {
+	    return col_DB_Out_LVDistributionFeeders;
 	}
 
 	@Override
@@ -6042,19 +6469,19 @@ public class DB_Out_C_01POJOs implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689267819650</Id>
-			<Name><![CDATA[DB_In_C_Community]]></Name>
+			<Name><![CDATA[C_DB_In_Community]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the input data of a community in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_In_C_Community
+ * C_DB_In_Community
  */	
-public class DB_In_C_Community implements Serializable {
+public class C_DB_In_Community implements Serializable {
 
     /**
      * Default constructor
      */
-    public DB_In_C_Community() {
+    public C_DB_In_Community() {
     }
 
 	@Override
@@ -6073,19 +6500,19 @@ public class DB_In_C_Community implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689267982610</Id>
-			<Name><![CDATA[DB_In_C_ElectricityGrid]]></Name>
+			<Name><![CDATA[C_DB_In_ElectricityGrid]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the input data of an electricity grid in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_In_C_ElectricityGrid
+ * C_DB_In_ElectricityGrid
  */	
-public class DB_In_C_ElectricityGrid implements Serializable {
+public class C_DB_In_ElectricityGrid implements Serializable {
 
     /**
      * Default constructor
      */
-    public DB_In_C_ElectricityGrid() {
+    public C_DB_In_ElectricityGrid() {
     }
 
 	@Override
@@ -6104,19 +6531,19 @@ public class DB_In_C_ElectricityGrid implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689268204129</Id>
-			<Name><![CDATA[DB_In_C_ElectricityGridOperator]]></Name>
+			<Name><![CDATA[C_DB_In_ElectricityGridOperator]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the input data of an electricity grid operator in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_In_C_ElectricityGridOperator
+ * C_DB_In_ElectricityGridOperator
  */	
-public class DB_In_C_ElectricityGridOperator implements Serializable {
+public class C_DB_In_ElectricityGridOperator implements Serializable {
 
     /**
      * Default constructor
      */
-    public DB_In_C_ElectricityGridOperator() {
+    public C_DB_In_ElectricityGridOperator() {
     }
 
 	@Override
@@ -6135,21 +6562,72 @@ public class DB_In_C_ElectricityGridOperator implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689268300353</Id>
-			<Name><![CDATA[DB_In_C_Household]]></Name>
+			<Name><![CDATA[C_DB_In_Household]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the input data of a household in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_In_C_Household
+ * C_DB_In_Household
  */	
-public class DB_In_C_Household implements Serializable {
+public class C_DB_In_Household implements Serializable {
 
+	// **********FIELDS**********
+	private final OL_GridUserType v_GridUserType;
+	private final LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> link_MyGridBus;
+	private final Map<Integer,Double> col_ConsumptionProfile;
+	private final Map<Integer,Double> col_ProductionProfile;
+	private final OL_CommunityMemberType v_CommunityMemberType;
+	private final LinkToAgentCollection<A_Logic_Community,A_Logic_Household> link_MyEnergyCommunity;
+	
+	// **********CONSTRUCTORS**********
     /**
-     * Default constructor
+     * Create an instance of a household
+     * @param p_GridUserType An Enum
+     * @param p_MyGridBus A bidirectional link to the grid
+     * @param p_ConsumptionProfile A collection of time and electricity consumption
+     * @param p_ProductionProfile A collection of time and electricity production
+     * @param p_CommunityMemberType An Enum
+     * @param p_MyEnergyCommunity A collection of bidirectional links to communities 
      */
-    public DB_In_C_Household() {
+    public C_DB_In_Household(OL_GridUserType p_GridUserType,
+    						 LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> p_MyGridBus,
+    						 Map<Integer,Double> p_ConsumptionProfile,
+    						 Map<Integer,Double> p_ProductionProfile,
+    						 OL_CommunityMemberType p_CommunityMemberType,
+    						 LinkToAgentCollection<A_Logic_Community,A_Logic_Household> p_MyEnergyCommunity) {
+    	this.v_GridUserType = p_GridUserType;
+    	this.link_MyGridBus = p_MyGridBus;
+    	this.col_ConsumptionProfile = p_ConsumptionProfile;
+    	this.col_ProductionProfile = p_ProductionProfile;
+    	this.v_CommunityMemberType = p_CommunityMemberType;
+    	this.link_MyEnergyCommunity = p_MyEnergyCommunity;
     }
-
+    
+    // **********GETTERS**********
+    public OL_GridUserType f_Get_GridUserType() {
+    	return v_GridUserType;
+    }
+    
+    public LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> f_Get_MyGridBus() {
+    	return link_MyGridBus;
+    }
+    
+    public Map<Integer,Double> f_Get_ConsumptionProfile() {
+    	return col_ConsumptionProfile;
+    }
+    
+    public Map<Integer,Double> f_Get_ProductionProfile() {
+    	return col_ProductionProfile;
+    }
+    
+    public OL_CommunityMemberType f_Get_CommunityMemberType() {
+    	return v_CommunityMemberType;
+    }
+    
+    public LinkToAgentCollection<A_Logic_Community,A_Logic_Household> f_Get_MyEnergyCommunity() {
+    	return link_MyEnergyCommunity;
+    }
+    
 	@Override
 	public String toString() {
 		return super.toString();
@@ -6166,19 +6644,19 @@ public class DB_In_C_Household implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689268386722</Id>
-			<Name><![CDATA[DB_Out_C_Community]]></Name>
+			<Name><![CDATA[C_DB_Out_Community]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the output data of a community in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_Out_C_Community
+ * C_DB_Out_Community
  */	
-public class DB_Out_C_Community implements Serializable {
+public class C_DB_Out_Community implements Serializable {
 
     /**
      * Default constructor
      */
-    public DB_Out_C_Community() {
+    public C_DB_Out_Community() {
     }
 
 	@Override
@@ -6197,19 +6675,19 @@ public class DB_Out_C_Community implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689268386789</Id>
-			<Name><![CDATA[DB_Out_C_ElectricityGrid]]></Name>
+			<Name><![CDATA[C_DB_Out_ElectricityGrid]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the output data of an electricity grid in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_Out_C_ElectricityGrid
+ * C_DB_Out_ElectricityGrid
  */	
-public class DB_Out_C_ElectricityGrid implements Serializable {
+public class C_DB_Out_ElectricityGrid implements Serializable {
 
     /**
      * Default constructor
      */
-    public DB_Out_C_ElectricityGrid() {
+    public C_DB_Out_ElectricityGrid() {
     }
 
 	@Override
@@ -6228,19 +6706,19 @@ public class DB_Out_C_ElectricityGrid implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689268386814</Id>
-			<Name><![CDATA[DB_Out_C_ElectricityGridOperator]]></Name>
+			<Name><![CDATA[C_DB_Out_ElectricityGridOperator]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the output data of an electricity grid operator in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_Out_C_ElectricityGridOperator
+ * C_DB_Out_ElectricityGridOperator
  */	
-public class DB_Out_C_ElectricityGridOperator implements Serializable {
+public class C_DB_Out_ElectricityGridOperator implements Serializable {
 
     /**
      * Default constructor
      */
-    public DB_Out_C_ElectricityGridOperator() {
+    public C_DB_Out_ElectricityGridOperator() {
     }
 
 	@Override
@@ -6259,19 +6737,19 @@ public class DB_Out_C_ElectricityGridOperator implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689268386829</Id>
-			<Name><![CDATA[DB_Out_C_Household]]></Name>
+			<Name><![CDATA[C_DB_Out_Household]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the output data of a household in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * DB_Out_C_Household
+ * C_DB_Out_Household
  */	
-public class DB_Out_C_Household implements Serializable {
+public class C_DB_Out_Household implements Serializable {
 
     /**
      * Default constructor
      */
-    public DB_Out_C_Household() {
+    public C_DB_Out_Household() {
     }
 
 	@Override
@@ -6287,62 +6765,13 @@ public class DB_Out_C_Household implements Serializable {
 
 }]]></Text>
 		</JavaClass>
-		<!--   =========   Java Class   ========  -->
-		<JavaClass>
-			<Id>1689325203759</Id>
-			<Name><![CDATA[Enum_GridUserType]]></Name>
-			<Description><![CDATA[@author Sharif_Khaleghparast
-@since 14_July_2023]]></Description>
-			<Text><![CDATA[/**
- * Enum_GridUserType
- */	
-public enum Enum_GridUserType implements Serializable {
-
-	CONSUMER,
-	PROSUMER,
-	PRODUCER;
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-
-	/**
-	 * This number is here for model snapshot storing purpose<br>
-	 * It needs to be changed when this class gets changed
-	 */ 
-	private static final long serialVersionUID = 1L;
-
-}]]></Text>
-		</JavaClass>
-		<!--   =========   Java Class   ========  -->
-		<JavaClass>
-			<Id>1689325995413</Id>
-			<Name><![CDATA[Enum_CommunityMemberType]]></Name>
-			<Description><![CDATA[@author Sharif_Khaleghparast
-@since 14_July_2023]]></Description>
-			<Text><![CDATA[/**
- * Enum_CommunityMemberType
- */	
-public enum Enum_CommunityMemberType implements Serializable {
-
-	NON_COLLABORATIVE,
-	COLLABORATIVE;
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-
-	/**
-	 * This number is here for model snapshot storing purpose<br>
-	 * It needs to be changed when this class gets changed
-	 */ 
-	private static final long serialVersionUID = 1L;
-
-}]]></Text>
-		</JavaClass>
 	</JavaClasses>
+	<ModelResources>
+		<Resource>
+			<Path><![CDATA[C:/Users/20210489/Desktop/New Microsoft Excel Worksheet.xlsx]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+		</Resource>
+	</ModelResources>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.modules.markup_descriptors]]></LibraryName>
 		<VersionMajor>1</VersionMajor>
