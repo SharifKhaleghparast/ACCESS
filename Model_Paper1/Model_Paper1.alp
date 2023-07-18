@@ -19,6 +19,44 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 	<EngineVersion>6</EngineVersion>
 	<JavaPackageName><![CDATA[model_paper1]]></JavaPackageName>
 	<ModelTimeUnit><![CDATA[Minute]]></ModelTimeUnit>
+	<OptionLists>
+		<OptionList>
+			<Id>1689703136117</Id>
+			<Name><![CDATA[OL_CommunityMemberType]]></Name>
+			<Description><![CDATA[@author Sharif_Khaleghparast
+@since 18_July_2023]]></Description>
+			<Option>
+				<Id>1689703136119</Id>
+				<Name><![CDATA[COLLABORATIVE]]></Name>
+			</Option>
+			<Option>
+				<Id>1689703136121</Id>
+				<Name><![CDATA[NON_COLLABORATIVE]]></Name>
+			</Option>
+			<Option>
+				<Id>1689703215915</Id>
+				<Name><![CDATA[NON_MEMBER]]></Name>
+			</Option>
+		</OptionList>
+		<OptionList>
+			<Id>1689703148874</Id>
+			<Name><![CDATA[OL_GridUserType]]></Name>
+			<Description><![CDATA[@author Sharif_Khaleghparast
+@since 18_July_2023]]></Description>
+			<Option>
+				<Id>1689703148876</Id>
+				<Name><![CDATA[CONSUMER]]></Name>
+			</Option>
+			<Option>
+				<Id>1689703148878</Id>
+				<Name><![CDATA[PROSUMER]]></Name>
+			</Option>
+			<Option>
+				<Id>1689703189750</Id>
+				<Name><![CDATA[PRODUCER]]></Name>
+			</Option>
+		</OptionList>
+	</OptionLists>
 	<ActiveObjectClasses>
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
@@ -207,6 +245,11 @@ for(C_DB_In__POJOContainer s: arg_ScenarioInputData) {
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[// TODO After the database is designed, give the arguments.
+
+//for(C_DB_In_Household h: ) {
+//	
+//}
+//ArrayList<C_DB_In__POJOContainer> c = new ArrayList<C_DB_In__POJOContainer>(,,,);
 //col_ScenarioInputData.add(new C_DB_Out_POJOContainer(,,,));
 return null;]]></Body>
 				</Function>
@@ -6291,29 +6334,36 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 public class C_DB_In__POJOContainer implements Serializable {
 
     // **********LIST FIELDS**********
-	private final List<C_DB_In_Household> col_DB_In_Households;
-	private final List<C_DB_In_Community> col_DB_In_EnergyCommunities;
-	private final List<C_DB_In_ElectricityGridOperator> col_DB_In_DistributionSystemOperators;
-	private final List<C_DB_In_ElectricityGrid> col_DB_In_LVDistributionFeeders;
+	private List<C_DB_In_Household> col_DB_In_Households;
+	private List<C_DB_In_Community> col_DB_In_EnergyCommunities;
+	private List<C_DB_In_ElectricityGridOperator> col_DB_In_DistributionSystemOperators;
+	private List<C_DB_In_ElectricityGrid> col_DB_In_LVDistributionFeeders;
 	
 	// **********CONSTRUCTORS**********
     /**
-     * Create an instance of the model input by POJOs
+     * Create an instance of a scenario input
+     */    
+    public C_DB_In__POJOContainer () {
+
+    }
+    
+	/**
+     * Create an instance of a scenario input
      * @param p_DB_In_Households A list of C_DB_In_Household POJOs
      * @param p_DB_In_EnergyCommunities A list of C_DB_In_Community POJOs
      * @param p_DB_In_DistributionSystemOperators A list of C_DB_In_ElectricityGridOperator POJOs
      * @param p_DB_In_LVDistributionFeeders A list of C_DB_In_ElectricityGrid POJOs
      */
     public C_DB_In__POJOContainer (List<C_DB_In_Household> p_DB_In_Households,
-    					    List<C_DB_In_Community> p_DB_In_EnergyCommunities,
-    					    List<C_DB_In_ElectricityGridOperator> p_DB_In_DistributionSystemOperators,
-    					    List<C_DB_In_ElectricityGrid> p_DB_In_LVDistributionFeeders) {
+    							   List<C_DB_In_Community> p_DB_In_EnergyCommunities,
+    							   List<C_DB_In_ElectricityGridOperator> p_DB_In_DistributionSystemOperators,
+    							   List<C_DB_In_ElectricityGrid> p_DB_In_LVDistributionFeeders) {
     	this.col_DB_In_Households = p_DB_In_Households;
     	this.col_DB_In_EnergyCommunities = p_DB_In_EnergyCommunities;
     	this.col_DB_In_DistributionSystemOperators = p_DB_In_DistributionSystemOperators;
     	this.col_DB_In_LVDistributionFeeders = p_DB_In_LVDistributionFeeders;
     }
-
+    
     // **********GETTERS**********
     public List<C_DB_In_Household> f_Get_DB_In_Households() {
     	return col_DB_In_Households;
@@ -6357,13 +6407,19 @@ public class C_DB_In__POJOContainer implements Serializable {
 public class C_DB_Out__POJOContainer implements Serializable {
 
 	// **********C_DB_Out_POJOContainer LISTS**********
-	private final List<C_DB_Out_Household> col_DB_Out_Households;
-	private final List<C_DB_Out_Community> col_DB_Out_EnergyCommunities;
-	private final List<C_DB_Out_ElectricityGridOperator> col_DB_Out_DistributionSystemOperators;
-	private final List<C_DB_Out_ElectricityGrid> col_DB_Out_LVDistributionFeeders;
+	private List<C_DB_Out_Household> col_DB_Out_Households;
+	private List<C_DB_Out_Community> col_DB_Out_EnergyCommunities;
+	private List<C_DB_Out_ElectricityGridOperator> col_DB_Out_DistributionSystemOperators;
+	private List<C_DB_Out_ElectricityGrid> col_DB_Out_LVDistributionFeeders;
 		
 	// **********CONSTRUCTORS**********
-	 /**
+    /**
+     * Create an instance of a scenario output
+     */    
+    public C_DB_Out__POJOContainer () {
+    }
+    
+	/**
 	 * Create an instance of the model output by POJOs
 	 * @param p_DB_Out_Households A list of C_DB_Out_Household POJOs 
 	 * @param p_DB_Out_EnergyCommunities A list of C_DB_Out_Community POJOs
@@ -6516,18 +6572,62 @@ public class C_DB_In_ElectricityGridOperator implements Serializable {
 public class C_DB_In_Household implements Serializable {
 
 	// **********FIELDS**********
-	
+	private final OL_GridUserType v_GridUserType;
+	private final LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> link_MyGridBus;
+	private final Map<Integer,Double> col_ConsumptionProfile;
+	private final Map<Integer,Double> col_ProductionProfile;
+	private final OL_CommunityMemberType v_CommunityMemberType;
+	private final LinkToAgentCollection<A_Logic_Community,A_Logic_Household> link_MyEnergyCommunity;
 	
 	// **********CONSTRUCTORS**********
     /**
-     * Default constructor
+     * Create an instance of a household
+     * @param p_GridUserType An Enum
+     * @param p_MyGridBus A bidirectional link to the grid
+     * @param p_ConsumptionProfile A collection of time and electricity consumption
+     * @param p_ProductionProfile A collection of time and electricity production
+     * @param p_CommunityMemberType An Enum
+     * @param p_MyEnergyCommunity A collection of bidirectional links to communities 
      */
-    public C_DB_In_Household() {
+    public C_DB_In_Household(OL_GridUserType p_GridUserType,
+    						 LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> p_MyGridBus,
+    						 Map<Integer,Double> p_ConsumptionProfile,
+    						 Map<Integer,Double> p_ProductionProfile,
+    						 OL_CommunityMemberType p_CommunityMemberType,
+    						 LinkToAgentCollection<A_Logic_Community,A_Logic_Household> p_MyEnergyCommunity) {
+    	this.v_GridUserType = p_GridUserType;
+    	this.link_MyGridBus = p_MyGridBus;
+    	this.col_ConsumptionProfile = p_ConsumptionProfile;
+    	this.col_ProductionProfile = p_ProductionProfile;
+    	this.v_CommunityMemberType = p_CommunityMemberType;
+    	this.link_MyEnergyCommunity = p_MyEnergyCommunity;
     }
     
     // **********GETTERS**********
-
-
+    public OL_GridUserType f_Get_GridUserType() {
+    	return v_GridUserType;
+    }
+    
+    public LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> f_Get_MyGridBus() {
+    	return link_MyGridBus;
+    }
+    
+    public Map<Integer,Double> f_Get_ConsumptionProfile() {
+    	return col_ConsumptionProfile;
+    }
+    
+    public Map<Integer,Double> f_Get_ProductionProfile() {
+    	return col_ProductionProfile;
+    }
+    
+    public OL_CommunityMemberType f_Get_CommunityMemberType() {
+    	return v_CommunityMemberType;
+    }
+    
+    public LinkToAgentCollection<A_Logic_Community,A_Logic_Household> f_Get_MyEnergyCommunity() {
+    	return link_MyEnergyCommunity;
+    }
+    
 	@Override
 	public String toString() {
 		return super.toString();
@@ -6665,62 +6765,13 @@ public class C_DB_Out_Household implements Serializable {
 
 }]]></Text>
 		</JavaClass>
-		<!--   =========   Java Class   ========  -->
-		<JavaClass>
-			<Id>1689325203759</Id>
-			<Name><![CDATA[Enum_GridUserType]]></Name>
-			<Description><![CDATA[@author Sharif_Khaleghparast
-@since 14_July_2023]]></Description>
-			<Text><![CDATA[/**
- * Enum_GridUserType
- */	
-public enum Enum_GridUserType implements Serializable {
-
-	CONSUMER,
-	PROSUMER,
-	PRODUCER;
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-
-	/**
-	 * This number is here for model snapshot storing purpose<br>
-	 * It needs to be changed when this class gets changed
-	 */ 
-	private static final long serialVersionUID = 1L;
-
-}]]></Text>
-		</JavaClass>
-		<!--   =========   Java Class   ========  -->
-		<JavaClass>
-			<Id>1689325995413</Id>
-			<Name><![CDATA[Enum_CommunityMemberType]]></Name>
-			<Description><![CDATA[@author Sharif_Khaleghparast
-@since 14_July_2023]]></Description>
-			<Text><![CDATA[/**
- * Enum_CommunityMemberType
- */	
-public enum Enum_CommunityMemberType implements Serializable {
-
-	NON_COLLABORATIVE,
-	COLLABORATIVE;
-	
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-
-	/**
-	 * This number is here for model snapshot storing purpose<br>
-	 * It needs to be changed when this class gets changed
-	 */ 
-	private static final long serialVersionUID = 1L;
-
-}]]></Text>
-		</JavaClass>
 	</JavaClasses>
+	<ModelResources>
+		<Resource>
+			<Path><![CDATA[C:/Users/20210489/Desktop/New Microsoft Excel Worksheet.xlsx]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+		</Resource>
+	</ModelResources>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.modules.markup_descriptors]]></LibraryName>
 		<VersionMajor>1</VersionMajor>
