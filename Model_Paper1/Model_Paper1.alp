@@ -1130,6 +1130,9 @@ Holds and handles ...
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[C_DB_In__POJOContainer]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -1874,6 +1877,9 @@ this.viewArea_Overview.navigateTo();
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[A_Logic__Scenario]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_ScenarioInputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -2627,6 +2633,9 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[C_DB_In_Household]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -3081,6 +3090,9 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[C_DB_In_Community]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -3533,6 +3545,9 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[C_DB_In_ElectricityGrid]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -3985,6 +4000,9 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[C_DB_In_ElectricityGridOperator]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -4437,6 +4455,9 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[A_Logic_Community]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -4891,6 +4912,9 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[A_Logic_Household]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -5345,6 +5369,9 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[A_Logic_ElectricityGrid]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -5799,6 +5826,9 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_ScenarioInputData.pop_Log
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[A_Logic_ElectricityGridOperator]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_InputData]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
