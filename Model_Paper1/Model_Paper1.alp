@@ -66,8 +66,9 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
-			<StartupCode><![CDATA[
-]]></StartupCode>
+			<StartupCode><![CDATA[traceln(v_Engine.getExperiment().getRunTimeSeconds());
+
+viewArea_ModelManager.navigateTo();]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689246676496</Id>
@@ -160,6 +161,21 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 			<CurrentLevel>1689246676497</CurrentLevel>
 			<ConnectionsId>1689246676491</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689863748025</Id>
+					<Name><![CDATA[v_Engine]]></Name>
+					<X>530</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[Engine]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[getEngine()]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="CollectionVariable">
 					<Id>1689761039735</Id>
 					<Name><![CDATA[col_PojoInContainers]]></Name>
@@ -195,13 +211,55 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 
 				</Variable>
 			</Variables>
+			<Events>
+				<Event>
+					<Id>1689863277530</Id>
+					<Name><![CDATA[e_pauseEngine]]></Name>
+					<Description><![CDATA[Pauses the experiment at model time 0.]]></Description>
+					<X>770</X><Y>230</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="occuresOnce">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[HOUR]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_HOUR]]></Unit>
+						</Rate>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1671523200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0.000000]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[HOUR]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[traceln(v_Engine.getExperiment().getRunTimeSeconds());
+f_ShowEngineSpecification();
+
+
+f_ShowEngineState();
+v_Engine.pause();
+f_ShowEngineState();
+v_Engine.run();
+f_ShowEngineState();]]></Action>
+				</Event>
+			</Events>
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>VOID</ReturnModificator>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689349242260</Id>
 					<Name><![CDATA[f_CreateModel]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -222,6 +280,35 @@ A_UI__Dashboard dashboard = add_pop_Dashboards(scenario);
 C_PojoOut__Container dataOut = new C_PojoOut__Container(scenario);
 col_PojoOutContainers.add(dataOut); 
 	]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1689862881040</Id>
+					<Name><![CDATA[f_ShowEngineState]]></Name>
+					<X>770</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[traceln("Engine state: " + v_Engine.getState());]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1689862881043</Id>
+					<Name><![CDATA[f_ShowEngineSpecification]]></Name>
+					<X>770</X><Y>90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[//Example: Optimization is an experiment. OptQuest is an optimization engine. 
+
+traceln("Simulation engine name: " + v_Engine + "\n" +
+		"Experiment name: " + v_Engine.getExperiment()
+		);
+]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -395,12 +482,26 @@ col_PojoOutContainers.add(dataOut);
 					<LevelVisibility>DIM_NON_CURRENT</LevelVisibility>
 
 			<Presentation>
-				<Rectangle>
-					<Id>1689757596146</Id>
-					<Name><![CDATA[rectangle_Menu]]></Name>
-					<X>20</X><Y>280</Y>
-					<Label><X>10</X><Y>10</Y></Label>
+				<Group>
+					<Id>1689860165656</Id>
+					<Name><![CDATA[groupTitleBar]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>11.109</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Rectangle>
+					<Id>1689860165658</Id>
+					<Name><![CDATA[rectangle5]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
@@ -408,15 +509,39 @@ col_PojoOutContainers.add(dataOut);
 					<Z>0</Z>
 					<ZHeight>10</ZHeight>
 					<LineWidth>1</LineWidth>
-					<LineColor>-16777216</LineColor>
+					<LineColor/>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
-					<Width>960</Width>
-					<Height>300</Height>
+					<Width>1000</Width>
+					<Height>54.808</Height>
 					<Rotation>0.0</Rotation>
-					<FillColor>-1</FillColor>
+					<FillColor>-5247250</FillColor>
 					<FillMaterial>null</FillMaterial>
 				</Rectangle>
+				<Text>
+					<Id>1689758032607</Id>
+					<Name><![CDATA[text_ModelManager]]></Name>
+					<X>30</X><Y>15</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Model Manager]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>20</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+			</Presentation>
+
+				</Group>
 				<Group>
 					<Id>1689252566406</Id>
 					<Name><![CDATA[group]]></Name>
@@ -654,8 +779,7 @@ col_PojoOutContainers.add(dataOut);
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689622781504</Id>
 					<Name><![CDATA[button_CreateModel]]></Name>
-					<Description><![CDATA[@todo  Complete the action.]]></Description>
-					<X>30</X><Y>350</Y>
+					<X>40</X><Y>700</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -677,32 +801,11 @@ button_ModelDashboard.setEnabled(true);
 						<LabelText><![CDATA[Create Model]]></LabelText>
 					</ExtendedProperties>
 				</Control>
-				<Text>
-					<Id>1689758032607</Id>
-					<Name><![CDATA[text_ModelManager]]></Name>
-					<X>30</X><Y>290</Y>
-					<Label><X>0</X><Y>-10</Y></Label>
-					<PublicFlag>true</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<DrawMode>SHAPE_DRAW_2D</DrawMode>
-					<EmbeddedIcon>false</EmbeddedIcon>
-					<Z>0</Z>
-					<Rotation>0.0</Rotation>
-					<Color>-16777216</Color>
-					<Text><![CDATA[Model Manager]]></Text>
-					<Font>
-						<Name>SansSerif</Name>
-						<Size>20</Size>
-						<Style>1</Style>
-					</Font>
-					<Alignment>LEFT</Alignment>
-				</Text>
 				<Control Type="Button">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689845556266</Id>
 					<Name><![CDATA[button_ModelDashboard]]></Name>
-					<X>30</X><Y>400</Y>
+					<X>40</X><Y>740</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -711,9 +814,10 @@ button_ModelDashboard.setEnabled(true);
 					<BasicProperties Width="120" Height="30">
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
+						<VisibleCode><![CDATA[!(button_CreateModel.isEnabled())]]></VisibleCode>
 						<Enabled>false</Enabled>
-						<ActionCode><![CDATA[// TODO Later check that where it should exactly navigate to.
-pop_Dashboards.get(0).viewArea_Overview.navigateTo();]]></ActionCode>
+						<ActionCode><![CDATA[// TODO Later check that where it should exactly f_Navigate to.
+pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -724,6 +828,20 @@ pop_Dashboards.get(0).viewArea_Overview.navigateTo();]]></ActionCode>
 
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1689860442715</Id>
+					<Name><![CDATA[viewArea_ModelManager]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -1259,21 +1377,11 @@ Holds and handles ...
 					</Parameter>
 					<Body><![CDATA[//Create initial embedded objects
 
-for (C_PojoIn_Household currHouseholdData : arg_MyPojoInContainer.f_Get_PojoIn_Households()) {
-	add_pop_Logic_Households(currHouseholdData);
-}
-
-for (C_PojoIn_Community currCommunityData : arg_MyPojoInContainer.f_Get_PojoIn_EnergyCommunities()) {
-	add_pop_Logic_EnergyCommunities(currCommunityData);
-}
-
-for (C_PojoIn_ElectricityGridOperator currElectricityGridOperatorData : arg_MyPojoInContainer.f_Get_PojoIn_DistributionSystemOperators()) {
-	add_pop_Logic_DistributionSystemOperators(currElectricityGridOperatorData);
-}
-
-for (C_PojoIn_ElectricityGrid currElectricityGridData : arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders()) {
-	add_pop_Logic_LVDistributionFeeders(currElectricityGridData);
-}]]></Body>
+arg_MyPojoInContainer.f_Get_PojoIn_Households().forEach(currHouseholdData -> add_pop_Logic_Households(currHouseholdData));
+arg_MyPojoInContainer.f_Get_PojoIn_EnergyCommunities().forEach(currCommunityData -> add_pop_Logic_EnergyCommunities(currCommunityData));
+arg_MyPojoInContainer.f_Get_PojoIn_DistributionSystemOperators().forEach(currElectricityGridOperatorData -> add_pop_Logic_DistributionSystemOperators(currElectricityGridOperatorData));
+arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders().forEach(currElectricityGridData -> add_pop_Logic_LVDistributionFeeders(currElectricityGridData));
+]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
@@ -2006,6 +2114,21 @@ f_CreateDashboard( link_MyScenario.getConnectedAgent() );
 			<CurrentLevel>1689252963340</CurrentLevel>
 			<ConnectionsId>1689252963364</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1689855523660</Id>
+					<Name><![CDATA[v_SelectedViewArea]]></Name>
+					<X>530</X><Y>110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[ViewArea]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[viewArea_Overview]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689352743394</Id>
 					<Name><![CDATA[p_MyScenario]]></Name>
@@ -2045,21 +2168,10 @@ f_CreateDashboard( link_MyScenario.getConnectedAgent() );
 					</Parameter>
 					<Body><![CDATA[// Create initial embedded objects
 
-for (A_Logic_Household currHousehold : arg_MyScenario.pop_Logic_Households) {
-	add_pop_UI_Households(currHousehold);
-}
-
-for (A_Logic_Community currCommunity : arg_MyScenario.pop_Logic_EnergyCommunities) {
-	add_pop_UI_EnergyCommunities(currCommunity);
-}
-
-for (A_Logic_ElectricityGridOperator currElectricityGridOperator : arg_MyScenario.pop_Logic_DistributionSystemOperators) {
-	add_pop_UI_DistributionSystemOperators(currElectricityGridOperator);
-}
-
-for (A_Logic_ElectricityGrid currElectricityGrid : arg_MyScenario.pop_Logic_LVDistributionFeeders) {
-	add_pop_UI_LVDistributionFeeders(currElectricityGrid);
-}
+arg_MyScenario.pop_Logic_Households.forEach(currHousehold -> add_pop_UI_Households(currHousehold));
+arg_MyScenario.pop_Logic_EnergyCommunities.forEach(currCommunity -> add_pop_UI_EnergyCommunities(currCommunity));
+arg_MyScenario.pop_Logic_DistributionSystemOperators.forEach(currElectricityGridOperator -> add_pop_UI_DistributionSystemOperators(currElectricityGridOperator));
+arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach(currElectricityGrid -> add_pop_UI_LVDistributionFeeders(currElectricityGrid));
 ]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
@@ -2073,6 +2185,52 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_MyScenario.pop_Logic_LVDi
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return link_MyScenario.getConnectedAgent();]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1689855523658</Id>
+					<Name><![CDATA[f_Navigate]]></Name>
+					<X>770</X><Y>130</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[f_SetSelectedViewArea(arg_ViewArea);
+arg_ViewArea.navigateTo();
+groupTitleBar.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1689855996394</Id>
+					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
+					<X>770</X><Y>150</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[v_SelectedViewArea = arg_ViewArea;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ViewArea]]></ReturnType>
+					<Id>1689859102887</Id>
+					<Name><![CDATA[f_GetSelectedViewArea]]></Name>
+					<X>770</X><Y>170</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_SelectedViewArea;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -2414,12 +2572,26 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_MyScenario.pop_Logic_LVDi
 					<LevelVisibility>DIM_NON_CURRENT</LevelVisibility>
 
 			<Presentation>
-				<Rectangle>
-					<Id>1689847423012</Id>
-					<Name><![CDATA[rectangle_Menu]]></Name>
-					<X>20</X><Y>640</Y>
-					<Label><X>10</X><Y>10</Y></Label>
+				<Group>
+					<Id>1689855523635</Id>
+					<Name><![CDATA[groupTitleBar]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>11.109</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Rectangle>
+					<Id>1689855523637</Id>
+					<Name><![CDATA[rectangle5]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
@@ -2427,15 +2599,148 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_MyScenario.pop_Logic_LVDi
 					<Z>0</Z>
 					<ZHeight>10</ZHeight>
 					<LineWidth>1</LineWidth>
-					<LineColor>-16777216</LineColor>
+					<LineColor/>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
-					<Width>960</Width>
-					<Height>300</Height>
+					<Width>1000</Width>
+					<Height>54.808</Height>
 					<Rotation>0.0</Rotation>
-					<FillColor>-1</FillColor>
+					<FillColor>-5247250</FillColor>
 					<FillMaterial>null</FillMaterial>
 				</Rectangle>
+				<Polyline>
+					<Id>1689855523641</Id>
+					<Name><![CDATA[polyline3]]></Name>
+					<X>760</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Overview);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-2037271</FillColor>
+					<FillColorCode><![CDATA[v_SelectedViewArea == viewArea_Overview ? 
+	new Color(224, 255, 255) : new Color(175, 238, 238)
+	/* lightCyan : paleTurquoise */]]></FillColorCode>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1689855523643</Id>
+					<Name><![CDATA[text_Overview]]></Name>
+					<X>770</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Overview]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1689847423014</Id>
+					<Name><![CDATA[text_Model]]></Name>
+					<X>30</X><Y>15</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Model]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>20</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Polyline>
+					<Id>1689859704570</Id>
+					<Name><![CDATA[polyline4]]></Name>
+					<X>880</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(get_A___ModelManager().viewArea_ModelManager);
+f_SetSelectedViewArea(viewArea_Overview);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-5247250</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1689859704575</Id>
+					<Name><![CDATA[text_Back]]></Name>
+					<X>935</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Model 
+Manager]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>16</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>CENTER</Alignment>
+				</Text>
+			</Presentation>
+
+				</Group>
 				<Group>
 					<Id>1689252963342</Id>
 					<Name><![CDATA[group]]></Name>
@@ -2672,7 +2977,7 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_MyScenario.pop_Logic_LVDi
 				<Text>
 					<Id>1689847406860</Id>
 					<Name><![CDATA[text_Agents]]></Name>
-					<X>280</X><Y>800</Y>
+					<X>20</X><Y>690</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2695,7 +3000,7 @@ for (A_Logic_ElectricityGrid currElectricityGrid : arg_MyScenario.pop_Logic_LVDi
 					<Id>1689847406862</Id>
 					<Name><![CDATA[button1]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>600</X><Y>770</Y>
+					<X>440</X><Y>690</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2719,7 +3024,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689847406864</Id>
 					<Name><![CDATA[checkbox]]></Name>
-					<X>350</X><Y>800</Y>
+					<X>320</X><Y>690</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2736,27 +3041,6 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 						<LinkTo>true</LinkTo>
 	 				</ExtendedProperties>
 				</Control>
-				<Text>
-					<Id>1689847423014</Id>
-					<Name><![CDATA[text_ModelDashboard]]></Name>
-					<X>30</X><Y>660</Y>
-					<Label><X>0</X><Y>-10</Y></Label>
-					<PublicFlag>true</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<DrawMode>SHAPE_DRAW_2D</DrawMode>
-					<EmbeddedIcon>false</EmbeddedIcon>
-					<Z>0</Z>
-					<Rotation>0.0</Rotation>
-					<Color>-16777216</Color>
-					<Text><![CDATA[Model Dashboard]]></Text>
-					<Font>
-						<Name>SansSerif</Name>
-						<Size>20</Size>
-						<Style>1</Style>
-					</Font>
-					<Alignment>LEFT</Alignment>
-				</Text>
 			</Presentation>
 
 				</Level>
@@ -2765,7 +3049,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Area>
 					<Id>1689449334613</Id>
 					<Name><![CDATA[viewArea_Overview]]></Name>
-					<X>0</X><Y>600</Y>
+					<X>0</X><Y>620</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6681,26 +6965,11 @@ public class C_PojoOut__Container implements Serializable {
 	private void f_CreatePojoOut__Container(A_Logic__Scenario arg_MyScenario) {
 		
 		// Create initial embedded objects
-
-		for (A_Logic_Household currHousehold : arg_MyScenario.pop_Logic_Households) {
-			C_PojoOut_Household h = new C_PojoOut_Household(currHousehold);
-			col_PojoOut_Households.add(h);
-		}
-
-		for (A_Logic_Community currCommunity : arg_MyScenario.pop_Logic_EnergyCommunities) {
-			C_PojoOut_Community c = new C_PojoOut_Community(currCommunity);
-			col_PojoOut_EnergyCommunities.add(c);
-		}
-
-		for (A_Logic_ElectricityGridOperator currElectricityGridOperator : arg_MyScenario.pop_Logic_DistributionSystemOperators) {
-			C_PojoOut_ElectricityGridOperator o = new C_PojoOut_ElectricityGridOperator(currElectricityGridOperator);
-			col_PojoOut_DistributionSystemOperators.add(o);
-		}
-			
-		for (A_Logic_ElectricityGrid currElectricityGrid : arg_MyScenario.pop_Logic_LVDistributionFeeders) {
-			C_PojoOut_ElectricityGrid g = new C_PojoOut_ElectricityGrid(currElectricityGrid);
-			col_PojoOut_LVDistributionFeeders.add(g);
-		}
+		
+		arg_MyScenario.pop_Logic_Households.forEach(currHousehold -> col_PojoOut_Households.add(new C_PojoOut_Household(currHousehold)));
+		arg_MyScenario.pop_Logic_EnergyCommunities.forEach(currCommunity -> col_PojoOut_EnergyCommunities.add(new C_PojoOut_Community(currCommunity)));
+		arg_MyScenario.pop_Logic_DistributionSystemOperators.forEach(currElectricityGridOperator -> col_PojoOut_DistributionSystemOperators.add(new C_PojoOut_ElectricityGridOperator(currElectricityGridOperator)));
+		arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach(currElectricityGrid -> col_PojoOut_LVDistributionFeeders.add(new C_PojoOut_ElectricityGrid(currElectricityGrid)));
 	}
 
 	@Override
