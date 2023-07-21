@@ -66,7 +66,8 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
-			<StartupCode><![CDATA[traceln(v_Engine.getExperiment().getRunTimeSeconds());
+			<StartupCode><![CDATA[traceln(getEngine().getRoot());
+traceln(v_Engine.getExperiment().getRunTimeSeconds());
 
 viewArea_ModelManager.navigateTo();]]></StartupCode>
 			<Generic>false</Generic>
@@ -164,6 +165,18 @@ viewArea_ModelManager.navigateTo();]]></StartupCode>
 				<Variable Class="PlainVariable">
 					<Id>1689863748025</Id>
 					<Name><![CDATA[v_Engine]]></Name>
+					<Description><![CDATA[This is the Anylogic engine that simulate an Anylogic model from the model root. The Anylogic engine contains the Anylogic model:
+getEngine().getRoot();
+
+The Anylogic engine is created by an experiment. The Anylogic model is also created by that experiment. The experiment pass the Anylogic model to the Anylogic engine, and ask the Anylogic engine to simulate the Anylogic model. The experiment does not contain the Anylogic model. Thus "getExperiment().getRoot();" does not exist.
+
+The experiment may interact with an optimization engine (i.e. OptQuest, jMetal, etc.) as well. The optimization engine only interact with the experiment. The optimization engine does not interact with the Anylogic engine or the Anylogic model. 
+
+1) Experiment --create--> Anylogic engine
+2) Experiment --create--> Anylogic model
+3) Experiment --ask to simulate the Anylogic model--> Anylogic engine
+4) Anylogic engine --simulate-->Anylogic model (from model root)
+]]></Description>
 					<X>530</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -303,7 +316,7 @@ col_PojoOutContainers.add(dataOut);
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[//Example: Optimization is an experiment. OptQuest is an optimization engine. 
+					<Body><![CDATA[//
 
 traceln("Simulation engine name: " + v_Engine + "\n" +
 		"Experiment name: " + v_Engine.getExperiment()
@@ -6783,9 +6796,42 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<Id>1689246676499</Id>
 			<Name><![CDATA[Simulation]]></Name>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
+			<InitialSetupCode><![CDATA[//This is somewhat inside the constructor body of the experiment.
+//This only runs once when the program window appear. 
+//The program window appear by clicking on the Anylogic run icon or by pressing F5.
+traceln("Initial experiment setup");
+
+//The experiment and the Anylogic engine objects was created:
+traceln("Experiment: " + getExperiment() + "\n" + 
+		"Anylogic Engine: " + getEngine());
+
+//No Anylogic model exists in the engine. The engine's root is null:
+traceln("Anylogic model inside the Anylogic engine: " + getEngine().getRoot() + "\n");]]></InitialSetupCode>
 			<MaximumMemory>512</MaximumMemory>
 			<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
 			<CustomGeneratorCode>new Random()</CustomGeneratorCode>
+			<BeforeEachExperimentRunCode><![CDATA[//This function runs everytime the experiment resets.
+//The experiment resets by clicking on the stop button and then play button on the program window.
+traceln("Before each experiment run");
+
+//Still, no Anylogic model exists in the engine. The engine's root is null:
+traceln("Anylogic model inside the Anylogic engine: " + getEngine().getRoot() + "\n");
+
+//The next built in code line is:
+//runAndShowRoot_xjal();]]></BeforeEachExperimentRunCode>
+			<BeforeSimulationRunCode><![CDATA[//This function runs everytime an Anylogic model is going to be simulated.
+traceln("Before simulation run");
+
+//This function get root as an argument.
+traceln("Anylogic model created (top-level agent): " + root);
+//root can be modified through its parameters and functions here, before it is passed to the engine!
+
+//Still, no Anylogic model exists in the engine. The engine's root is null:
+traceln("Anylogic model inside the Anylogic engine: " + getEngine().getRoot() + "\n");
+
+
+
+]]></BeforeSimulationRunCode>
 			<SeedValue>1</SeedValue>
 			<SelectionModeForSimultaneousEvents>LIFO</SelectionModeForSimultaneousEvents>
 			<VmArgs><![CDATA[]]></VmArgs>
