@@ -320,8 +320,8 @@ col_PojoOutContainers.add(dataOut);
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[traceln("\n" + "Anylogic engine state: " + v_Engine.getState());
-traceln("Simulation experiment state:" + v_Engine.getExperiment().getState());
+					<Body><![CDATA[traceln("\n" + "Anylogic engine state: " + f_GetEngine().getState());
+traceln("Simulation experiment state:" + f_GetEngine().getExperiment().getState());
 ]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
@@ -416,7 +416,7 @@ traceln("Simulation experiment state:" + v_Engine.getExperiment().getState());
 						<Parameter>
 							<Name><![CDATA[p_Engine]]></Name>
 							<Value Class="CodeValue">
-								<Code><![CDATA[v_Engine]]></Code>
+								<Code><![CDATA[f_GetEngine()]]></Code>
 							</Value>
 						</Parameter>
 					</Parameters>
@@ -868,7 +868,7 @@ traceln("Simulation experiment state:" + v_Engine.getExperiment().getState());
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689622781504</Id>
 					<Name><![CDATA[button_CreateModel]]></Name>
-					<X>40</X><Y>700</Y>
+					<X>40</X><Y>960</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -880,7 +880,7 @@ traceln("Simulation experiment state:" + v_Engine.getExperiment().getState());
 						<Enabled>true</Enabled>
 						<ActionCode><![CDATA[self.setEnabled(false);
 
-f_CreateModel(v_Engine, f_GetSelectedViewArea());
+f_CreateModel(f_GetEngine(), f_GetSelectedViewArea());
 
 button_ModelDashboard.setEnabled(true);
 ]]></ActionCode>
@@ -894,7 +894,7 @@ button_ModelDashboard.setEnabled(true);
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689845556266</Id>
 					<Name><![CDATA[button_ModelDashboard]]></Name>
-					<X>40</X><Y>740</Y>
+					<X>40</X><Y>1000</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -917,7 +917,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689964540035</Id>
 					<Name><![CDATA[button]]></Name>
-					<X>360</X><Y>880</Y>
+					<X>360</X><Y>1150</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -938,7 +938,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689964624007</Id>
 					<Name><![CDATA[button1]]></Name>
-					<X>220</X><Y>830</Y>
+					<X>220</X><Y>1100</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -948,7 +948,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<ActionCode><![CDATA[v_Engine.run();]]></ActionCode>
+						<ActionCode><![CDATA[f_GetEngine.run();]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -959,7 +959,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689964626305</Id>
 					<Name><![CDATA[button2]]></Name>
-					<X>340</X><Y>830</Y>
+					<X>340</X><Y>1100</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -969,7 +969,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<ActionCode><![CDATA[v_Engine.pause();]]></ActionCode>
+						<ActionCode><![CDATA[f_GetEngine.pause();]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -980,7 +980,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689964629037</Id>
 					<Name><![CDATA[button3]]></Name>
-					<X>580</X><Y>830</Y>
+					<X>580</X><Y>1100</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -990,7 +990,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<ActionCode><![CDATA[v_Engine.stop();
+						<ActionCode><![CDATA[f_GetEngine.stop();
 
 f_ShowSimulationRunState();
 ]]></ActionCode>
@@ -1004,7 +1004,7 @@ f_ShowSimulationRunState();
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689964749715</Id>
 					<Name><![CDATA[button4]]></Name>
-					<X>460</X><Y>830</Y>
+					<X>460</X><Y>1100</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1014,7 +1014,7 @@ f_ShowSimulationRunState();
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<ActionCode><![CDATA[v_Engine.finish();
+						<ActionCode><![CDATA[f_GetEngine.finish();
 
 f_ShowSimulationRunState();
 ]]></ActionCode>
@@ -1546,6 +1546,9 @@ Holds and handles ...
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[Engine]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_Engine]]></Code>
+						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
@@ -1683,7 +1686,7 @@ ArrayList<C_PojoIn__Container> c = new ArrayList<C_PojoIn__Container>();
 //col_Models.add(new C_PojoOut_POJOContainer(,,,));
 return null;]]></Body>
 				</Function>
-				<Function AccessType="private" StaticFunction="false">
+				<Function AccessType="public" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[Engine]]></ReturnType>
 					<Id>1690035238394</Id>
@@ -1694,6 +1697,20 @@ return null;]]></Body>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return v_Engine;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690038839958</Id>
+					<Name><![CDATA[f_ShowSimulationRunState]]></Name>
+					<X>770</X><Y>210</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[traceln("\n" + "Anylogic engine state: " + f_GetEngine().getState());
+traceln("Simulation experiment state:" + f_GetEngine().getExperiment().getState());
+]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -3359,6 +3376,117 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<FillColor>-2031617</FillColor>
 					<FillMaterial>null</FillMaterial>
 				</Rectangle>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690039752100</Id>
+					<Name><![CDATA[button]]></Name>
+					<X>370</X><Y>1120</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="180" Height="30">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>true</Enabled>
+						<ActionCode><![CDATA[f_GetMyScenario().f_ShowSimulationRunState();]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[Show Simulation Run State]]></LabelText>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690039752116</Id>
+					<Name><![CDATA[button3]]></Name>
+					<X>590</X><Y>1070</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="30">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>true</Enabled>
+						<ActionCode><![CDATA[f_GetMyScenario().f_GetEngine().stop();
+
+f_GetMyScenario().f_ShowSimulationRunState();
+]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[Stop]]></LabelText>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690039752118</Id>
+					<Name><![CDATA[button4]]></Name>
+					<X>470</X><Y>1070</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="30">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>true</Enabled>
+						<ActionCode><![CDATA[f_GetMyScenario().f_GetEngine().finish();
+
+f_GetMyScenario().f_ShowSimulationRunState();
+]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[Finish]]></LabelText>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690039752120</Id>
+					<Name><![CDATA[button2]]></Name>
+					<X>230</X><Y>1070</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="30">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>true</Enabled>
+						<ActionCode><![CDATA[f_GetMyScenario().f_GetEngine().run();]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[Run]]></LabelText>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690039752122</Id>
+					<Name><![CDATA[button5]]></Name>
+					<X>350</X><Y>1070</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="30">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>true</Enabled>
+						<ActionCode><![CDATA[f_GetMyScenario().f_GetEngine().pause();]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[Pause]]></LabelText>
+					</ExtendedProperties>
+				</Control>
 			</Presentation>
 
 				</Level>
