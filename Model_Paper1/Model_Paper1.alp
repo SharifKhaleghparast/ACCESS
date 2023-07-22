@@ -299,7 +299,8 @@ col_PojoOutContainers.add(dataOut);
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[traceln("\n" + "Anylogic engine state: " + v_Engine.getState());
-traceln("Simulation experiment state:" + v_Engine.getExperiment().getState());]]></Body>
+traceln("Simulation experiment state:" + v_Engine.getExperiment().getState());
+]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -473,9 +474,32 @@ traceln("Simulation experiment state:" + v_Engine.getExperiment().getState());]]
 					<LevelVisibility>DIM_NON_CURRENT</LevelVisibility>
 
 			<Presentation>
+				<Rectangle>
+					<Id>1690032808076</Id>
+					<Name><![CDATA[rectangle_ContextBackground01]]></Name>
+					<X>0</X><Y>675</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Lock>true</Lock>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>545</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-2031617</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
 				<Group>
 					<Id>1689860165656</Id>
-					<Name><![CDATA[groupTitleBar]]></Name>
+					<Name><![CDATA[group_TitleBar]]></Name>
 					<X>0</X><Y>620</Y>
 					<Label><X>11.109</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -489,7 +513,7 @@ traceln("Simulation experiment state:" + v_Engine.getExperiment().getState());]]
 			<Presentation>
 				<Rectangle>
 					<Id>1689860165658</Id>
-					<Name><![CDATA[rectangle5]]></Name>
+					<Name><![CDATA[rectangle_TitleBackground]]></Name>
 					<X>0</X><Y>0</Y>
 					<Label><X>10</X><Y>10</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -535,7 +559,7 @@ traceln("Simulation experiment state:" + v_Engine.getExperiment().getState());]]
 				</Group>
 				<Group>
 					<Id>1689252566406</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -1085,7 +1109,7 @@ Holds and handles ...
 			<Presentation>
 				<Group>
 					<Id>1689252318440</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -1873,7 +1897,7 @@ return null;]]></Body>
 			<Presentation>
 				<Group>
 					<Id>1689252665133</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -2304,7 +2328,7 @@ arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach(currElectricityGrid -> ad
 					</Parameter>
 					<Body><![CDATA[f_SetSelectedViewArea(arg_ViewArea);
 arg_ViewArea.navigateTo();
-groupTitleBar.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
+group_TitleBar.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>VOID</ReturnModificator>
@@ -2676,7 +2700,7 @@ groupTitleBar.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 			<Presentation>
 				<Group>
 					<Id>1689855523635</Id>
-					<Name><![CDATA[groupTitleBar]]></Name>
+					<Name><![CDATA[group_TitleBar]]></Name>
 					<X>0</X><Y>620</Y>
 					<Label><X>11.109</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -2690,7 +2714,7 @@ groupTitleBar.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 			<Presentation>
 				<Rectangle>
 					<Id>1689855523637</Id>
-					<Name><![CDATA[rectangle5]]></Name>
+					<Name><![CDATA[rectangle_TitleBackground]]></Name>
 					<X>0</X><Y>0</Y>
 					<Label><X>10</X><Y>10</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -2712,7 +2736,7 @@ groupTitleBar.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 				</Rectangle>
 				<Polyline>
 					<Id>1689855523641</Id>
-					<Name><![CDATA[polyline3]]></Name>
+					<Name><![CDATA[polyline_Overview]]></Name>
 					<X>760</X><Y>55</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -2788,7 +2812,7 @@ groupTitleBar.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 				</Text>
 				<Polyline>
 					<Id>1689859704570</Id>
-					<Name><![CDATA[polyline4]]></Name>
+					<Name><![CDATA[polyline_ModelManager]]></Name>
 					<X>880</X><Y>55</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -2845,7 +2869,7 @@ Manager]]></Text>
 				</Group>
 				<Group>
 					<Id>1689252963342</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -3143,6 +3167,29 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 						<LinkTo>true</LinkTo>
 	 				</ExtendedProperties>
 				</Control>
+				<Rectangle>
+					<Id>1690032703641</Id>
+					<Name><![CDATA[rectangle_ContextBackground01]]></Name>
+					<X>0</X><Y>675</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Lock>true</Lock>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>545</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-2031617</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
 			</Presentation>
 
 				</Level>
@@ -3383,7 +3430,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<Presentation>
 				<Group>
 					<Id>1689260063084</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -3838,7 +3885,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<Presentation>
 				<Group>
 					<Id>1689260380184</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -4293,7 +4340,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<Presentation>
 				<Group>
 					<Id>1689260704435</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -4748,7 +4795,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<Presentation>
 				<Group>
 					<Id>1689261067012</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -5210,7 +5257,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<Presentation>
 				<Group>
 					<Id>1689262721833</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -5672,7 +5719,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<Presentation>
 				<Group>
 					<Id>1689262886730</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -6134,7 +6181,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<Presentation>
 				<Group>
 					<Id>1689262892379</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -6596,7 +6643,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<Presentation>
 				<Group>
 					<Id>1689262910852</Id>
-					<Name><![CDATA[group]]></Name>
+					<Name><![CDATA[group_AgentSpecification]]></Name>
 					<X>500</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
