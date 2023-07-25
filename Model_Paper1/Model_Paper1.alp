@@ -215,7 +215,7 @@ getExperiment().getEngine();
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+					<Properties SaveInSnapshot="true" Constant="true" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[Engine]]></Type>        
 						<InitialValue Class="CodeValue">
 							<Code><![CDATA[getEngine()]]></Code>
@@ -309,6 +309,43 @@ getExperiment().getEngine();
 }
 ]]></Action>
 				</Event>
+				<Event>
+					<Id>1690301529614</Id>
+					<Name><![CDATA[e_CyclicPojoOutContainerCreator]]></Name>
+					<Description><![CDATA[It stores all the model data during the simulation run cyclicly, to enable the modelers write them in the database output tables at once at the end of the simulation run.
+
+// Ignore this event untill when we really make the pojoOutContainers work.]]></Description>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>30</X><Y>350</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MINUTE]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_MINUTE]]></Unit>
+						</Rate>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1690358400000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MINUTE]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[MINUTE]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[C_PojoOut__Container dataOut = new C_PojoOut__Container(scenario);
+col_PojoOutContainers.add(dataOut);
+]]></Action>
+				</Event>
 			</Events>
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
@@ -316,23 +353,27 @@ getExperiment().getEngine();
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689349242260</Id>
 					<Name><![CDATA[f_CreateModel]]></Name>
+					<Description><![CDATA[It does not let more than one model being created by limiting the number of scenarios, dashboards, pojoInContainers and pojoOutContainers to one. This is because we want to keep the one-to-one ratio between the number of the model and the engine. We do not want to use one engine to run more than one model.
+
+Attention: The pojoOutContainer object that is created here, keeps the initial model data setup of the model. Other pojoOutContainer objects are created to keep the model data through time.
+Attention: The experiment is the only object that can create an engine. We cannot create engines from within the agents.]]></Description>
 					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Parameter>
-						<Name><![CDATA[arg_GetEngine]]></Name>
+						<Name><![CDATA[arg_Engine]]></Name>
 						<Type><![CDATA[Engine]]></Type>
 					</Parameter>
 					<Parameter>
-						<Name><![CDATA[arg_GetSelectedViewArea]]></Name>
+						<Name><![CDATA[arg_SelectedViewArea]]></Name>
 						<Type><![CDATA[ViewArea]]></Type>
 					</Parameter>
 					<Body><![CDATA[/* Create initial embedded objects */
 
 /* FIRST: PojoInContainer setup */
-C_PojoIn__Container dataIn = new C_PojoIn__Container(arg_GetEngine,null, null, null, null);
+C_PojoIn__Container dataIn = new C_PojoIn__Container(arg_Engine,null, null, null, null);
 
 //Sanity check
 if(col_PojoInContainers.size() != 0) {
@@ -358,7 +399,7 @@ A_UI__Dashboard dashboard = new A_UI__Dashboard();
 if(pop_Dashboards.size() != 0) {
 	error(pop_Dashboards.size() + " dashboards are created before model creation.");
 } else {
-	dashboard = add_pop_Dashboards(scenario, arg_GetSelectedViewArea);
+	dashboard = add_pop_Dashboards(scenario, arg_SelectedViewArea);
 }
 
 /* FOURTH: PojoOutContainer setup */
@@ -1097,7 +1138,7 @@ button_ModelDashboard.setEnabled(true);
 						<VisibleCode><![CDATA[//!(button_CreateModel.isEnabled())]]></VisibleCode>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[// TODO Later check that where it should exactly f_Navigate to.
-pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();]]></ActionCode>
+pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -1404,7 +1445,7 @@ Holds and handles ...
 				<Group>
 					<Id>1689252318440</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1610,13 +1651,10 @@ Holds and handles ...
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689250985441</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1636,8 +1674,37 @@ Holds and handles ...
 				</Text>
 			</Presentation>
 
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690308569519</Id>
+					<Name><![CDATA[viewArea_Logic]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690308711227</Id>
+					<Name><![CDATA[viewArea_Overview]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -1749,7 +1816,7 @@ if(this.getIndex() != 0) {
 				<Variable Class="PlainVariable">
 					<Id>1689442134270</Id>
 					<Name><![CDATA[v_MyPojoInContainer]]></Name>
-					<X>530</X><Y>110</Y>
+					<X>530</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1764,7 +1831,7 @@ if(this.getIndex() != 0) {
 				<Variable Class="PlainVariable">
 					<Id>1690035202844</Id>
 					<Name><![CDATA[v_Engine]]></Name>
-					<X>530</X><Y>90</Y>
+					<X>530</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1779,7 +1846,7 @@ if(this.getIndex() != 0) {
 				<Variable Class="Parameter">
 					<Id>1689346312586</Id>
 					<Name><![CDATA[p_MyPojoInContainer]]></Name>
-					<X>290</X><Y>90</Y>
+					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1806,7 +1873,7 @@ if(this.getIndex() != 0) {
 					<Id>1689346698198</Id>
 					<Name><![CDATA[f_CreateScenario]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1849,7 +1916,7 @@ if(arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders() == null) {
 					<ReturnType><![CDATA[C_PojoIn__Container]]></ReturnType>
 					<Id>1689673620224</Id>
 					<Name><![CDATA[f_GetMyPojoInContainer]]></Name>
-					<X>770</X><Y>130</Y>
+					<X>770</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1862,7 +1929,7 @@ if(arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders() == null) {
 					<Id>1689844894377</Id>
 					<Name><![CDATA[f_SetScenarioInputData]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>190</Y>
+					<X>770</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1879,7 +1946,7 @@ if(arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders() == null) {
 					<Id>1689844894381</Id>
 					<Name><![CDATA[f_GetScenarioInputData]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>150</Y>
+					<X>770</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1893,7 +1960,7 @@ if(arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders() == null) {
 					<Name><![CDATA[f_LoadScenarioInputData]]></Name>
 					<Description><![CDATA[Load input data for a scenario from the Anylogic database]]></Description>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>170</Y>
+					<X>770</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1915,7 +1982,7 @@ return null;]]></Body>
 					<ReturnType><![CDATA[Engine]]></ReturnType>
 					<Id>1690035238394</Id>
 					<Name><![CDATA[f_GetEngine]]></Name>
-					<X>770</X><Y>110</Y>
+					<X>770</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1950,7 +2017,7 @@ return null;]]></Body>
 					<Id>1689326574859</Id>
 					<Name><![CDATA[a___ModelManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>50</X><Y>90</Y>
+					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1967,7 +2034,7 @@ return null;]]></Body>
 					<Name><![CDATA[pop_Logic_EnergyCommunities]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>130</Y>
+					<X>50</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2033,7 +2100,7 @@ return null;]]></Body>
 					<Name><![CDATA[pop_Logic_Households]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>150</Y>
+					<X>50</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2099,7 +2166,7 @@ return null;]]></Body>
 					<Name><![CDATA[pop_Logic_LVDistributionFeeders]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>170</Y>
+					<X>50</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2165,7 +2232,7 @@ return null;]]></Body>
 					<Name><![CDATA[pop_Logic_DistributionSystemOperators]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>110</Y>
+					<X>50</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2245,7 +2312,7 @@ return null;]]></Body>
 				<Group>
 					<Id>1689252665133</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2451,13 +2518,10 @@ return null;]]></Body>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689252665153</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2477,8 +2541,37 @@ return null;]]></Body>
 				</Text>
 			</Presentation>
 
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690310561471</Id>
+					<Name><![CDATA[viewArea_Logic1]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690312500754</Id>
+					<Name><![CDATA[viewArea_Logic2]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -2486,6 +2579,9 @@ return null;]]></Body>
 			<Id>1689252963338</Id>
 			<Name><![CDATA[A_UI__Dashboard]]></Name>
 			<Description><![CDATA[Holds and handles UI agents and classes for this dashboard.
+
+Attention: No navigation through agent populations in the logic tab during the runtime. All navigations should be done in the overview tab.
+
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
@@ -2682,12 +2778,16 @@ link_MyScenario.connectTo(p_MyScenario);
 						<Name><![CDATA[arg_MyScenario]]></Name>
 						<Type><![CDATA[A_Logic__Scenario]]></Type>
 					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_SelectedViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
 					<Body><![CDATA[// Create initial embedded objects
 
-arg_MyScenario.pop_Logic_Households.forEach(currHousehold -> add_pop_UI_Households(currHousehold));
-arg_MyScenario.pop_Logic_EnergyCommunities.forEach(currCommunity -> add_pop_UI_EnergyCommunities(currCommunity));
-arg_MyScenario.pop_Logic_DistributionSystemOperators.forEach(currElectricityGridOperator -> add_pop_UI_DistributionSystemOperators(currElectricityGridOperator));
-arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach(currElectricityGrid -> add_pop_UI_LVDistributionFeeders(currElectricityGrid));
+arg_MyScenario.pop_Logic_Households.forEach(currHousehold -> add_pop_UI_Households(currHousehold, arg_SelectedViewArea));
+arg_MyScenario.pop_Logic_EnergyCommunities.forEach(currCommunity -> add_pop_UI_EnergyCommunities(currCommunity, arg_SelectedViewArea));
+arg_MyScenario.pop_Logic_DistributionSystemOperators.forEach(currElectricityGridOperator -> add_pop_UI_DistributionSystemOperators(currElectricityGridOperator, arg_SelectedViewArea));
+arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach(currElectricityGrid -> add_pop_UI_LVDistributionFeeders(currElectricityGrid, arg_SelectedViewArea));
 ]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
@@ -2845,6 +2945,9 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 						<Parameter>
 							<Name><![CDATA[p_MyHousehold]]></Name>
 						</Parameter>
+						<Parameter>
+							<Name><![CDATA[p_ReferenceViewArea]]></Name>
+						</Parameter>
 					</Parameters>
 					<ReplicationFlag>true</ReplicationFlag>
 					<Replication Class="CodeValue">
@@ -2910,6 +3013,9 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Parameters>
 						<Parameter>
 							<Name><![CDATA[p_MyCommunity]]></Name>
+						</Parameter>
+						<Parameter>
+							<Name><![CDATA[p_ReferenceViewArea]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>true</ReplicationFlag>
@@ -2977,6 +3083,9 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 						<Parameter>
 							<Name><![CDATA[p_MyMyElectricityGridOperator]]></Name>
 						</Parameter>
+						<Parameter>
+							<Name><![CDATA[p_ReferenceViewArea]]></Name>
+						</Parameter>
 					</Parameters>
 					<ReplicationFlag>true</ReplicationFlag>
 					<Replication Class="CodeValue">
@@ -3042,6 +3151,9 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Parameters>
 						<Parameter>
 							<Name><![CDATA[p_MyElectricityGrid]]></Name>
+						</Parameter>
+						<Parameter>
+							<Name><![CDATA[p_ReferenceViewArea]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>true</ReplicationFlag>
@@ -3219,7 +3331,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Model Behavior]]></Text>
+					<Text><![CDATA[Model Assumptions > Model Behavior]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>24</Size>
@@ -3905,7 +4017,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Variable Class="PlainVariable">
 					<Id>1689447675142</Id>
 					<Name><![CDATA[v_MyPojoInHousehold]]></Name>
-					<X>530</X><Y>90</Y>
+					<X>530</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3920,7 +4032,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Variable Class="Parameter">
 					<Id>1689348892437</Id>
 					<Name><![CDATA[p_MyPojoInHousehold]]></Name>
-					<X>290</X><Y>90</Y>
+					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3945,7 +4057,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<ReturnType><![CDATA[C_PojoIn_Household]]></ReturnType>
 					<Id>1689674194520</Id>
 					<Name><![CDATA[f_GetMyPojoInHousehold]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3980,7 +4092,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689338288544</Id>
 					<Name><![CDATA[a_Logic__Scenario]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>60</X><Y>110</Y>
+					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3994,7 +4106,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689338288549</Id>
 					<Name><![CDATA[a___ModelManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>50</X><Y>90</Y>
+					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4023,7 +4135,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Group>
 					<Id>1689260063084</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4229,13 +4341,10 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689260063104</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4255,8 +4364,37 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				</Text>
 			</Presentation>
 
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690312458154</Id>
+					<Name><![CDATA[viewArea_Logic1]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690312470498</Id>
+					<Name><![CDATA[viewArea_Logic2]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -4362,7 +4500,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Variable Class="PlainVariable">
 					<Id>1689447894646</Id>
 					<Name><![CDATA[v_MyPojoInCommunity]]></Name>
-					<X>535</X><Y>90</Y>
+					<X>535</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4377,7 +4515,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Variable Class="Parameter">
 					<Id>1689349020070</Id>
 					<Name><![CDATA[p_MyPojoInCommunity]]></Name>
-					<X>290</X><Y>90</Y>
+					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4402,7 +4540,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<ReturnType><![CDATA[C_PojoIn_Community]]></ReturnType>
 					<Id>1689674307837</Id>
 					<Name><![CDATA[f_GetMyPojoInCommunity]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4436,7 +4574,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<ContainerLink>
 					<Id>1689328691574</Id>
 					<Name><![CDATA[a_Logic__Scenario]]></Name>
-					<X>60</X><Y>110</Y>
+					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4449,7 +4587,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<ContainerLink>
 					<Id>1689328691578</Id>
 					<Name><![CDATA[a___ModelManager]]></Name>
-					<X>50</X><Y>90</Y>
+					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4478,7 +4616,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Group>
 					<Id>1689260380184</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4684,13 +4822,10 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689260380204</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4710,8 +4845,37 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				</Text>
 			</Presentation>
 
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690312427287</Id>
+					<Name><![CDATA[viewArea_Logic1]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690312491038</Id>
+					<Name><![CDATA[viewArea_Logic2]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -4817,7 +4981,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Variable Class="PlainVariable">
 					<Id>1689448015375</Id>
 					<Name><![CDATA[v_MyPojoInElectricityGrid]]></Name>
-					<X>530</X><Y>90</Y>
+					<X>530</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4832,7 +4996,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Variable Class="Parameter">
 					<Id>1689349141511</Id>
 					<Name><![CDATA[p_MyPojoInElectricityGrid]]></Name>
-					<X>290</X><Y>90</Y>
+					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4857,7 +5021,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<ReturnType><![CDATA[C_PojoIn_ElectricityGrid]]></ReturnType>
 					<Id>1689674354963</Id>
 					<Name><![CDATA[f_GetMyPojoInElectricityGrid]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4891,7 +5055,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<ContainerLink>
 					<Id>1689338612789</Id>
 					<Name><![CDATA[a_Logic__Scenario]]></Name>
-					<X>60</X><Y>110</Y>
+					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4904,7 +5068,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<ContainerLink>
 					<Id>1689338612791</Id>
 					<Name><![CDATA[a___ModelManager]]></Name>
-					<X>50</X><Y>90</Y>
+					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4933,7 +5097,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Group>
 					<Id>1689260704435</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5139,13 +5303,10 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689260704455</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5165,8 +5326,37 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				</Text>
 			</Presentation>
 
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690312438104</Id>
+					<Name><![CDATA[viewArea_Logic1]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690312485071</Id>
+					<Name><![CDATA[viewArea_Logic2]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -5272,7 +5462,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Variable Class="PlainVariable">
 					<Id>1689447967144</Id>
 					<Name><![CDATA[v_MyPojoInElectricityGridOperator]]></Name>
-					<X>530</X><Y>90</Y>
+					<X>530</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5287,7 +5477,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Variable Class="Parameter">
 					<Id>1689349083557</Id>
 					<Name><![CDATA[p_MyPojoInElectricityGridOperator]]></Name>
-					<X>290</X><Y>90</Y>
+					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5312,7 +5502,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<ReturnType><![CDATA[C_PojoIn_ElectricityGridOperator]]></ReturnType>
 					<Id>1689674334101</Id>
 					<Name><![CDATA[f_GetMyPojoInElectricityGridOperator]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5346,7 +5536,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<ContainerLink>
 					<Id>1689338728772</Id>
 					<Name><![CDATA[a_Logic__Scenario]]></Name>
-					<X>60</X><Y>110</Y>
+					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5359,7 +5549,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<ContainerLink>
 					<Id>1689338728774</Id>
 					<Name><![CDATA[a___ModelManager]]></Name>
-					<X>50</X><Y>90</Y>
+					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5388,7 +5578,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Group>
 					<Id>1689261067012</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5594,13 +5784,10 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689261067032</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5620,8 +5807,37 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				</Text>
 			</Presentation>
 
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690312446704</Id>
+					<Name><![CDATA[viewArea_Logic1]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690312477638</Id>
+					<Name><![CDATA[viewArea_Logic2]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -5724,10 +5940,40 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<CurrentLevel>1689262721831</CurrentLevel>
 			<ConnectionsId>1689262721855</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1690309784978</Id>
+					<Name><![CDATA[v_SelectedViewArea]]></Name>
+					<X>530</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[ViewArea]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[viewArea_Overview]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1690309784980</Id>
+					<Name><![CDATA[v_ReferenceViewArea]]></Name>
+					<X>530</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[ViewArea]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_ReferenceViewArea]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689353774313</Id>
 					<Name><![CDATA[p_MyCommunity]]></Name>
-					<X>290</X><Y>90</Y>
+					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5745,6 +5991,27 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 						</ParameterEditor>
 					</Properties>                 
 				</Variable>
+				<Variable Class="Parameter">
+					<Id>1690309784983</Id>
+					<Name><![CDATA[p_ReferenceViewArea]]></Name>
+					<X>290</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[ViewArea]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1690309784981</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
 			</Variables>
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
@@ -5752,12 +6019,70 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<ReturnType><![CDATA[A_Logic_Community]]></ReturnType>
 					<Id>1689674067219</Id>
 					<Name><![CDATA[f_GetMyCommunity]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return link_MyCommunity.getConnectedAgent();]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690309784970</Id>
+					<Name><![CDATA[f_Navigate]]></Name>
+					<X>770</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[f_SetSelectedViewArea(arg_ViewArea);
+arg_ViewArea.navigateTo();
+group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690309784972</Id>
+					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
+					<X>770</X><Y>240</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[v_SelectedViewArea = arg_ViewArea;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ViewArea]]></ReturnType>
+					<Id>1690309784974</Id>
+					<Name><![CDATA[f_GetSelectedViewArea]]></Name>
+					<X>770</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_SelectedViewArea;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ViewArea]]></ReturnType>
+					<Id>1690309784976</Id>
+					<Name><![CDATA[f_GetReferenceViewArea]]></Name>
+					<X>770</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_ReferenceViewArea;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -5783,7 +6108,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<AgentLink>
 					<Id>1689778660149</Id>
 					<Name><![CDATA[link_MyCommunity]]></Name>
-					<X>530</X><Y>90</Y>
+					<X>530</X><Y>140</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5807,7 +6132,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689339981054</Id>
 					<Name><![CDATA[a___ModelManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>50</X><Y>90</Y>
+					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5821,7 +6146,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689339981056</Id>
 					<Name><![CDATA[a_UI__Dashboard]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>60</X><Y>110</Y>
+					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5850,7 +6175,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Group>
 					<Id>1689262721833</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6056,13 +6381,10 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689262721853</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6082,8 +6404,300 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				</Text>
 			</Presentation>
 
+				</Group>
+				<Group>
+					<Id>1690312818254</Id>
+					<Name><![CDATA[group_Background]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Lock>true</Lock>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Group>
+					<Id>1690312818256</Id>
+					<Name><![CDATA[group_TitleBar]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>11.109</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Rectangle>
+					<Id>1690312818258</Id>
+					<Name><![CDATA[rectangle_BackgroundTitle]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>55</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-5247250</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
+				<Polyline>
+					<Id>1690312818260</Id>
+					<Name><![CDATA[polyline_Overview]]></Name>
+					<X>880</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Overview);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-2031617</FillColor>
+					<FillColorCode><![CDATA[v_SelectedViewArea == viewArea_Overview ? 
+	new Color(224, 255, 255) : new Color(0, 206, 209)
+	/* lightCyan : darkTurquoise */]]></FillColorCode>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690312818262</Id>
+					<Name><![CDATA[text_Overview]]></Name>
+					<X>890</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Overview]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1690312818264</Id>
+					<Name><![CDATA[text_AgentBehavior]]></Name>
+					<X>30</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Model Assumptions > Model Behavior > Agent Behavior]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Polyline>
+					<Id>1690312818266</Id>
+					<Name><![CDATA[polyline_Back]]></Name>
+					<X>0</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Overview);
+f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16724271</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>25</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>25</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690312818268</Id>
+					<Name><![CDATA[text_Back]]></Name>
+					<X>12</X><Y>8</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[<]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>28</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>CENTER</Alignment>
+				</Text>
+				<Polyline>
+					<Id>1690312818270</Id>
+					<Name><![CDATA[polyline_Logic]]></Name>
+					<X>760</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Logic);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16724271</FillColor>
+					<FillColorCode><![CDATA[v_SelectedViewArea == viewArea_Logic ? 
+	new Color(224, 255, 255) : new Color(0, 206, 209)
+	/* lightCyan : darkTurquoise */]]></FillColorCode>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690312818272</Id>
+					<Name><![CDATA[text_Logic]]></Name>
+					<X>791</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Logic]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+			</Presentation>
+
+				</Group>
+				<Rectangle>
+					<Id>1690312818274</Id>
+					<Name><![CDATA[rectangle_BackgroundBody]]></Name>
+					<X>0</X><Y>55</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>545</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-2031617</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
+			</Presentation>
+
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690308562441</Id>
+					<Name><![CDATA[viewArea_Logic]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690308703463</Id>
+					<Name><![CDATA[viewArea_Overview]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -6186,10 +6800,40 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<CurrentLevel>1689262886728</CurrentLevel>
 			<ConnectionsId>1689262886752</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1690309587162</Id>
+					<Name><![CDATA[v_SelectedViewArea]]></Name>
+					<X>530</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[ViewArea]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[viewArea_Overview]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1690309587164</Id>
+					<Name><![CDATA[v_ReferenceViewArea]]></Name>
+					<X>530</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[ViewArea]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_ReferenceViewArea]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689353686385</Id>
 					<Name><![CDATA[p_MyHousehold]]></Name>
-					<X>290</X><Y>90</Y>
+					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6207,6 +6851,27 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 						</ParameterEditor>
 					</Properties>                 
 				</Variable>
+				<Variable Class="Parameter">
+					<Id>1690309587167</Id>
+					<Name><![CDATA[p_ReferenceViewArea]]></Name>
+					<X>290</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[ViewArea]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1690309587165</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
 			</Variables>
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
@@ -6214,12 +6879,70 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<ReturnType><![CDATA[A_Logic_Household]]></ReturnType>
 					<Id>1689673991713</Id>
 					<Name><![CDATA[f_GetMyHousehold]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return link_MyHousehold.getConnectedAgent();]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690309587154</Id>
+					<Name><![CDATA[f_Navigate]]></Name>
+					<X>770</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[f_SetSelectedViewArea(arg_ViewArea);
+arg_ViewArea.navigateTo();
+group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690309587156</Id>
+					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
+					<X>770</X><Y>240</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[v_SelectedViewArea = arg_ViewArea;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ViewArea]]></ReturnType>
+					<Id>1690309587158</Id>
+					<Name><![CDATA[f_GetSelectedViewArea]]></Name>
+					<X>770</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_SelectedViewArea;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ViewArea]]></ReturnType>
+					<Id>1690309587160</Id>
+					<Name><![CDATA[f_GetReferenceViewArea]]></Name>
+					<X>770</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_ReferenceViewArea;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -6245,7 +6968,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<AgentLink>
 					<Id>1689779210476</Id>
 					<Name><![CDATA[link_MyHousehold]]></Name>
-					<X>530</X><Y>90</Y>
+					<X>530</X><Y>140</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6269,7 +6992,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689339323418</Id>
 					<Name><![CDATA[a___ModelManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>50</X><Y>90</Y>
+					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6283,7 +7006,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689339323420</Id>
 					<Name><![CDATA[a_UI__Dashboard]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>60</X><Y>110</Y>
+					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6310,9 +7033,272 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 
 			<Presentation>
 				<Group>
+					<Id>1690308879927</Id>
+					<Name><![CDATA[group_Background]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Lock>true</Lock>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Group>
+					<Id>1690308879929</Id>
+					<Name><![CDATA[group_TitleBar]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>11.109</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Rectangle>
+					<Id>1690308879931</Id>
+					<Name><![CDATA[rectangle_BackgroundTitle]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>55</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-5247250</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
+				<Polyline>
+					<Id>1690308879933</Id>
+					<Name><![CDATA[polyline_Overview]]></Name>
+					<X>880</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Overview);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-2031617</FillColor>
+					<FillColorCode><![CDATA[v_SelectedViewArea == viewArea_Overview ? 
+	new Color(224, 255, 255) : new Color(0, 206, 209)
+	/* lightCyan : darkTurquoise */]]></FillColorCode>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690308879935</Id>
+					<Name><![CDATA[text_Overview]]></Name>
+					<X>890</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Overview]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1690308879937</Id>
+					<Name><![CDATA[text_AgentBehavior]]></Name>
+					<X>30</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Model Assumptions > Model Behavior > Agent Behavior]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Polyline>
+					<Id>1690308879939</Id>
+					<Name><![CDATA[polyline_Back]]></Name>
+					<X>0</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Overview);
+f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16724271</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>25</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>25</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690308879941</Id>
+					<Name><![CDATA[text_Back]]></Name>
+					<X>12</X><Y>8</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[<]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>28</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>CENTER</Alignment>
+				</Text>
+				<Polyline>
+					<Id>1690308879943</Id>
+					<Name><![CDATA[polyline_Logic]]></Name>
+					<X>760</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Logic);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16724271</FillColor>
+					<FillColorCode><![CDATA[v_SelectedViewArea == viewArea_Logic ? 
+	new Color(224, 255, 255) : new Color(0, 206, 209)
+	/* lightCyan : darkTurquoise */]]></FillColorCode>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690308879945</Id>
+					<Name><![CDATA[text_Logic]]></Name>
+					<X>791</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Logic]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+			</Presentation>
+
+				</Group>
+				<Rectangle>
+					<Id>1690308879947</Id>
+					<Name><![CDATA[rectangle_BackgroundBody]]></Name>
+					<X>0</X><Y>55</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>545</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-2031617</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
+			</Presentation>
+
+				</Group>
+				<Group>
 					<Id>1689262886730</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6518,13 +7504,10 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689262886750</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6544,8 +7527,37 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				</Text>
 			</Presentation>
 
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690308256572</Id>
+					<Name><![CDATA[viewArea_Logic]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690308653608</Id>
+					<Name><![CDATA[viewArea_Overview]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -6648,10 +7660,40 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<CurrentLevel>1689262892377</CurrentLevel>
 			<ConnectionsId>1689262892401</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1690309762479</Id>
+					<Name><![CDATA[v_SelectedViewArea]]></Name>
+					<X>530</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[ViewArea]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[viewArea_Overview]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1690309762481</Id>
+					<Name><![CDATA[v_ReferenceViewArea]]></Name>
+					<X>530</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[ViewArea]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_ReferenceViewArea]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689353919928</Id>
 					<Name><![CDATA[p_MyElectricityGrid]]></Name>
-					<X>290</X><Y>90</Y>
+					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6669,6 +7711,27 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 						</ParameterEditor>
 					</Properties>                 
 				</Variable>
+				<Variable Class="Parameter">
+					<Id>1690309762484</Id>
+					<Name><![CDATA[p_ReferenceViewArea]]></Name>
+					<X>290</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[ViewArea]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1690309762482</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
 			</Variables>
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
@@ -6676,12 +7739,70 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<ReturnType><![CDATA[A_Logic_ElectricityGrid]]></ReturnType>
 					<Id>1689674136947</Id>
 					<Name><![CDATA[f_GetMyElectricityGrid]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return link_MyElectricityGrid.getConnectedAgent();]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690309762471</Id>
+					<Name><![CDATA[f_Navigate]]></Name>
+					<X>770</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[f_SetSelectedViewArea(arg_ViewArea);
+arg_ViewArea.navigateTo();
+group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690309762473</Id>
+					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
+					<X>770</X><Y>240</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[v_SelectedViewArea = arg_ViewArea;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ViewArea]]></ReturnType>
+					<Id>1690309762475</Id>
+					<Name><![CDATA[f_GetSelectedViewArea]]></Name>
+					<X>770</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_SelectedViewArea;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ViewArea]]></ReturnType>
+					<Id>1690309762477</Id>
+					<Name><![CDATA[f_GetReferenceViewArea]]></Name>
+					<X>770</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_ReferenceViewArea;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -6707,7 +7828,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<AgentLink>
 					<Id>1689778985833</Id>
 					<Name><![CDATA[link_MyElectricityGrid]]></Name>
-					<X>530</X><Y>90</Y>
+					<X>530</X><Y>140</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6731,7 +7852,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689340162477</Id>
 					<Name><![CDATA[a___ModelManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>50</X><Y>90</Y>
+					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6745,7 +7866,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689340162479</Id>
 					<Name><![CDATA[a_UI__Dashboard]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>60</X><Y>110</Y>
+					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6774,7 +7895,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Group>
 					<Id>1689262892379</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -6980,13 +8101,10 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689262892399</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -7006,8 +8124,300 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				</Text>
 			</Presentation>
 
+				</Group>
+				<Group>
+					<Id>1690312740320</Id>
+					<Name><![CDATA[group_Background]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Lock>true</Lock>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Group>
+					<Id>1690312740322</Id>
+					<Name><![CDATA[group_TitleBar]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>11.109</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Rectangle>
+					<Id>1690312740324</Id>
+					<Name><![CDATA[rectangle_BackgroundTitle]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>55</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-5247250</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
+				<Polyline>
+					<Id>1690312740326</Id>
+					<Name><![CDATA[polyline_Overview]]></Name>
+					<X>880</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Overview);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-2031617</FillColor>
+					<FillColorCode><![CDATA[v_SelectedViewArea == viewArea_Overview ? 
+	new Color(224, 255, 255) : new Color(0, 206, 209)
+	/* lightCyan : darkTurquoise */]]></FillColorCode>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690312740328</Id>
+					<Name><![CDATA[text_Overview]]></Name>
+					<X>890</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Overview]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1690312740330</Id>
+					<Name><![CDATA[text_AgentBehavior]]></Name>
+					<X>30</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Model Assumptions > Model Behavior > Agent Behavior]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Polyline>
+					<Id>1690312740332</Id>
+					<Name><![CDATA[polyline_Back]]></Name>
+					<X>0</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Overview);
+f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16724271</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>25</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>25</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690312740334</Id>
+					<Name><![CDATA[text_Back]]></Name>
+					<X>12</X><Y>8</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[<]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>28</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>CENTER</Alignment>
+				</Text>
+				<Polyline>
+					<Id>1690312740336</Id>
+					<Name><![CDATA[polyline_Logic]]></Name>
+					<X>760</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Logic);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16724271</FillColor>
+					<FillColorCode><![CDATA[v_SelectedViewArea == viewArea_Logic ? 
+	new Color(224, 255, 255) : new Color(0, 206, 209)
+	/* lightCyan : darkTurquoise */]]></FillColorCode>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690312740338</Id>
+					<Name><![CDATA[text_Logic]]></Name>
+					<X>791</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Logic]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+			</Presentation>
+
+				</Group>
+				<Rectangle>
+					<Id>1690312740340</Id>
+					<Name><![CDATA[rectangle_BackgroundBody]]></Name>
+					<X>0</X><Y>55</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>545</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-2031617</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
+			</Presentation>
+
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690308555272</Id>
+					<Name><![CDATA[viewArea_Logic]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690308696293</Id>
+					<Name><![CDATA[viewArea_Overview]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 		<!--   =========   Active Object Class   ========  -->
@@ -7110,10 +8520,40 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 			<CurrentLevel>1689262910850</CurrentLevel>
 			<ConnectionsId>1689262910874</ConnectionsId>
 			<Variables>
+				<Variable Class="PlainVariable">
+					<Id>1690309710845</Id>
+					<Name><![CDATA[v_SelectedViewArea]]></Name>
+					<X>530</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[ViewArea]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[viewArea_Overview]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1690309710847</Id>
+					<Name><![CDATA[v_ReferenceViewArea]]></Name>
+					<X>530</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[ViewArea]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[p_ReferenceViewArea]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689353865001</Id>
 					<Name><![CDATA[p_MyMyElectricityGridOperator]]></Name>
-					<X>290</X><Y>90</Y>
+					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -7131,6 +8571,27 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 						</ParameterEditor>
 					</Properties>                 
 				</Variable>
+				<Variable Class="Parameter">
+					<Id>1690309710850</Id>
+					<Name><![CDATA[p_ReferenceViewArea]]></Name>
+					<X>290</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[ViewArea]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1690309710848</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
 			</Variables>
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
@@ -7138,12 +8599,70 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<ReturnType><![CDATA[A_Logic_ElectricityGridOperator]]></ReturnType>
 					<Id>1689674102390</Id>
 					<Name><![CDATA[f_GetMyMyElectricityGridOperator]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return link_MyMyElectricityGridOperator.getConnectedAgent();]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690309710837</Id>
+					<Name><![CDATA[f_Navigate]]></Name>
+					<X>770</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[f_SetSelectedViewArea(arg_ViewArea);
+arg_ViewArea.navigateTo();
+group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690309710839</Id>
+					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
+					<X>770</X><Y>240</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_ViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Body><![CDATA[v_SelectedViewArea = arg_ViewArea;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ViewArea]]></ReturnType>
+					<Id>1690309710841</Id>
+					<Name><![CDATA[f_GetSelectedViewArea]]></Name>
+					<X>770</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_SelectedViewArea;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ViewArea]]></ReturnType>
+					<Id>1690309710843</Id>
+					<Name><![CDATA[f_GetReferenceViewArea]]></Name>
+					<X>770</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_ReferenceViewArea;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -7169,7 +8688,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<AgentLink>
 					<Id>1689779091832</Id>
 					<Name><![CDATA[link_MyMyElectricityGridOperator]]></Name>
-					<X>530</X><Y>90</Y>
+					<X>530</X><Y>140</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -7193,7 +8712,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689340120435</Id>
 					<Name><![CDATA[a___ModelManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>50</X><Y>90</Y>
+					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -7207,7 +8726,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<Id>1689340120437</Id>
 					<Name><![CDATA[a_UI__Dashboard]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>60</X><Y>110</Y>
+					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -7236,7 +8755,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				<Group>
 					<Id>1689262910852</Id>
 					<Name><![CDATA[group_AgentSpecification]]></Name>
-					<X>500</X><Y>140</Y>
+					<X>500</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -7442,13 +8961,10 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-			</Presentation>
-
-				</Group>
 				<Text>
 					<Id>1689262910872</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>30</X><Y>30</Y>
+					<X>-470</X><Y>-110</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -7468,8 +8984,300 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				</Text>
 			</Presentation>
 
+				</Group>
+				<Group>
+					<Id>1690312797574</Id>
+					<Name><![CDATA[group_Background]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Lock>true</Lock>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Group>
+					<Id>1690312797576</Id>
+					<Name><![CDATA[group_TitleBar]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>11.109</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+
+			<Presentation>
+				<Rectangle>
+					<Id>1690312797578</Id>
+					<Name><![CDATA[rectangle_BackgroundTitle]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>55</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-5247250</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
+				<Polyline>
+					<Id>1690312797580</Id>
+					<Name><![CDATA[polyline_Overview]]></Name>
+					<X>880</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Overview);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-2031617</FillColor>
+					<FillColorCode><![CDATA[v_SelectedViewArea == viewArea_Overview ? 
+	new Color(224, 255, 255) : new Color(0, 206, 209)
+	/* lightCyan : darkTurquoise */]]></FillColorCode>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690312797582</Id>
+					<Name><![CDATA[text_Overview]]></Name>
+					<X>890</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Overview]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1690312797584</Id>
+					<Name><![CDATA[text_AgentBehavior]]></Name>
+					<X>30</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Model Assumptions > Model Behavior > Agent Behavior]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Polyline>
+					<Id>1690312797586</Id>
+					<Name><![CDATA[polyline_Back]]></Name>
+					<X>0</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Overview);
+f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16724271</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>25</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>25</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690312797588</Id>
+					<Name><![CDATA[text_Back]]></Name>
+					<X>12</X><Y>8</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[<]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>28</Size>
+						<Style>1</Style>
+					</Font>
+					<Alignment>CENTER</Alignment>
+				</Text>
+				<Polyline>
+					<Id>1690312797590</Id>
+					<Name><![CDATA[polyline_Logic]]></Name>
+					<X>760</X><Y>55</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<OnClickCode><![CDATA[f_Navigate(viewArea_Logic);]]></OnClickCode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>-16724271</FillColor>
+					<FillColorCode><![CDATA[v_SelectedViewArea == viewArea_Logic ? 
+	new Color(224, 255, 255) : new Color(0, 206, 209)
+	/* lightCyan : darkTurquoise */]]></FillColorCode>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>-55</Y><Z>0</Z></Point>
+					   <Point><X>120</X><Y>0</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1690312797592</Id>
+					<Name><![CDATA[text_Logic]]></Name>
+					<X>791</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Logic]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>24</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+			</Presentation>
+
+				</Group>
+				<Rectangle>
+					<Id>1690312797594</Id>
+					<Name><![CDATA[rectangle_BackgroundBody]]></Name>
+					<X>0</X><Y>55</Y>
+					<Label><X>10</X><Y>10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor/>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<Width>1000</Width>
+					<Height>545</Height>
+					<Rotation>0.0</Rotation>
+					<FillColor>-2031617</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Rectangle>
+			</Presentation>
+
+				</Group>
+			</Presentation>
+
 				</Level>
 			</Presentation>
+			<Areas>
+				<Area>
+					<Id>1690308548041</Id>
+					<Name><![CDATA[viewArea_Logic]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+				<Area>
+					<Id>1690308689394</Id>
+					<Name><![CDATA[viewArea_Overview]]></Name>
+					<X>0</X><Y>620</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<Title><![CDATA[]]></Title>
+					<Width>1000</Width>
+					<Height>600</Height>
+				</Area>
+			</Areas>
 
 		</ActiveObjectClass>
 	</ActiveObjectClasses>	
@@ -7643,7 +9451,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 public class C_PojoIn__Container implements Serializable {
 
 	// **********VARIABLES**********
-	private Engine v_Engine;
+	private final Engine v_Engine;
 	
 	// **********EMBEDDED STRUCTURE**********
 	private List<C_PojoIn_Household> col_PojoIn_Households;
@@ -7715,6 +9523,7 @@ public class C_PojoIn__Container implements Serializable {
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
  * C_PojoOut__Container
+ * This class store model data at a point in time.
  */	
 public class C_PojoOut__Container implements Serializable {
 
@@ -7722,6 +9531,7 @@ public class C_PojoOut__Container implements Serializable {
 	private final A_Logic__Scenario v_MyScenario;
 	
 	// **********EMBEDDED STRUCTURE**********
+	
 	private List<C_PojoOut_Household> col_PojoOut_Households;
 	private List<C_PojoOut_Community> col_PojoOut_EnergyCommunities;
 	private List<C_PojoOut_ElectricityGridOperator> col_PojoOut_DistributionSystemOperators;
