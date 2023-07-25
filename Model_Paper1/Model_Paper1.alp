@@ -259,7 +259,7 @@ getExperiment().getEngine();
 					<Name><![CDATA[col_PojoOutContainers]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 19_July_2023]]></Description>
-					<X>50</X><Y>200</Y>
+					<X>50</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -316,7 +316,7 @@ getExperiment().getEngine();
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689349242260</Id>
 					<Name><![CDATA[f_CreateModel]]></Name>
-					<X>770</X><Y>230</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -378,7 +378,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[Engine]]></ReturnType>
 					<Id>1690035012094</Id>
 					<Name><![CDATA[f_GetEngine]]></Name>
-					<X>770</X><Y>140</Y>
+					<X>770</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -390,7 +390,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690035690544</Id>
 					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
-					<X>770</X><Y>160</Y>
+					<X>770</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -418,7 +418,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690278618575</Id>
 					<Name><![CDATA[f_Navigate]]></Name>
-					<X>770</X><Y>270</Y>
+					<X>770</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -460,7 +460,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Name><![CDATA[pop_Scenarios]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>160</Y>
+					<X>50</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1648,7 +1648,7 @@ Holds and handles ...
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
-			<StartupCode><![CDATA[//Sanity check----------------------------------------------
+			<StartupCode><![CDATA[/* Sanity check */
 if(this.getIndex() != 0) {
 	error(this.getIndex() + " scenarios are created.");
 }
@@ -1749,7 +1749,7 @@ if(this.getIndex() != 0) {
 				<Variable Class="PlainVariable">
 					<Id>1689442134270</Id>
 					<Name><![CDATA[v_MyPojoInContainer]]></Name>
-					<X>530</X><Y>90</Y>
+					<X>530</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1764,7 +1764,7 @@ if(this.getIndex() != 0) {
 				<Variable Class="PlainVariable">
 					<Id>1690035202844</Id>
 					<Name><![CDATA[v_Engine]]></Name>
-					<X>530</X><Y>110</Y>
+					<X>530</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1806,7 +1806,7 @@ if(this.getIndex() != 0) {
 					<Id>1689346698198</Id>
 					<Name><![CDATA[f_CreateScenario]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>130</Y>
+					<X>770</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1849,7 +1849,7 @@ if(arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders() == null) {
 					<ReturnType><![CDATA[C_PojoIn__Container]]></ReturnType>
 					<Id>1689673620224</Id>
 					<Name><![CDATA[f_GetMyPojoInContainer]]></Name>
-					<X>770</X><Y>90</Y>
+					<X>770</X><Y>130</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1862,7 +1862,7 @@ if(arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders() == null) {
 					<Id>1689844894377</Id>
 					<Name><![CDATA[f_SetScenarioInputData]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>170</Y>
+					<X>770</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1879,7 +1879,7 @@ if(arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders() == null) {
 					<Id>1689844894381</Id>
 					<Name><![CDATA[f_GetScenarioInputData]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>190</Y>
+					<X>770</X><Y>150</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1893,7 +1893,7 @@ if(arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders() == null) {
 					<Name><![CDATA[f_LoadScenarioInputData]]></Name>
 					<Description><![CDATA[Load input data for a scenario from the Anylogic database]]></Description>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>150</Y>
+					<X>770</X><Y>170</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1921,20 +1921,6 @@ return null;]]></Body>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return v_Engine;]]></Body>
-				</Function>
-				<Function AccessType="public" StaticFunction="false">
-					<ReturnModificator>VOID</ReturnModificator>
-					<ReturnType><![CDATA[double]]></ReturnType>
-					<Id>1690038839958</Id>
-					<Name><![CDATA[f_ShowSimulationRunState]]></Name>
-					<X>770</X><Y>210</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[traceln("\n" + "Anylogic engine state: " + f_GetEngine().getState());
-traceln("Simulation experiment state:" + f_GetEngine().getExperiment().getState());
-]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -2047,7 +2033,7 @@ traceln("Simulation experiment state:" + f_GetEngine().getExperiment().getState(
 					<Name><![CDATA[pop_Logic_Households]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>110</Y>
+					<X>50</X><Y>150</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2179,7 +2165,7 @@ traceln("Simulation experiment state:" + f_GetEngine().getExperiment().getState(
 					<Name><![CDATA[pop_Logic_DistributionSystemOperators]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>150</Y>
+					<X>50</X><Y>110</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2503,12 +2489,12 @@ traceln("Simulation experiment state:" + f_GetEngine().getExperiment().getState(
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
-			<StartupCode><![CDATA[//Sanity check----------------------------------------------
+			<StartupCode><![CDATA[/* Sanity check */
 if(this.getIndex() != 0) {
 	error(this.getIndex() + " dashboards are created.");
 }
 
-//Link the dashboard to the scenario-----------------------
+/* Link the dashboard to the scenario */
 link_MyScenario.connectTo(p_MyScenario);
 
 //f_CreateDashboard( link_MyScenario.getConnectedAgent() );
@@ -2687,7 +2673,7 @@ link_MyScenario.connectTo(p_MyScenario);
 					<Id>1689353056488</Id>
 					<Name><![CDATA[f_CreateDashboard]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>240</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2709,7 +2695,7 @@ arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach(currElectricityGrid -> ad
 					<ReturnType><![CDATA[A_Logic__Scenario]]></ReturnType>
 					<Id>1689673799720</Id>
 					<Name><![CDATA[f_GetMyScenario]]></Name>
-					<X>770</X><Y>140</Y>
+					<X>770</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2739,7 +2725,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689855996394</Id>
 					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
-					<X>770</X><Y>180</Y>
+					<X>770</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2767,7 +2753,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[ViewArea]]></ReturnType>
 					<Id>1690036603733</Id>
 					<Name><![CDATA[f_GetReferenceViewArea]]></Name>
-					<X>770</X><Y>160</Y>
+					<X>770</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2839,7 +2825,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Name><![CDATA[pop_UI_Households]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>160</Y>
+					<X>50</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2971,7 +2957,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Name><![CDATA[pop_UI_DistributionSystemOperators]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>200</Y>
+					<X>50</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
