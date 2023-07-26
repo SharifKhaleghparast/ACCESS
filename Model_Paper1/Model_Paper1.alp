@@ -54,18 +54,18 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 		</OptionList>
 		<OptionList>
 			<Id>1690369068047</Id>
-			<Name><![CDATA[OL_TimeResolution]]></Name>
+			<Name><![CDATA[OL_EnergyUsageResolution]]></Name>
 			<Option>
 				<Id>1690369068048</Id>
-				<Name><![CDATA[MINUTE]]></Name>
+				<Name><![CDATA[MINUTES]]></Name>
 			</Option>
 			<Option>
 				<Id>1690369068049</Id>
-				<Name><![CDATA[QUARTER]]></Name>
+				<Name><![CDATA[QUARTERS]]></Name>
 			</Option>
 			<Option>
 				<Id>1690369068050</Id>
-				<Name><![CDATA[HOUR]]></Name>
+				<Name><![CDATA[HOURS]]></Name>
 			</Option>
 		</OptionList>
 	</OptionLists>
@@ -78,6 +78,7 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
+			<Import><![CDATA[import java.lang.reflect.Array;]]></Import>
 			<StartupCode><![CDATA[/* Intro */
 
 //The code here runs everytime this top-level Agent is being simulated in the Anylogic engine.
@@ -99,7 +100,9 @@ traceln("\n" + "Top_level Agent On startup code box");
 
 /* UI Navigation */
 f_Navigate(f_GetSelectedViewArea());
-]]></StartupCode>
+
+/* Model creation */
+f_CreateEmptyModel(f_GetEngine(), f_GetSelectedViewArea());]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689246676496</Id>
@@ -364,7 +367,7 @@ col_PojoOutContainers.add(dataOut);
 					<ReturnModificator>VOID</ReturnModificator>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689349242260</Id>
-					<Name><![CDATA[f_CreateModel]]></Name>
+					<Name><![CDATA[f_CreateEmptyModel]]></Name>
 					<Description><![CDATA[It does not let more than one model being created by limiting the number of scenarios, dashboards, pojoInContainers and pojoOutContainers to one. This is because we want to keep the one-to-one ratio between the number of the model and the engine. We do not want to use one engine to run more than one model.
 
 Attention: The pojoOutContainer object that is created here, keeps the initial model data setup of the model. Other pojoOutContainer objects are created to keep the model data through time.
@@ -385,7 +388,7 @@ Attention: The experiment is the only object that can create an engine. We canno
 					<Body><![CDATA[/* Create initial embedded objects */
 
 /* FIRST: PojoInContainer setup */
-C_PojoIn__Container dataIn = new C_PojoIn__Container(arg_Engine,null, null, null, null);
+C_PojoIn__Container dataIn = new C_PojoIn__Container(arg_Engine);
 
 //Sanity check
 if(col_PojoInContainers.size() != 0) {
@@ -443,7 +446,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690035690544</Id>
 					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
-					<X>770</X><Y>220</Y>
+					<X>770</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -471,7 +474,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690278618575</Id>
 					<Name><![CDATA[f_Navigate]]></Name>
-					<X>770</X><Y>200</Y>
+					<X>770</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -483,6 +486,88 @@ if(col_PojoOutContainers.size() != 0) {
 					<Body><![CDATA[f_SetSelectedViewArea(arg_ViewArea);
 arg_ViewArea.navigateTo();
 group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690398892393</Id>
+					<Name><![CDATA[f_LoadModel]]></Name>
+					<X>770</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[f_LoadHouseholds( combobox_HouseholdConsumptionProfile );
+
+// TODO It calls all f_LoadAgentPopulations
+]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1690399731031</Id>
+					<Name><![CDATA[f_LoadHouseholds]]></Name>
+					<X>770</X><Y>280</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_HouseholdConsumptionProfile]]></Name>
+						<Type><![CDATA[ShapeComboBox]]></Type>
+					</Parameter>
+					<Body><![CDATA[
+/* Load Consumption profile */
+
+//Create an empty temporary list of profiles
+List<LinkedHashMap<Integer, Double>> profiles = new ArrayList<>();
+
+//Create a temporary list of corresponding table
+List<Tuple> rows = selectFrom(db_in_consumption_profiles_24hours).list();
+
+//Fill-in the empty list of profiles
+switch (arg_HouseholdConsumptionProfile.getValue()) {
+	
+	case "zero":
+		profiles.forEach( profile -> 
+						  	rows.forEach( row -> 
+						  					profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
+						  								 row.get( db_in_consumption_profiles_24hours.zero_kwh ) 
+						  							   )
+						  				)
+						);
+		break;
+	
+	case "household_cbs_noon_peak":
+		//An stochastic noise of type triangular distribution is multiplied.  
+		profiles.forEach( profile -> 
+						  	rows.forEach( row -> 
+						  					profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
+						  								 row.get( db_in_consumption_profiles_24hours.household_cbs_noon_peak_kwh ) * triangular(0, 2, 1)
+						  							   )
+						  				)
+						);		
+		break;
+		
+	case "household_cbs_morning_evening_peak":
+		//An stochastic noise of type triangular distribution is multiplied.
+		profiles.forEach( profile -> 
+						  	rows.forEach( row -> 
+						  					profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
+						  								 row.get( db_in_consumption_profiles_24hours.household_cbs_morning_evening_peak_kwh ) * triangular(0, 2, 1)
+						  							   )
+						  				)
+						);		
+		break;
+}
+
+//Store the filled-in list of profiles in the corresponding PojoIn object
+int i=0;
+for( Map<Integer,Double> profile : profiles) {
+	col_PojoInContainers.get(0).f_Get_PojoIn_Households().get(i).f_Set_ConsumptionProfile(profile);
+	i++;
+}
+]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -1108,7 +1193,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 				<Control Type="Button">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689622781504</Id>
-					<Name><![CDATA[button_CreateModel]]></Name>
+					<Name><![CDATA[button_LoadModel]]></Name>
 					<X>440</X><Y>1140</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -1124,14 +1209,14 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 checkbox_LVElectricityGrid.setEnabled(false);
 checkbox_EnergyCommunity.setEnabled(false);
 
-f_CreateModel(f_GetEngine(), f_GetSelectedViewArea());
+f_LoadModel();
 
 button_ModelDashboard.setEnabled(true);
 ]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
-						<LabelText><![CDATA[Create A Model]]></LabelText>
+						<LabelText><![CDATA[Load Model]]></LabelText>
 					</ExtendedProperties>
 				</Control>
 				<Control Type="Button">
@@ -1488,7 +1573,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>false</Enabled>
-						<EnableExpression><![CDATA[checkbox_EnergyCommunity.isSelected() && (radio_CommunityCollaborativeMemberRatio.getValue() > 0)]]></EnableExpression>
+						<EnableExpression><![CDATA[radio_CommunityCollaborativeMemberRatio.getValue() > 0]]></EnableExpression>
 						<ActionCode><![CDATA[if(value) {
 	//TODO
 } else {	
@@ -1552,7 +1637,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690360213915</Id>
 					<Name><![CDATA[combobox_HouseholdConsumptionProfile]]></Name>
-					<X>350</X><Y>-20</Y>
+					<X>260</X><Y>-40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1562,18 +1647,24 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<FillColor/>
 						<TextColor/>
-						<Enabled>true</Enabled>
+						<VisibleCode><![CDATA[col_PojoInContainers.get(0).f_Get_Resolution() == OL_EnergyUsageResolution.HOURS]]></VisibleCode>
+						<Enabled>false</Enabled>
+						<EnableExpression><![CDATA[col_PojoInContainers.get(0).f_Get_Resolution() == OL_EnergyUsageResolution.HOURS]]></EnableExpression>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
 						<Editable>false</Editable>
+						<Button><![CDATA[zero]]></Button>
+						<Button><![CDATA[household_cbs_noon_peak]]></Button>
+						<Button><![CDATA[household_cbs_morning_evening_peak]]></Button>
 						<LinkTo>false</LinkTo>
 					</ExtendedProperties>
 				</Control>
 				<Text>
 					<Id>1690360309531</Id>
 					<Name><![CDATA[text_HouseholdConsumptionProfile]]></Name>
-					<X>340</X><Y>-40</Y>
+					<X>70</X><Y>-40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1583,7 +1674,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Household consumption profile:]]></Text>
+					<Text><![CDATA[Household consumption profile [kWh]:]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>10</Size>
@@ -1594,7 +1685,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				<Text>
 					<Id>1690360329287</Id>
 					<Name><![CDATA[text_HouseholdProductionProfile]]></Name>
-					<X>340</X><Y>10</Y>
+					<X>70</X><Y>10</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1604,7 +1695,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Household production profile:]]></Text>
+					<Text><![CDATA[Household production profile [kWh]:]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>10</Size>
@@ -1616,7 +1707,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690360406108</Id>
 					<Name><![CDATA[combobox_HouseholdProductionProfile]]></Name>
-					<X>350</X><Y>30</Y>
+					<X>80</X><Y>30</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1626,10 +1717,12 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<FillColor/>
 						<TextColor/>
-						<Enabled>true</Enabled>
+						<Enabled>false</Enabled>
+						<EnableExpression><![CDATA[col_PojoInContainers.get(0).f_Get_Resolution() == OL_EnergyUsageResolution.MINUTES]]></EnableExpression>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
 						<Editable>false</Editable>
 						<LinkTo>false</LinkTo>
 					</ExtendedProperties>
@@ -1734,7 +1827,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690368752232</Id>
 					<Name><![CDATA[combobox_EnergyUsageResolution]]></Name>
-					<X>30</X><Y>710</Y>
+					<X>150</X><Y>690</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1745,10 +1838,28 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 						<FillColor/>
 						<TextColor/>
 						<Enabled>true</Enabled>
+						<ActionCode><![CDATA[switch (value) {
+	
+	case "MINUTES":
+		col_PojoInContainers.get(0).f_Set_Resolution(OL_EnergyUsageResolution.MINUTES);
+		break;
+	
+	case "QUARTERS":
+		col_PojoInContainers.get(0).f_Set_Resolution(OL_EnergyUsageResolution.QUARTERS);
+		break;
+		
+	case "HOURS":
+		col_PojoInContainers.get(0).f_Set_Resolution(OL_EnergyUsageResolution.HOURS);
+		break;
+}]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
 						<Editable>false</Editable>
+						<Button><![CDATA[MINUTES]]></Button>
+						<Button><![CDATA[QUARTERS]]></Button>
+						<Button><![CDATA[HOURS]]></Button>
 						<LinkTo>false</LinkTo>
 					</ExtendedProperties>
 				</Control>
@@ -3284,10 +3395,10 @@ link_MyScenario.connectTo(p_MyScenario);
 					</Parameter>
 					<Body><![CDATA[// Create initial embedded objects
 
-arg_MyScenario.pop_Logic_Households.forEach(currHousehold -> add_pop_UI_Households(currHousehold, arg_SelectedViewArea));
-arg_MyScenario.pop_Logic_EnergyCommunities.forEach(currCommunity -> add_pop_UI_EnergyCommunities(currCommunity, arg_SelectedViewArea));
-arg_MyScenario.pop_Logic_DistributionSystemOperators.forEach(currElectricityGridOperator -> add_pop_UI_DistributionSystemOperators(currElectricityGridOperator, arg_SelectedViewArea));
-arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach(currElectricityGrid -> add_pop_UI_LVDistributionFeeders(currElectricityGrid, arg_SelectedViewArea));
+arg_MyScenario.pop_Logic_Households.forEach( household -> add_pop_UI_Households( household, arg_SelectedViewArea ) );
+arg_MyScenario.pop_Logic_EnergyCommunities.forEach( community -> add_pop_UI_EnergyCommunities(community, arg_SelectedViewArea ) );
+arg_MyScenario.pop_Logic_DistributionSystemOperators.forEach( electricityGridOperator -> add_pop_UI_DistributionSystemOperators( electricityGridOperator, arg_SelectedViewArea ) );
+arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach( electricityGrid -> add_pop_UI_LVDistributionFeeders( electricityGrid, arg_SelectedViewArea ) );
 ]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
@@ -9952,6 +10063,7 @@ public class C_PojoIn__Container implements Serializable {
 
 	// **********VARIABLES**********
 	private final Engine v_Engine;
+	private OL_EnergyUsageResolution v_resolution;
 	
 	// **********EMBEDDED STRUCTURE**********
 	private List<C_PojoIn_Household> col_PojoIn_Households;
@@ -9963,17 +10075,28 @@ public class C_PojoIn__Container implements Serializable {
 	/**
      * Create an instance of a scenario input
      * @param p_Engine the Anylogic engine that simulate the top-level agent
+     */
+    public C_PojoIn__Container (Engine p_Engine) {
+    	this.v_Engine = p_Engine;
+    }
+	
+	/**
+     * Create an instance of a scenario input
+     * @param p_Engine the Anylogic engine that simulate the top-level agent
+     * @param p_Resolution Energy usage resolution
      * @param p_PojoIn_Households A list of C_PojoIn_Household POJOs
      * @param p_PojoIn_EnergyCommunities A list of C_PojoIn_Community POJOs
      * @param p_PojoIn_DistributionSystemOperators A list of C_PojoIn_ElectricityGridOperator POJOs
      * @param p_PojoIn_LVDistributionFeeders A list of C_PojoIn_ElectricityGrid POJOs
      */
     public C_PojoIn__Container (Engine p_Engine,
+    							OL_EnergyUsageResolution p_Resolution,
     							List<C_PojoIn_Household> p_PojoIn_Households,
     							List<C_PojoIn_Community> p_PojoIn_EnergyCommunities,
     							List<C_PojoIn_ElectricityGridOperator> p_PojoIn_DistributionSystemOperators,
     							List<C_PojoIn_ElectricityGrid> p_PojoIn_LVDistributionFeeders) {
     	this.v_Engine = p_Engine;
+    	this.v_resolution = p_Resolution;
     	this.col_PojoIn_Households = p_PojoIn_Households;
     	this.col_PojoIn_EnergyCommunities = p_PojoIn_EnergyCommunities;
     	this.col_PojoIn_DistributionSystemOperators = p_PojoIn_DistributionSystemOperators;
@@ -9983,6 +10106,10 @@ public class C_PojoIn__Container implements Serializable {
     // **********GETTERS**********
     public Engine f_GetEngine() {
     	return v_Engine;
+    }
+    
+    public OL_EnergyUsageResolution f_Get_Resolution() {
+    	return v_resolution;
     }
     
     public List<C_PojoIn_Household> f_Get_PojoIn_Households() {
@@ -9999,6 +10126,11 @@ public class C_PojoIn__Container implements Serializable {
     
     public List<C_PojoIn_ElectricityGrid> f_Get_PojoIn_LVDistributionFeeders() {
     	return col_PojoIn_LVDistributionFeeders;
+    }
+    
+    // **********SETTERS**********
+    public void f_Set_Resolution(OL_EnergyUsageResolution arg_resolution) {
+    	v_resolution = arg_resolution;
     }
     
 	@Override
@@ -10198,15 +10330,22 @@ public class C_PojoIn_ElectricityGridOperator implements Serializable {
 public class C_PojoIn_Household implements Serializable {
 
 	// **********FIELDS**********
-	private final OL_GridUserType v_GridUserType;
-	private final LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> link_MyGridBus;
-	private final Map<Integer,Double> col_ConsumptionProfile;
-	private final Map<Integer,Double> col_ProductionProfile;
-	private final OL_CommunityMemberType v_CommunityMemberType;
-	private final LinkToAgentCollection<A_Logic_Community,A_Logic_Household> link_MyEnergyCommunity;
+	private OL_GridUserType v_GridUserType;
+	private LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> link_MyGridBus;
+	private Map<Integer,Double> col_ConsumptionProfile;
+	private Map<Integer,Double> col_ProductionProfile;
+	private OL_CommunityMemberType v_CommunityMemberType;
+	private LinkToAgentCollection<A_Logic_Community,A_Logic_Household> link_MyEnergyCommunity;
 	
 	// **********CONSTRUCTORS**********
-    /**
+    
+	/**
+     * Create an instance of a household
+     */
+    public C_PojoIn_Household() {
+    }
+	
+	/**
      * Create an instance of a household
      * @param p_GridUserType An Enum
      * @param p_MyGridBus A bidirectional link to the grid
@@ -10252,6 +10391,31 @@ public class C_PojoIn_Household implements Serializable {
     
     public LinkToAgentCollection<A_Logic_Community,A_Logic_Household> f_Get_MyEnergyCommunity() {
     	return link_MyEnergyCommunity;
+    }
+    
+    // **********SETTERS**********
+    public void f_Set_GridUserType(OL_GridUserType arg_GridUserType) {
+    	v_GridUserType = arg_GridUserType;
+    }
+    
+    public void f_Set_MyGridBus(LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> arg_MyGridBus) {
+    	link_MyGridBus = arg_MyGridBus;
+    }
+    
+    public void f_Set_ConsumptionProfile(Map<Integer,Double> arg_ConsumptionProfile) {
+    	col_ConsumptionProfile = arg_ConsumptionProfile;
+    }
+    
+    public void f_Set_ProductionProfile(Map<Integer,Double> arg_ProductionProfile) {
+    	col_ProductionProfile = arg_ProductionProfile;
+    }
+    
+    public void f_Set_CommunityMemberType(OL_CommunityMemberType arg_CommunityMemberType) {
+    	v_CommunityMemberType = arg_CommunityMemberType;
+    }
+    
+    public void f_Set_MyEnergyCommunity(LinkToAgentCollection<A_Logic_Community,A_Logic_Household> arg_MyEnergyCommunity) {
+    	link_MyEnergyCommunity = arg_MyEnergyCommunity;
     }
     
 	@Override
