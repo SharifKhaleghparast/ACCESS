@@ -78,7 +78,8 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
-			<Import><![CDATA[import java.lang.reflect.Array;]]></Import>
+			<Import><![CDATA[import java.util.stream.Collectors;
+import java.lang.reflect.Array;]]></Import>
 			<StartupCode><![CDATA[/* Intro */
 
 //The code here runs everytime this top-level Agent is being simulated in the Anylogic engine.
@@ -225,7 +226,7 @@ getExperiment().getEngine();
 3) Experiment --ask to simulate the  top-level Agent from--> Anylogic engine
 4) Anylogic engine --simulate--> top-level Agent
 ]]></Description>
-					<X>530</X><Y>140</Y>
+					<X>530</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -240,7 +241,7 @@ getExperiment().getEngine();
 				<Variable Class="PlainVariable">
 					<Id>1690035690548</Id>
 					<Name><![CDATA[v_SelectedViewArea]]></Name>
-					<X>530</X><Y>160</Y>
+					<X>530</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -283,6 +284,42 @@ getExperiment().getEngine();
 						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
 						<ElementClass><![CDATA[C_PojoOut__Container]]></ElementClass>
 						<ValueElementClass><![CDATA[String]]></ValueElementClass>
+					</Properties>
+
+				</Variable>
+				<Variable Class="CollectionVariable">
+					<Id>1690450793555</Id>
+					<Name><![CDATA[col_CB_HouseholdConsumptionProfiles]]></Name>
+					<X>530</X><Y>140</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
+						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
+						<ElementClass><![CDATA[ShapeComboBox]]></ElementClass>
+						<ValueElementClass><![CDATA[String]]></ValueElementClass>
+						<CollectionInitializer Class="CodeValue">
+							<Code><![CDATA[{combobox_HouseholdConsumptionProfile_Hours, combobox_HouseholdConsumptionProfile_Minutes, combobox_HouseholdConsumptionProfile_Quarters}]]></Code>
+						</CollectionInitializer>
+					</Properties>
+
+				</Variable>
+				<Variable Class="CollectionVariable">
+					<Id>1690450934177</Id>
+					<Name><![CDATA[col_CB_HouseholdProductionProfiles]]></Name>
+					<X>530</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
+						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
+						<ElementClass><![CDATA[ShapeComboBox]]></ElementClass>
+						<ValueElementClass><![CDATA[String]]></ValueElementClass>
+						<CollectionInitializer Class="CodeValue">
+							<Code><![CDATA[{combobox_HouseholdProductionProfile_Hours, combobox_HouseholdProductionProfile_Quarters, combobox_HouseholdProductionProfile_Minutes}]]></Code>
+						</CollectionInitializer>
 					</Properties>
 
 				</Variable>
@@ -446,7 +483,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690035690544</Id>
 					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
-					<X>770</X><Y>240</Y>
+					<X>770</X><Y>260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -474,7 +511,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690278618575</Id>
 					<Name><![CDATA[f_Navigate]]></Name>
-					<X>770</X><Y>220</Y>
+					<X>770</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -491,14 +528,44 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnModificator>VOID</ReturnModificator>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690398892393</Id>
-					<Name><![CDATA[f_LoadModel]]></Name>
-					<X>770</X><Y>200</Y>
+					<Name><![CDATA[f_LoadScenario]]></Name>
+					<X>770</X><Y>370</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[f_LoadHouseholds( combobox_HouseholdConsumptionProfile );
+					<Parameter>
+						<Name><![CDATA[arg_Pojo_Container]]></Name>
+						<Type><![CDATA[C_PojoIn__Container]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_CB_EnergyUsageResolution]]></Name>
+						<Type><![CDATA[ShapeComboBox]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_HouseholdConsumptionProfile_CBs]]></Name>
+						<Type><![CDATA[ArrayList<ShapeComboBox>]]></Type>
+					</Parameter>
+					<Body><![CDATA[
+/* Load energy usage resolution */
+switch (arg_CB_EnergyUsageResolution.getValue()) {
+	
+	case "MINUTES":
+		arg_Pojo_Container.f_Set_EnergyUsageResolution(OL_EnergyUsageResolution.MINUTES);
+		break;
+	
+	case "QUARTERS":
+		arg_Pojo_Container.f_Set_EnergyUsageResolution(OL_EnergyUsageResolution.QUARTERS);
+		break;
+		
+	case "HOURS":
+		arg_Pojo_Container.f_Set_EnergyUsageResolution(OL_EnergyUsageResolution.HOURS);
+		break;
+}
 
+/* Load Households */
+ShapeComboBox selectedConsumptionProfileCB = arg_HouseholdConsumptionProfile_CBs.stream().filter( CB -> CB.getValue() != "CHOOSE" ).collect(Collectors.toList()).get(0);
+f_LoadHouseholds( arg_Pojo_Container.f_Get_PojoIn_Households(), selectedConsumptionProfileCB);
 // TODO It calls all f_LoadAgentPopulations
 ]]></Body>
 				</Function>
@@ -507,13 +574,17 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690399731031</Id>
 					<Name><![CDATA[f_LoadHouseholds]]></Name>
-					<X>770</X><Y>280</Y>
+					<X>770</X><Y>350</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Parameter>
-						<Name><![CDATA[arg_HouseholdConsumptionProfile]]></Name>
+						<Name><![CDATA[arg_Pojo_Households]]></Name>
+						<Type><![CDATA[List<C_PojoIn_Household>]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_CB_HouseholdConsumptionProfile]]></Name>
 						<Type><![CDATA[ShapeComboBox]]></Type>
 					</Parameter>
 					<Body><![CDATA[
@@ -526,8 +597,11 @@ List<LinkedHashMap<Integer, Double>> profiles = new ArrayList<>();
 List<Tuple> rows = selectFrom(db_in_consumption_profiles_24hours).list();
 
 //Fill-in the empty list of profiles
-switch (arg_HouseholdConsumptionProfile.getValue()) {
+switch (arg_CB_HouseholdConsumptionProfile.getValue()) {
 	
+	case "CHOOSE":
+		break;
+		
 	case "zero":
 		profiles.forEach( profile -> 
 						  	rows.forEach( row -> 
@@ -563,8 +637,8 @@ switch (arg_HouseholdConsumptionProfile.getValue()) {
 
 //Store the filled-in list of profiles in the corresponding PojoIn object
 int i=0;
-for( Map<Integer,Double> profile : profiles) {
-	col_PojoInContainers.get(0).f_Get_PojoIn_Households().get(i).f_Set_ConsumptionProfile(profile);
+for( Map<Integer,Double> profile : profiles ) {
+	arg_Pojo_Households.get(i).f_Set_ConsumptionProfile(profile);
 	i++;
 }
 ]]></Body>
@@ -1193,7 +1267,7 @@ for( Map<Integer,Double> profile : profiles) {
 				<Control Type="Button">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689622781504</Id>
-					<Name><![CDATA[button_LoadModel]]></Name>
+					<Name><![CDATA[button_LoadScenario]]></Name>
 					<X>440</X><Y>1140</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -1209,14 +1283,14 @@ for( Map<Integer,Double> profile : profiles) {
 checkbox_LVElectricityGrid.setEnabled(false);
 checkbox_EnergyCommunity.setEnabled(false);
 
-f_LoadModel();
+f_LoadScenario( col_PojoInContainers.get(0), combobox_EnergyUsageResolution , col_CB_HouseholdConsumptionProfiles);
 
 button_ModelDashboard.setEnabled(true);
 ]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
-						<LabelText><![CDATA[Load Model]]></LabelText>
+						<LabelText><![CDATA[Load Scenario]]></LabelText>
 					</ExtendedProperties>
 				</Control>
 				<Control Type="Button">
@@ -1636,8 +1710,8 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				<Control Type="ComboBox">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690360213915</Id>
-					<Name><![CDATA[combobox_HouseholdConsumptionProfile]]></Name>
-					<X>260</X><Y>-40</Y>
+					<Name><![CDATA[combobox_HouseholdConsumptionProfile_Hours]]></Name>
+					<X>460</X><Y>-40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1647,9 +1721,9 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<FillColor/>
 						<TextColor/>
-						<VisibleCode><![CDATA[col_PojoInContainers.get(0).f_Get_Resolution() == OL_EnergyUsageResolution.HOURS]]></VisibleCode>
+						<VisibleCode><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.HOURS.name()]]></VisibleCode>
 						<Enabled>false</Enabled>
-						<EnableExpression><![CDATA[col_PojoInContainers.get(0).f_Get_Resolution() == OL_EnergyUsageResolution.HOURS]]></EnableExpression>
+						<EnableExpression><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.HOURS.name()]]></EnableExpression>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -1706,8 +1780,8 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				<Control Type="ComboBox">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690360406108</Id>
-					<Name><![CDATA[combobox_HouseholdProductionProfile]]></Name>
-					<X>80</X><Y>30</Y>
+					<Name><![CDATA[combobox_HouseholdProductionProfile_Hours]]></Name>
+					<X>460</X><Y>10</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1717,13 +1791,15 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<FillColor/>
 						<TextColor/>
+						<VisibleCode><![CDATA[combobox_EnergyUsageResolution.getValue() == (String) OL_EnergyUsageResolution.HOURS.name()]]></VisibleCode>
 						<Enabled>false</Enabled>
-						<EnableExpression><![CDATA[col_PojoInContainers.get(0).f_Get_Resolution() == OL_EnergyUsageResolution.MINUTES]]></EnableExpression>
+						<EnableExpression><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.HOURS.name()]]></EnableExpression>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
 						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
 						<Editable>false</Editable>
+						<Button><![CDATA[zero]]></Button>
 						<LinkTo>false</LinkTo>
 					</ExtendedProperties>
 				</Control>
@@ -1820,6 +1896,110 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 						<LinkTo>false</LinkTo>
 					</ExtendedProperties>
 				</Control>
+				<Control Type="ComboBox">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690450088654</Id>
+					<Name><![CDATA[combobox_HouseholdConsumptionProfile_Minutes]]></Name>
+					<X>260</X><Y>-40</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<FillColor/>
+						<TextColor/>
+						<VisibleCode><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.MINUTES.name()]]></VisibleCode>
+						<Enabled>false</Enabled>
+						<EnableExpression><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.MINUTES.name()]]></EnableExpression>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
+						<Editable>false</Editable>
+						<Button><![CDATA[zero]]></Button>
+						<LinkTo>false</LinkTo>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="ComboBox">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690450186285</Id>
+					<Name><![CDATA[combobox_HouseholdConsumptionProfile_Quarters]]></Name>
+					<X>360</X><Y>-40</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<FillColor/>
+						<TextColor/>
+						<VisibleCode><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.QUARTERS.name()]]></VisibleCode>
+						<Enabled>false</Enabled>
+						<EnableExpression><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.QUARTERS.name()]]></EnableExpression>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
+						<Editable>false</Editable>
+						<Button><![CDATA[zero]]></Button>
+						<LinkTo>false</LinkTo>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="ComboBox">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690450349133</Id>
+					<Name><![CDATA[combobox_HouseholdProductionProfile_Quarters]]></Name>
+					<X>360</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<FillColor/>
+						<TextColor/>
+						<VisibleCode><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.QUARTERS.name()]]></VisibleCode>
+						<Enabled>false</Enabled>
+						<EnableExpression><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.QUARTERS.name()]]></EnableExpression>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
+						<Editable>false</Editable>
+						<Button><![CDATA[zero]]></Button>
+						<LinkTo>false</LinkTo>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="ComboBox">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690450393293</Id>
+					<Name><![CDATA[combobox_HouseholdProductionProfile_Minutes]]></Name>
+					<X>260</X><Y>10</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="100" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<FillColor/>
+						<TextColor/>
+						<VisibleCode><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.MINUTES.name()]]></VisibleCode>
+						<Enabled>false</Enabled>
+						<EnableExpression><![CDATA[combobox_EnergyUsageResolution.getValue() == OL_EnergyUsageResolution.MINUTES.name()]]></EnableExpression>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
+						<Editable>false</Editable>
+						<Button><![CDATA[zero]]></Button>
+						<LinkTo>false</LinkTo>
+					</ExtendedProperties>
+				</Control>
 			</Presentation>
 
 				</Group>
@@ -1838,20 +2018,6 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 						<FillColor/>
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<ActionCode><![CDATA[switch (value) {
-	
-	case "MINUTES":
-		col_PojoInContainers.get(0).f_Set_Resolution(OL_EnergyUsageResolution.MINUTES);
-		break;
-	
-	case "QUARTERS":
-		col_PojoInContainers.get(0).f_Set_Resolution(OL_EnergyUsageResolution.QUARTERS);
-		break;
-		
-	case "HOURS":
-		col_PojoInContainers.get(0).f_Set_Resolution(OL_EnergyUsageResolution.HOURS);
-		break;
-}]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -2451,6 +2617,21 @@ if(this.getIndex() != 0) {
 						<Type><![CDATA[Engine]]></Type>        
 						<InitialValue Class="CodeValue">
 							<Code><![CDATA[f_GetMyPojoInContainer().f_GetEngine()]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1690447561272</Id>
+					<Name><![CDATA[v_EnergyUsageResolution]]></Name>
+					<X>530</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[OL_EnergyUsageResolution]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[f_GetMyPojoInContainer().f_Get_EnergyUsageResolution()]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -10063,7 +10244,7 @@ public class C_PojoIn__Container implements Serializable {
 
 	// **********VARIABLES**********
 	private final Engine v_Engine;
-	private OL_EnergyUsageResolution v_resolution;
+	private OL_EnergyUsageResolution v_EnergyUsageResolution;
 	
 	// **********EMBEDDED STRUCTURE**********
 	private List<C_PojoIn_Household> col_PojoIn_Households;
@@ -10090,13 +10271,13 @@ public class C_PojoIn__Container implements Serializable {
      * @param p_PojoIn_LVDistributionFeeders A list of C_PojoIn_ElectricityGrid POJOs
      */
     public C_PojoIn__Container (Engine p_Engine,
-    							OL_EnergyUsageResolution p_Resolution,
+    							OL_EnergyUsageResolution p_EnergyUsageResolution,
     							List<C_PojoIn_Household> p_PojoIn_Households,
     							List<C_PojoIn_Community> p_PojoIn_EnergyCommunities,
     							List<C_PojoIn_ElectricityGridOperator> p_PojoIn_DistributionSystemOperators,
     							List<C_PojoIn_ElectricityGrid> p_PojoIn_LVDistributionFeeders) {
     	this.v_Engine = p_Engine;
-    	this.v_resolution = p_Resolution;
+    	this.v_EnergyUsageResolution = p_EnergyUsageResolution;
     	this.col_PojoIn_Households = p_PojoIn_Households;
     	this.col_PojoIn_EnergyCommunities = p_PojoIn_EnergyCommunities;
     	this.col_PojoIn_DistributionSystemOperators = p_PojoIn_DistributionSystemOperators;
@@ -10108,8 +10289,8 @@ public class C_PojoIn__Container implements Serializable {
     	return v_Engine;
     }
     
-    public OL_EnergyUsageResolution f_Get_Resolution() {
-    	return v_resolution;
+    public OL_EnergyUsageResolution f_Get_EnergyUsageResolution() {
+    	return v_EnergyUsageResolution;
     }
     
     public List<C_PojoIn_Household> f_Get_PojoIn_Households() {
@@ -10129,8 +10310,8 @@ public class C_PojoIn__Container implements Serializable {
     }
     
     // **********SETTERS**********
-    public void f_Set_Resolution(OL_EnergyUsageResolution arg_resolution) {
-    	v_resolution = arg_resolution;
+    public void f_Set_EnergyUsageResolution(OL_EnergyUsageResolution arg_EnergyUsageResolution) {
+    	v_EnergyUsageResolution = arg_EnergyUsageResolution;
     }
     
 	@Override
