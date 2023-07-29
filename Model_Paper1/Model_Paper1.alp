@@ -399,7 +399,7 @@ getExperiment().getEngine();
 				<Event>
 					<Id>1690274864232</Id>
 					<Name><![CDATA[e_InitialEnginePause]]></Name>
-					<X>30</X><Y>330</Y>
+					<X>30</X><Y>540</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -439,7 +439,7 @@ getExperiment().getEngine();
 
 // Ignore this event untill when we really make the pojoOutContainers work.]]></Description>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>30</X><Y>350</Y>
+					<X>30</X><Y>560</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -480,7 +480,7 @@ col_PojoOutContainers.add(dataOut);
 
 Attention: The pojoOutContainer object that is created here, keeps the initial model data setup of the model. Other pojoOutContainer objects are created to keep the model data through time.
 Attention: The experiment is the only object that can create an engine. We cannot create engines from within the agents.]]></Description>
-					<X>770</X><Y>330</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -564,7 +564,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[Engine]]></ReturnType>
 					<Id>1690035012094</Id>
 					<Name><![CDATA[f_GetEngine]]></Name>
-					<X>770</X><Y>160</Y>
+					<X>770</X><Y>170</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -576,7 +576,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690035690544</Id>
 					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
-					<X>770</X><Y>260</Y>
+					<X>770</X><Y>340</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -592,7 +592,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[ViewArea]]></ReturnType>
 					<Id>1690035690546</Id>
 					<Name><![CDATA[f_GetSelectedViewArea]]></Name>
-					<X>770</X><Y>180</Y>
+					<X>770</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -604,7 +604,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690278618575</Id>
 					<Name><![CDATA[f_Navigate]]></Name>
-					<X>770</X><Y>240</Y>
+					<X>770</X><Y>310</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -622,7 +622,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[List<C_PojoIn_Household>]]></ReturnType>
 					<Id>1690399731031</Id>
 					<Name><![CDATA[f_LoadHouseholdsData]]></Name>
-					<X>770</X><Y>350</Y>
+					<X>770</X><Y>260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -640,6 +640,7 @@ pojoInList.forEach( household -> household.f_Set_EnergyUsageResolution(p_EnergyU
 
 /* Load consumption and production profile */
 //Store the filled-in list of profiles in the corresponding PojoIn object
+//This should not be here! Here should be a loop over households pojo-in objects that give each one of those objects their parameters. 
 int i=0;
 for( Map<Integer,Double> profile : p_HouseholdsConsumptionProfiles ) {
 	pojoInList.get( i ).f_Set_ConsumptionProfile( profile );
@@ -659,7 +660,7 @@ return pojoInList;]]></Body>
 					<ReturnType><![CDATA[List<C_PojoIn_Community>]]></ReturnType>
 					<Id>1690571266635</Id>
 					<Name><![CDATA[f_LoadEnergyCommunitiesData]]></Name>
-					<X>770</X><Y>370</Y>
+					<X>770</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -679,7 +680,7 @@ return pojoInList;]]></Body>
 					<ReturnType><![CDATA[List<C_PojoIn_ElectricityGrid>]]></ReturnType>
 					<Id>1690571574772</Id>
 					<Name><![CDATA[f_LoadLVDistributionFeedersData]]></Name>
-					<X>770</X><Y>390</Y>
+					<X>770</X><Y>280</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -699,7 +700,7 @@ return pojoInList;]]></Body>
 					<ReturnType><![CDATA[List<C_PojoIn_ElectricityGridOperator>]]></ReturnType>
 					<Id>1690571675702</Id>
 					<Name><![CDATA[f_LoadDistributionSystemOperatorsData]]></Name>
-					<X>770</X><Y>410</Y>
+					<X>770</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1134,7 +1135,7 @@ return pojoInList;]]></Body>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>970</Width>
-					<Height>240</Height>
+					<Height>330</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-4144960</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -1242,7 +1243,7 @@ return pojoInList;]]></Body>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>230</Width>
-					<Height>200</Height>
+					<Height>290</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-16728065</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -1349,11 +1350,7 @@ return pojoInList;]]></Body>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>false</Enabled>
-						<EnableExpression><![CDATA[!combobox_EnergyUsageResolution.isEnabled() // TODO &&  &&]]></EnableExpression>
 						<ActionCode><![CDATA[self.setEnabled(false);
-
-checkbox_LVElectricityGrid.setEnabled(false);
-checkbox_EnergyCommunity.setEnabled(false);
 
 f_CreateModel(f_GetEngine(), f_LoadHouseholdsData(), f_LoadEnergyCommunitiesData(), f_LoadDistributionSystemOperatorsData(), f_LoadLVDistributionFeedersData(), f_GetSelectedViewArea());
 
@@ -1445,7 +1442,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690045418111</Id>
 					<Name><![CDATA[checkbox_LVElectricityGrid]]></Name>
-					<X>20</X><Y>760</Y>
+					<X>10</X><Y>750</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1472,7 +1469,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				<Text>
 					<Id>1690045584928</Id>
 					<Name><![CDATA[text5]]></Name>
-					<X>20</X><Y>740</Y>
+					<X>10</X><Y>730</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1494,7 +1491,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690359972645</Id>
 					<Name><![CDATA[checkbox_Household]]></Name>
-					<X>20</X><Y>820</Y>
+					<X>10</X><Y>810</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1522,7 +1519,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690360507556</Id>
 					<Name><![CDATA[checkbox_DistributionSystemOperator]]></Name>
-					<X>20</X><Y>790</Y>
+					<X>10</X><Y>780</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1549,7 +1546,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				<Group>
 					<Id>1690367748380</Id>
 					<Name><![CDATA[group_EnergyCommunityAssumptions]]></Name>
-					<X>560</X><Y>1010</Y>
+					<X>550</X><Y>1010</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1740,7 +1737,7 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690045618514</Id>
 					<Name><![CDATA[checkbox_EnergyCommunity]]></Name>
-					<X>20</X><Y>960</Y>
+					<X>10</X><Y>960</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1767,91 +1764,21 @@ pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 				<Group>
 					<Id>1690368193797</Id>
 					<Name><![CDATA[group_HouseholdAssumptions]]></Name>
-					<X>360</X><Y>890</Y>
+					<X>350</X><Y>880</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
-					<PresentationFlag>false</PresentationFlag>
+					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<VisibleCode><![CDATA[checkbox_Household.isSelected()]]></VisibleCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 
 			<Presentation>
-				<Control Type="ComboBox">
-				 	<EmbeddedIcon>false</EmbeddedIcon>				
-					<Id>1690360213915</Id>
-					<Name><![CDATA[combobox_HouseholdConsumptionProfile_Hours]]></Name>
-					<X>268.352</X><Y>-20</Y>
-					<Label><X>0</X><Y>-10</Y></Label>
-					<PublicFlag>true</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<BasicProperties Width="180" Height="20">
-                        <EmbeddedIcon>false</EmbeddedIcon>	
-						<FillColor/>
-						<TextColor/>
-						<VisibleCode><![CDATA[false]]></VisibleCode>
-						<Enabled>false</Enabled>
-						<ActionCode><![CDATA[//Create a temporary list of corresponding consumption DB table
-List<Tuple> consumption_hour_rows = selectFrom(db_in_consumption_profiles_24hours).list();
-
-//Fill-in the empty list of consumption profiles
-switch (v_HouseholdConsumptionProfileCB.getValue()) {
-		
-	case "CHOOSE":
-		error("Household consumption profile has not been set!");
-		break;
-				
-	case "zero":
-		p_HouseholdsConsumptionProfiles.forEach( profile -> 
-		  	consumption_hour_rows.forEach( row -> 
-				profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
-							 row.get( db_in_consumption_profiles_24hours.zero_kwh ) 
-			   )
-			)
-		);
-		break;
-			
-	case "household_cbs_noon_peak":
-		//An stochastic noise of type triangular distribution is multiplied.  
-		p_HouseholdsConsumptionProfiles.forEach( profile -> 
-		  	consumption_hour_rows.forEach( row -> 
-				profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
-							 row.get( db_in_consumption_profiles_24hours.household_cbs_noon_peak_kwh ) * triangular(0, 2, 1)
-			   )
-			)
-		);		
-		break;
-				
-	case "household_cbs_morning_evening_peak":
-		//An stochastic noise of type triangular distribution is multiplied.
-		p_HouseholdsConsumptionProfiles.forEach( profile -> 
-		  	consumption_hour_rows.forEach( row -> 
-				profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
-							 row.get( db_in_consumption_profiles_24hours.household_cbs_morning_evening_peak_kwh ) * triangular(0, 2, 1)
-			   )
-			)
-		);		
-		break;
-}]]></ActionCode>
-					</BasicProperties>
-					<ExtendedProperties>
-						<Font Name="Dialog" Size="11" Style="0"/>
-						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
-						<Editable>false</Editable>
-						<Button><![CDATA[zero]]></Button>
-						<Button><![CDATA[household_cbs_noon_peak]]></Button>
-						<Button><![CDATA[household_cbs_morning_evening_peak]]></Button>
-						<LinkTo>false</LinkTo>
-					</ExtendedProperties>
-				</Control>
 				<Text>
 					<Id>1690360309531</Id>
 					<Name><![CDATA[text_HouseholdConsumptionProfile]]></Name>
-					<X>70</X><Y>-40</Y>
+					<X>10</X><Y>-40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1872,7 +1799,7 @@ switch (v_HouseholdConsumptionProfileCB.getValue()) {
 				<Text>
 					<Id>1690360329287</Id>
 					<Name><![CDATA[text_HouseholdProductionProfile]]></Name>
-					<X>70</X><Y>10</Y>
+					<X>10</X><Y>20</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1882,7 +1809,7 @@ switch (v_HouseholdConsumptionProfileCB.getValue()) {
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Household production profile [kWh]:]]></Text>
+					<Text><![CDATA[Prosumer household production profile [kWh]:]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>10</Size>
@@ -1890,67 +1817,10 @@ switch (v_HouseholdConsumptionProfileCB.getValue()) {
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
-				<Control Type="ComboBox">
-				 	<EmbeddedIcon>false</EmbeddedIcon>				
-					<Id>1690360406108</Id>
-					<Name><![CDATA[combobox_HouseholdProductionProfile_Hours]]></Name>
-					<X>268.352</X><Y>30</Y>
-					<Label><X>0</X><Y>-10</Y></Label>
-					<PublicFlag>true</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<BasicProperties Width="180" Height="20">
-                        <EmbeddedIcon>false</EmbeddedIcon>	
-						<FillColor/>
-						<TextColor/>
-						<VisibleCode><![CDATA[false]]></VisibleCode>
-						<Enabled>false</Enabled>
-						<ActionCode><![CDATA[//Create a temporary list of corresponding production DB table
-List<Tuple> production_hour_rows = selectFrom(db_in_production_profiles_24hours).list();
-		
-//Fill-in the empty list of production profiles
-switch (v_HouseholdProductionProfileCB.getValue()) {
-			
-	case "CHOOSE":
-		error("Household Production profile has not been set!");
-		break;
-				
-	case "zero":
-		p_HouseholdsProductionProfiles.forEach( profile -> 
-		  	production_hour_rows.forEach( row -> 
-				profile.put( row.get( db_in_production_profiles_24hours.time_hour ), 
-							 row.get( db_in_production_profiles_24hours.zero_kwh ) 
-				)
-			)
-		);
-		break;
-			
-	case "household_sample_solar":
-		//An stochastic noise of type triangular distribution is multiplied.  
-		p_HouseholdsProductionProfiles.forEach( profile -> 
-		  	production_hour_rows.forEach( row -> 
-				profile.put( row.get( db_in_production_profiles_24hours.time_hour ), 
-							 row.get( db_in_production_profiles_24hours.household_sample_solar_kwh ) * triangular(0, 2, 1)
-				)
-			)
-		);		
-		break;				
-}	]]></ActionCode>
-					</BasicProperties>
-					<ExtendedProperties>
-						<Font Name="Dialog" Size="11" Style="0"/>
-						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
-						<Editable>false</Editable>
-						<Button><![CDATA[zero]]></Button>
-						<Button><![CDATA[household_sample_solar]]></Button>
-						<LinkTo>false</LinkTo>
-					</ExtendedProperties>
-				</Control>
 				<Text>
 					<Id>1690360814468</Id>
 					<Name><![CDATA[text_HouseholdPopulation]]></Name>
-					<X>-210</X><Y>-40</Y>
+					<X>-320</X><Y>-40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1971,7 +1841,7 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 				<Text>
 					<Id>1690362146114</Id>
 					<Name><![CDATA[text_ProsumerHousehold]]></Name>
-					<X>-210</X><Y>10</Y>
+					<X>-320</X><Y>20</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1981,7 +1851,7 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Prosumer household - consumer household ratio [%]:]]></Text>
+					<Text><![CDATA[Prosumer household - all household ratio [%]:]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>10</Size>
@@ -1989,11 +1859,41 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
+				<Control Type="ComboBox">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690468186870</Id>
+					<Name><![CDATA[combobox_HouseholdPopulation]]></Name>
+					<X>-140</X><Y>-20</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="70" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<FillColor/>
+						<TextColor/>
+						<Enabled>false</Enabled>
+						<ActionCode><![CDATA[set_p_HouseholdPopulation(self.getIntValue());
+
+button_ToHouseholdConsumptionProfileSelection.setEnabled(true);]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
+						<Editable>false</Editable>
+						<Button><![CDATA[200]]></Button>
+						<Button><![CDATA[400]]></Button>
+						<Button><![CDATA[600]]></Button>
+						<Button><![CDATA[800]]></Button>
+						<LinkTo>false</LinkTo>
+					</ExtendedProperties>
+				</Control>
 				<Control Type="RadioButtons">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690362223032</Id>
-					<Name><![CDATA[radio_ProsumerHousehold]]></Name>
-					<X>-210</X><Y>20</Y>
+					<Name><![CDATA[radio_ProsumerHouseholdRatio]]></Name>
+					<X>-320</X><Y>30</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2002,10 +1902,13 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 					<BasicProperties Width="230" Height="30">
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
-						<Enabled>true</Enabled>
+						<Enabled>false</Enabled>
+						<ActionCode><![CDATA[button_ToHouseholdProductionProfileSelection.setEnabled(true);
+//TODO START FROME HERE! The value of this radio button is not a parameter for households! It should help to set the parameter of "Grid User Type" for households. (It might be a parameter for the scenario! think about it.)]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA[0]]></DefaultValueCode>
 						<Orientation>HORIZONTAL</Orientation>
 						<Button><![CDATA[0%]]></Button>
 						<Button><![CDATA[25%]]></Button>
@@ -2017,9 +1920,9 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 				</Control>
 				<Control Type="ComboBox">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
-					<Id>1690450186285</Id>
-					<Name><![CDATA[combobox_HouseholdConsumptionProfile_Quarters]]></Name>
-					<X>449.292</X><Y>-20</Y>
+					<Id>1690360213915</Id>
+					<Name><![CDATA[combobox_HouseholdConsumptionProfile_Hours]]></Name>
+					<X>208.352</X><Y>-20</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2029,9 +1932,97 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<FillColor/>
 						<TextColor/>
-						<VisibleCode><![CDATA[false]]></VisibleCode>
+						<VisibleCode><![CDATA[//false]]></VisibleCode>
 						<Enabled>false</Enabled>
-						<ActionCode><![CDATA[//Create a temporary list of corresponding consumption DB table
+						<ActionCode><![CDATA[//Create an empty list of consumption profiles
+List<LinkedHashMap<Integer, Double>> householdsConsumptionProfiles = new ArrayList<>();
+
+for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
+	householdsConsumptionProfiles.add( new LinkedHashMap<>() );
+}
+
+//Create a temporary list of corresponding consumption DB table
+List<Tuple> consumption_hour_rows = selectFrom(db_in_consumption_profiles_24hours).list();
+
+//Fill-in the empty list of consumption profiles
+switch (value) {
+		
+	case "CHOOSE":
+		error("Household consumption profile has not been set!");
+		break;
+				
+	case "zero":
+		householdsConsumptionProfiles.forEach( profile -> 
+		  	consumption_hour_rows.forEach( row -> 
+				profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
+							 row.get( db_in_consumption_profiles_24hours.zero_kwh ) 
+			   )
+			)
+		);
+		break;
+			
+	case "household_cbs_noon_peak":
+		//An stochastic noise of type triangular distribution is multiplied.  
+		householdsConsumptionProfiles.forEach( profile -> 
+		  	consumption_hour_rows.forEach( row -> 
+				profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
+							 row.get( db_in_consumption_profiles_24hours.household_cbs_noon_peak_kwh ) * triangular(0, 2, 1)
+			   )
+			)
+		);		
+		break;
+				
+	case "household_cbs_morning_evening_peak":
+		//An stochastic noise of type triangular distribution is multiplied.
+		householdsConsumptionProfiles.forEach( profile -> 
+		  	consumption_hour_rows.forEach( row -> 
+				profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
+							 row.get( db_in_consumption_profiles_24hours.household_cbs_morning_evening_peak_kwh ) * triangular(0, 2, 1)
+			   )
+			)
+		);		
+		break;
+}
+
+//Set the parameter to the filled list
+set_p_HouseholdsConsumptionProfiles( householdsConsumptionProfiles );
+
+button_ToProsumerHouseholdRatioSelection.setEnabled(true);]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
+						<Editable>false</Editable>
+						<Button><![CDATA[zero]]></Button>
+						<Button><![CDATA[household_cbs_noon_peak]]></Button>
+						<Button><![CDATA[household_cbs_morning_evening_peak]]></Button>
+						<LinkTo>false</LinkTo>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="ComboBox">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690450186285</Id>
+					<Name><![CDATA[combobox_HouseholdConsumptionProfile_Quarters]]></Name>
+					<X>389.292</X><Y>-20</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="180" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<FillColor/>
+						<TextColor/>
+						<VisibleCode><![CDATA[//false]]></VisibleCode>
+						<Enabled>false</Enabled>
+						<ActionCode><![CDATA[//Create an empty list of consumption profiles
+List<LinkedHashMap<Integer, Double>> householdsConsumptionProfiles = new ArrayList<>();
+
+for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
+	householdsConsumptionProfiles.add( new LinkedHashMap<>() );
+}
+
+//Create a temporary list of corresponding consumption DB table
 List<Tuple> consumption_quarter_rows = selectFrom(db_in_consumption_profiles_96quarters).list();
 
 //Fill-in the empty list of consumption profiles
@@ -2041,7 +2032,7 @@ switch (value) {
 		break;
 				
 	case "zero":
-		p_HouseholdsConsumptionProfiles.forEach( profile -> 
+		householdsConsumptionProfiles.forEach( profile -> 
 			consumption_quarter_rows.forEach( row -> 
 				profile.put( row.get( db_in_consumption_profiles_96quarters.time_quarter ), 
 							 row.get( db_in_consumption_profiles_96quarters.zero_kwh ) 
@@ -2049,85 +2040,18 @@ switch (value) {
 			)
 		);
 		break;
-}]]></ActionCode>
+}
+
+//Set the parameter to the filled list
+set_p_HouseholdsConsumptionProfiles( householdsConsumptionProfiles );
+
+button_ToProsumerHouseholdRatioSelection.setEnabled(true);]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
 						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
 						<Editable>false</Editable>
 						<Button><![CDATA[zero]]></Button>
-						<LinkTo>false</LinkTo>
-					</ExtendedProperties>
-				</Control>
-				<Control Type="ComboBox">
-				 	<EmbeddedIcon>false</EmbeddedIcon>				
-					<Id>1690450349133</Id>
-					<Name><![CDATA[combobox_HouseholdProductionProfile_Quarters]]></Name>
-					<X>449.292</X><Y>30</Y>
-					<Label><X>0</X><Y>-10</Y></Label>
-					<PublicFlag>true</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<BasicProperties Width="180" Height="20">
-                        <EmbeddedIcon>false</EmbeddedIcon>	
-						<FillColor/>
-						<TextColor/>
-						<VisibleCode><![CDATA[false]]></VisibleCode>
-						<Enabled>false</Enabled>
-						<ActionCode><![CDATA[//Create a temporary list of corresponding Production DB table
-List<Tuple> production_quarter_rows = selectFrom(db_in_production_profiles_96quarters).list();
-	
-//Fill-in the empty list of production profiles
-switch (v_HouseholdProductionProfileCB.getValue()) {
-			
-	case "CHOOSE":
-		error("Household Production profile has not been set!");
-		break;
-				
-	case "zero":
-		p_HouseholdsProductionProfiles.forEach( profile -> 
-		  	production_quarter_rows.forEach( row -> 
-				profile.put( row.get( db_in_production_profiles_96quarters.time_quarter ), 
-							 row.get( db_in_production_profiles_96quarters.zero_kwh ) 
-			   )
-			)
-		);
-		break;
-}]]></ActionCode>
-					</BasicProperties>
-					<ExtendedProperties>
-						<Font Name="Dialog" Size="11" Style="0"/>
-						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
-						<Editable>false</Editable>
-						<Button><![CDATA[zero]]></Button>
-						<LinkTo>false</LinkTo>
-					</ExtendedProperties>
-				</Control>
-				<Control Type="ComboBox">
-				 	<EmbeddedIcon>false</EmbeddedIcon>				
-					<Id>1690468186870</Id>
-					<Name><![CDATA[combobox_HouseholdPopulation]]></Name>
-					<X>-200</X><Y>-20</Y>
-					<Label><X>0</X><Y>-10</Y></Label>
-					<PublicFlag>true</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<BasicProperties Width="60" Height="20">
-                        <EmbeddedIcon>false</EmbeddedIcon>	
-						<FillColor/>
-						<TextColor/>
-						<Enabled>true</Enabled>
-						<ActionCode><![CDATA[set_p_HouseholdPopulation(self.getIntValue());]]></ActionCode>
-					</BasicProperties>
-					<ExtendedProperties>
-						<Font Name="Dialog" Size="11" Style="0"/>
-						<Editable>false</Editable>
-						<Button><![CDATA[200]]></Button>
-						<Button><![CDATA[400]]></Button>
-						<Button><![CDATA[600]]></Button>
-						<Button><![CDATA[800]]></Button>
 						<LinkTo>false</LinkTo>
 					</ExtendedProperties>
 				</Control>
@@ -2135,7 +2059,7 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690450088654</Id>
 					<Name><![CDATA[combobox_HouseholdConsumptionProfile_Minutes]]></Name>
-					<X>87.412</X><Y>-20</Y>
+					<X>27.412</X><Y>-20</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2145,9 +2069,16 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<FillColor/>
 						<TextColor/>
-						<VisibleCode><![CDATA[false]]></VisibleCode>
+						<VisibleCode><![CDATA[//false]]></VisibleCode>
 						<Enabled>false</Enabled>
-						<ActionCode><![CDATA[//Create a temporary list of corresponding consumption DB table
+						<ActionCode><![CDATA[//Create an empty list of consumption profiles
+List<LinkedHashMap<Integer, Double>> householdsConsumptionProfiles = new ArrayList<>();
+
+for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
+	householdsConsumptionProfiles.add( new LinkedHashMap<>() );
+}
+
+//Create a temporary list of corresponding consumption DB table
 List<Tuple> consumption_minute_rows = selectFrom(db_in_consumption_profiles_1440minutes).list();
 
 //Fill-in the empty list of consumption profiles
@@ -2157,7 +2088,7 @@ switch (value) {
 		break;
 				
 	case "zero":
-		p_HouseholdsConsumptionProfiles.forEach( profile -> 
+		householdsConsumptionProfiles.forEach( profile -> 
 			consumption_minute_rows.forEach( row -> 
 				profile.put( row.get( db_in_consumption_profiles_1440minutes.time_minute ), 
 							 row.get( db_in_consumption_profiles_1440minutes.zero_kwh ) 
@@ -2165,7 +2096,138 @@ switch (value) {
 			)
 		);
 		break;
-}]]></ActionCode>
+}
+
+//Set the parameter to the filled list
+set_p_HouseholdsConsumptionProfiles( householdsConsumptionProfiles );
+
+button_ToProsumerHouseholdRatioSelection.setEnabled(true);]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
+						<Editable>false</Editable>
+						<Button><![CDATA[zero]]></Button>
+						<LinkTo>false</LinkTo>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="ComboBox">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690360406108</Id>
+					<Name><![CDATA[combobox_HouseholdProductionProfile_Hours]]></Name>
+					<X>208.352</X><Y>40</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="180" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<FillColor/>
+						<TextColor/>
+						<VisibleCode><![CDATA[//false]]></VisibleCode>
+						<Enabled>false</Enabled>
+						<ActionCode><![CDATA[//Create an empty list of production profiles
+List<LinkedHashMap<Integer, Double>> householdsProductionProfiles = new ArrayList<>();
+
+for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
+	householdsProductionProfiles.add( new LinkedHashMap<>() );
+}
+
+//Create a temporary list of corresponding production DB table
+List<Tuple> production_hour_rows = selectFrom(db_in_production_profiles_24hours).list();
+		
+//Fill-in the empty list of production profiles
+switch (value) {
+			
+	case "CHOOSE":
+		error("Household Production profile has not been set!");
+		break;
+				
+	case "zero":
+		householdsProductionProfiles.forEach( profile -> 
+		  	production_hour_rows.forEach( row -> 
+				profile.put( row.get( db_in_production_profiles_24hours.time_hour ), 
+							 row.get( db_in_production_profiles_24hours.zero_kwh ) 
+				)
+			)
+		);
+		break;
+			
+	case "household_sample_solar":
+		//An stochastic noise of type triangular distribution is multiplied.  
+		householdsProductionProfiles.forEach( profile -> 
+		  	production_hour_rows.forEach( row -> 
+				profile.put( row.get( db_in_production_profiles_24hours.time_hour ), 
+							 row.get( db_in_production_profiles_24hours.household_sample_solar_kwh ) * triangular(0, 2, 1)
+				)
+			)
+		);		
+		break;				
+}	
+
+//Set the parameter to the filled list
+set_p_HouseholdsProductionProfiles( householdsProductionProfiles );		
+
+button_ToCreateModel.setEnabled(true);	]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<DefaultValueCode><![CDATA["CHOOSE"]]></DefaultValueCode>
+						<Editable>false</Editable>
+						<Button><![CDATA[zero]]></Button>
+						<Button><![CDATA[household_sample_solar]]></Button>
+						<LinkTo>false</LinkTo>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="ComboBox">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690450349133</Id>
+					<Name><![CDATA[combobox_HouseholdProductionProfile_Quarters]]></Name>
+					<X>389.292</X><Y>40</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="180" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<FillColor/>
+						<TextColor/>
+						<VisibleCode><![CDATA[//false]]></VisibleCode>
+						<Enabled>false</Enabled>
+						<ActionCode><![CDATA[//Create an empty list of production profiles
+List<LinkedHashMap<Integer, Double>> householdsProductionProfiles = new ArrayList<>();
+
+for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
+	householdsProductionProfiles.add( new LinkedHashMap<>() );
+}
+
+//Create a temporary list of corresponding Production DB table
+List<Tuple> production_quarter_rows = selectFrom(db_in_production_profiles_96quarters).list();
+	
+//Fill-in the empty list of production profiles
+switch (value) {
+			
+	case "CHOOSE":
+		error("Household Production profile has not been set!");
+		break;
+				
+	case "zero":
+		householdsProductionProfiles.forEach( profile -> 
+		  	production_quarter_rows.forEach( row -> 
+				profile.put( row.get( db_in_production_profiles_96quarters.time_quarter ), 
+							 row.get( db_in_production_profiles_96quarters.zero_kwh ) 
+			   )
+			)
+		);
+		break;
+}
+
+//Set the parameter to the filled list
+set_p_HouseholdsProductionProfiles( householdsProductionProfiles );		
+
+button_ToCreateModel.setEnabled(true);	]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -2179,7 +2241,7 @@ switch (value) {
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690450393293</Id>
 					<Name><![CDATA[combobox_HouseholdProductionProfile_Minutes]]></Name>
-					<X>87.412</X><Y>30</Y>
+					<X>27.412</X><Y>40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2189,20 +2251,27 @@ switch (value) {
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<FillColor/>
 						<TextColor/>
-						<VisibleCode><![CDATA[false]]></VisibleCode>
+						<VisibleCode><![CDATA[//false]]></VisibleCode>
 						<Enabled>false</Enabled>
-						<ActionCode><![CDATA[//Create a temporary list of corresponding Production DB table
+						<ActionCode><![CDATA[//Create an empty list of production profiles
+List<LinkedHashMap<Integer, Double>> householdsProductionProfiles = new ArrayList<>();
+
+for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
+	householdsProductionProfiles.add( new LinkedHashMap<>() );
+}
+
+//Create a temporary list of corresponding Production DB table
 List<Tuple> production_minute_rows = selectFrom(db_in_production_profiles_1440minutes).list();
 	
 //Fill-in the empty list of production profiles
-switch (v_HouseholdProductionProfileCB.getValue()) {
+switch (value) {
 			
 	case "CHOOSE":
 		error("Household Production profile has not been set!");
 		break;
 				
 	case "zero":
-		p_HouseholdsProductionProfiles.forEach( profile -> 
+		householdsProductionProfiles.forEach( profile -> 
 		  	production_minute_rows.forEach( row -> 
 				profile.put( row.get( db_in_production_profiles_1440minutes.time_minute ), 
 							 row.get( db_in_production_profiles_1440minutes.zero_kwh ) 
@@ -2210,7 +2279,12 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 			)
 		);
 		break;
-}		]]></ActionCode>
+}
+
+//Set the parameter to the filled list
+set_p_HouseholdsProductionProfiles( householdsProductionProfiles );	
+
+button_ToCreateModel.setEnabled(true);	]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -2220,6 +2294,153 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 						<LinkTo>false</LinkTo>
 					</ExtendedProperties>
 				</Control>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690649475511</Id>
+					<Name><![CDATA[button_ToHouseholdConsumptionProfileSelection]]></Name>
+					<X>-60</X><Y>-20</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="60" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>false</Enabled>
+						<ActionCode><![CDATA[combobox_HouseholdPopulation.setEnabled(false);
+
+self.setEnabled(false);
+
+switch (p_EnergyUsageResolution) {
+	
+	case MINUTES:
+		//Consumption
+		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Minutes;
+		break;
+	
+	case HOURS:
+		//Consumption
+		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Hours;
+		break;
+		
+	case QUARTERS:
+		//Consumption
+		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Quarters;
+		break;
+}
+
+v_HouseholdConsumptionProfileCB.setEnabled(true);]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[next]]></LabelText>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690650625194</Id>
+					<Name><![CDATA[button_ToHouseholdProductionProfileSelection]]></Name>
+					<X>-60</X><Y>40</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="60" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>false</Enabled>
+						<ActionCode><![CDATA[radio_ProsumerHouseholdRatio.setEnabled(false);
+
+self.setEnabled(false);
+
+switch (p_EnergyUsageResolution) {
+	
+	case MINUTES:
+		//Production
+		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Minutes;		
+		break;
+	
+	case HOURS:
+		//Production
+		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Hours;	
+		break;
+		
+	case QUARTERS:
+		//Production
+		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Quarters;	
+		break;
+}
+
+switch (radio_ProsumerHouseholdRatio.getValue()) {
+
+	case 0:
+		v_HouseholdProductionProfileCB.setValue( "zero" , true );
+		break;
+	
+	default:
+		v_HouseholdProductionProfileCB.setEnabled(true);
+		break;
+}
+]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[next]]></LabelText>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690650245298</Id>
+					<Name><![CDATA[button_ToProsumerHouseholdRatioSelection]]></Name>
+					<X>580</X><Y>-20</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="60" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>false</Enabled>
+						<ActionCode><![CDATA[v_HouseholdConsumptionProfileCB.setEnabled(false);
+
+self.setEnabled(false);
+
+radio_ProsumerHouseholdRatio.setEnabled(true);
+button_ToHouseholdProductionProfileSelection.setEnabled(true);]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[next]]></LabelText>
+					</ExtendedProperties>
+				</Control>
+				<Control Type="Button">
+				 	<EmbeddedIcon>false</EmbeddedIcon>				
+					<Id>1690650766140</Id>
+					<Name><![CDATA[button_ToCreateModel]]></Name>
+					<X>580</X><Y>40</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<BasicProperties Width="60" Height="20">
+                        <EmbeddedIcon>false</EmbeddedIcon>	
+						<TextColor/>
+						<Enabled>false</Enabled>
+						<ActionCode><![CDATA[v_HouseholdProductionProfileCB.setEnabled(false);
+
+self.setEnabled(false);
+
+button_CreateModel.setEnabled(true);]]></ActionCode>
+					</BasicProperties>
+					<ExtendedProperties>
+						<Font Name="Dialog" Size="11" Style="0"/>
+						<LabelText><![CDATA[next]]></LabelText>
+					</ExtendedProperties>
+				</Control>
 			</Presentation>
 
 				</Group>
@@ -2227,7 +2448,7 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690368752232</Id>
 					<Name><![CDATA[combobox_EnergyUsageResolution]]></Name>
-					<X>150</X><Y>690</Y>
+					<X>140</X><Y>680</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2252,7 +2473,8 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 		set_p_EnergyUsageResolution(OL_EnergyUsageResolution.QUARTERS);
 		break;
 }
-]]></ActionCode>
+
+button_ToAgentPopulationAssumptions.setEnabled(true);]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -2267,7 +2489,7 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 				<Text>
 					<Id>1690368752248</Id>
 					<Name><![CDATA[text_EnergyUsageResolution]]></Name>
-					<X>20</X><Y>690</Y>
+					<X>10</X><Y>680</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2288,60 +2510,27 @@ switch (v_HouseholdProductionProfileCB.getValue()) {
 				<Control Type="Button">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690559996508</Id>
-					<Name><![CDATA[button_Ok]]></Name>
-					<X>290</X><Y>690</Y>
+					<Name><![CDATA[button_ToAgentPopulationAssumptions]]></Name>
+					<X>250</X><Y>680</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<BasicProperties Width="100" Height="30">
+					<BasicProperties Width="60" Height="20">
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>false</Enabled>
-						<EnableExpression><![CDATA[combobox_EnergyUsageResolution.getValue() != "CHOOSE"]]></EnableExpression>
 						<ActionCode><![CDATA[combobox_EnergyUsageResolution.setEnabled(false);
+
 self.setEnabled(false);
 
-switch (p_EnergyUsageResolution) {
-	
-	case MINUTES:
-		//Consumption
-		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Minutes;
-		v_HouseholdConsumptionProfileCB.setVisible(true);
-		v_HouseholdConsumptionProfileCB.setEnabled(true);
-		//Production
-		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Minutes;
-		v_HouseholdProductionProfileCB.setVisible(true);
-		v_HouseholdProductionProfileCB.setEnabled(true);		
-		break;
-	
-	case HOURS:
-		//Consumption
-		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Hours;
-		v_HouseholdConsumptionProfileCB.setVisible(true);
-		v_HouseholdConsumptionProfileCB.setEnabled(true);
-		//Production
-		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Hours;
-		v_HouseholdProductionProfileCB.setVisible(true);
-		v_HouseholdProductionProfileCB.setEnabled(true);	
-		break;
-		
-	case QUARTERS:
-		//Consumption
-		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Quarters;
-		v_HouseholdConsumptionProfileCB.setVisible(true);
-		v_HouseholdConsumptionProfileCB.setEnabled(true);
-		//Production
-		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Quarters;
-		v_HouseholdProductionProfileCB.setVisible(true);
-		v_HouseholdProductionProfileCB.setEnabled(true);	
-		break;
-}]]></ActionCode>
+combobox_HouseholdPopulation.setEnabled(true); // TODO
+]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
-						<LabelText><![CDATA[Ok]]></LabelText>
+						<LabelText><![CDATA[next]]></LabelText>
 					</ExtendedProperties>
 				</Control>
 			</Presentation>
@@ -4798,6 +4987,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 				<Text>
 					<Id>1689847406860</Id>
 					<Name><![CDATA[text_Agents]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>20</X><Y>690</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -4845,6 +5035,7 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689847406864</Id>
 					<Name><![CDATA[checkbox]]></Name>
+					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>320</X><Y>690</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
