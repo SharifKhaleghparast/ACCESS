@@ -40,7 +40,7 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 		</OptionList>
 		<OptionList>
 			<Id>1689703148874</Id>
-			<Name><![CDATA[OL_GridUserType]]></Name>
+			<Name><![CDATA[OL_GridUsageType]]></Name>
 			<Description><![CDATA[@author Sharif_Khaleghparast
 @since 18_July_2023]]></Description>
 			<Option>
@@ -299,7 +299,7 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1690559676374</Id>
 					<Name><![CDATA[p_HouseholdsConsumptionProfiles]]></Name>
-					<X>290</X><Y>160</Y>
+					<X>290</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -310,6 +310,7 @@ getExperiment().getEngine();
 						<SdArray>false</SdArray>
 						<ParameterEditor>
 							<Id>1690559676372</Id>
+							<Label><![CDATA[p_HouseholdsConsumptionProfiles]]></Label>
 							<EditorContolType>TEXT_BOX</EditorContolType>
 							<MinSliderValue><![CDATA[0]]></MinSliderValue>
 							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
@@ -320,7 +321,7 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1690561618963</Id>
 					<Name><![CDATA[p_HouseholdsProductionProfiles]]></Name>
-					<X>290</X><Y>180</Y>
+					<X>290</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -342,7 +343,7 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1690568577254</Id>
 					<Name><![CDATA[p_HouseholdPopulation]]></Name>
-					<X>290</X><Y>200</Y>
+					<X>290</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -353,6 +354,49 @@ getExperiment().getEngine();
 						<SdArray>false</SdArray>
 						<ParameterEditor>
 							<Id>1690568577252</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+				<Variable Class="Parameter">
+					<Id>1691585693291</Id>
+					<Name><![CDATA[p_HouseholdsGridUsageTypes]]></Name>
+					<X>290</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[List<OL_GridUsageType>]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1691585693289</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+				<Variable Class="Parameter">
+					<Id>1691588920682</Id>
+					<Name><![CDATA[p_ProsumerHouseholdRatio]]></Name>
+					<X>290</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[double]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<UnitOfValue Class="RateUnits"><![CDATA[PER_SECOND]]></UnitOfValue>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1691588920680</Id>
 							<EditorContolType>TEXT_BOX</EditorContolType>
 							<MinSliderValue><![CDATA[0]]></MinSliderValue>
 							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
@@ -1904,7 +1948,51 @@ button_ToHouseholdConsumptionProfileSelection.setEnabled(true);]]></ActionCode>
 						<TextColor/>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[button_ToHouseholdProductionProfileSelection.setEnabled(true);
-//TODO START FROME HERE! The value of this radio button is not a parameter for households! It should help to set the parameter of "Grid User Type" for households. (It might be a parameter for the scenario! think about it.)]]></ActionCode>
+
+//The value of this radio button is not and should not be a parameter for households! It is a parameter for the scenario!
+//It should help to set the parameter of "Grid Usage Type" for households.
+
+//Set the single value of a related parameter 
+switch( value ) {
+	case 0:
+		set_p_ProsumerHouseholdRatio(0.0);
+		break;
+		
+	case 1:
+		set_p_ProsumerHouseholdRatio(0.25);
+		break;
+
+	case 2:
+		set_p_ProsumerHouseholdRatio(0.50);
+		break;
+		
+	case 3:
+		set_p_ProsumerHouseholdRatio(0.75);
+		break;
+
+	case 4:
+		set_p_ProsumerHouseholdRatio(1.0);
+		break;
+}
+
+//Set the list values of a related parameter 
+List<OL_GridUsageType> HouseholdsGridUsageTypes = new ArrayList<>();
+
+for( int i = 0; i < p_HouseholdPopulation; i++ ) {
+	HouseholdsGridUsageTypes.add( OL_GridUsageType.CONSUMER );
+}
+
+double ratio = 0.0;
+
+while ( ratio < p_ProsumerHouseholdRatio ) {
+	int prosumerIndex = uniform_discr( HouseholdsGridUsageTypes.size() - 1 );
+	HouseholdsGridUsageTypes.set( prosumerIndex,  OL_GridUsageType.PROSUMER); //test
+	ratio = ( HouseholdsGridUsageTypes.stream().filter( t -> t.equals(OL_GridUsageType.PROSUMER) ).count() ) / p_HouseholdPopulation;
+	traceln(ratio); //TODO START HERE!
+} 
+traceln(ratio);
+set_p_HouseholdsGridUsageTypes( HouseholdsGridUsageTypes );
+]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -2312,24 +2400,6 @@ button_ToCreateModel.setEnabled(true);	]]></ActionCode>
 
 self.setEnabled(false);
 
-switch (p_EnergyUsageResolution) {
-	
-	case MINUTES:
-		//Consumption
-		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Minutes;
-		break;
-	
-	case HOURS:
-		//Consumption
-		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Hours;
-		break;
-		
-	case QUARTERS:
-		//Consumption
-		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Quarters;
-		break;
-}
-
 v_HouseholdConsumptionProfileCB.setEnabled(true);]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
@@ -2354,24 +2424,6 @@ v_HouseholdConsumptionProfileCB.setEnabled(true);]]></ActionCode>
 						<ActionCode><![CDATA[radio_ProsumerHouseholdRatio.setEnabled(false);
 
 self.setEnabled(false);
-
-switch (p_EnergyUsageResolution) {
-	
-	case MINUTES:
-		//Production
-		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Minutes;		
-		break;
-	
-	case HOURS:
-		//Production
-		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Hours;	
-		break;
-		
-	case QUARTERS:
-		//Production
-		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Quarters;	
-		break;
-}
 
 switch (radio_ProsumerHouseholdRatio.getValue()) {
 
@@ -2524,6 +2576,24 @@ button_ToAgentPopulationAssumptions.setEnabled(true);]]></ActionCode>
 						<ActionCode><![CDATA[combobox_EnergyUsageResolution.setEnabled(false);
 
 self.setEnabled(false);
+
+switch (p_EnergyUsageResolution) {
+	
+	case MINUTES:
+		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Minutes;
+		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Minutes;
+		break;
+	
+	case HOURS:
+		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Hours;
+		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Hours;
+		break;
+		
+	case QUARTERS:
+		v_HouseholdConsumptionProfileCB = combobox_HouseholdConsumptionProfile_Quarters;
+		v_HouseholdProductionProfileCB = combobox_HouseholdProductionProfile_Quarters;	
+		break;
+}
 
 combobox_HouseholdPopulation.setEnabled(true); // TODO
 ]]></ActionCode>
@@ -10708,6 +10778,12 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 				<Parameter>
 					<ParameterName><![CDATA[p_HouseholdPopulation]]></ParameterName>
 				</Parameter>
+				<Parameter>
+					<ParameterName><![CDATA[p_HouseholdsGridUsageTypes]]></ParameterName>
+				</Parameter>
+				<Parameter>
+					<ParameterName><![CDATA[p_ProsumerHouseholdRatio]]></ParameterName>
+				</Parameter>
 			</Parameters>			
 			<PresentationProperties>
 				<EnableZoomAndPanning>true</EnableZoomAndPanning>
@@ -11009,7 +11085,7 @@ public class C_PojoIn_ElectricityGridOperator implements Serializable {
 public class C_PojoIn_Household implements Serializable {
 
 	// **********FIELDS**********
-	private OL_GridUserType v_GridUserType;
+	private OL_GridUsageType v_GridUsageType;
 	private LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> link_MyGridBus;
 	private OL_EnergyUsageResolution v_EnergyUsageResolution;
 	private Map<Integer,Double> col_ConsumptionProfile;
@@ -11035,14 +11111,14 @@ public class C_PojoIn_Household implements Serializable {
      * @param p_CommunityMemberType An Enum
      * @param p_MyEnergyCommunity A collection of bidirectional links to communities 
      */
-    public C_PojoIn_Household(OL_GridUserType p_GridUserType,
+    public C_PojoIn_Household(OL_GridUsageType p_GridUsageType,
     						 LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> p_MyGridBus,
     						 OL_EnergyUsageResolution p_EnergyUsageResolution,
     						 Map<Integer,Double> p_ConsumptionProfile,
     						 Map<Integer,Double> p_ProductionProfile,
     						 OL_CommunityMemberType p_CommunityMemberType,
     						 LinkToAgentCollection<A_Logic_Community,A_Logic_Household> p_MyEnergyCommunity) {
-    	this.v_GridUserType = p_GridUserType;
+    	this.v_GridUsageType = p_GridUsageType;
     	this.link_MyGridBus = p_MyGridBus;
     	this.v_EnergyUsageResolution = p_EnergyUsageResolution;
     	this.col_ConsumptionProfile = p_ConsumptionProfile;
@@ -11052,8 +11128,8 @@ public class C_PojoIn_Household implements Serializable {
     }
     
     // **********GETTERS**********
-    public OL_GridUserType f_Get_GridUserType() {
-    	return v_GridUserType;
+    public OL_GridUsageType f_Get_GridUsageType() {
+    	return v_GridUsageType;
     }
     
     public LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> f_Get_MyGridBus() {
@@ -11081,8 +11157,8 @@ public class C_PojoIn_Household implements Serializable {
     }
     
     // **********SETTERS**********
-    public void f_Set_GridUserType(OL_GridUserType arg_GridUserType) {
-    	v_GridUserType = arg_GridUserType;
+    public void f_Set_GridUsageType(OL_GridUsageType arg_GridUsageType) {
+    	v_GridUsageType = arg_GridUsageType;
     }
     
     public void f_Set_MyGridBus(LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> arg_MyGridBus) {
