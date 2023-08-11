@@ -254,7 +254,7 @@ getExperiment().getEngine();
 				<Variable Class="PlainVariable">
 					<Id>1690562757756</Id>
 					<Name><![CDATA[v_HouseholdConsumptionProfileCB]]></Name>
-					<X>530</X><Y>180</Y>
+					<X>530</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -266,7 +266,7 @@ getExperiment().getEngine();
 				<Variable Class="PlainVariable">
 					<Id>1690562782453</Id>
 					<Name><![CDATA[v_HouseholdProductionProfileCB]]></Name>
-					<X>530</X><Y>200</Y>
+					<X>530</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -364,7 +364,7 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1691585693291</Id>
 					<Name><![CDATA[p_HouseholdsGridUsageTypes]]></Name>
-					<X>290</X><Y>200</Y>
+					<X>290</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -385,7 +385,7 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1691588920682</Id>
 					<Name><![CDATA[p_ProsumerHouseholdRatio]]></Name>
-					<X>290</X><Y>220</Y>
+					<X>290</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -406,7 +406,7 @@ getExperiment().getEngine();
 				</Variable>
 				<Variable Class="CollectionVariable">
 					<Id>1689761039735</Id>
-					<Name><![CDATA[col_PojoInContainers]]></Name>
+					<Name><![CDATA[col_PojoInScenarios]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 19_July_2023]]></Description>
 					<X>50</X><Y>140</Y>
@@ -416,14 +416,14 @@ getExperiment().getEngine();
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
 						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
-						<ElementClass><![CDATA[C_PojoIn__Container]]></ElementClass>
+						<ElementClass><![CDATA[C_PojoIn__Scenario]]></ElementClass>
 						<ValueElementClass><![CDATA[String]]></ValueElementClass>
 					</Properties>
 
 				</Variable>
 				<Variable Class="CollectionVariable">
 					<Id>1689761799728</Id>
-					<Name><![CDATA[col_PojoOutContainers]]></Name>
+					<Name><![CDATA[col_PojoOutScenarios]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 19_July_2023]]></Description>
 					<X>50</X><Y>160</Y>
@@ -433,7 +433,7 @@ getExperiment().getEngine();
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
 						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
-						<ElementClass><![CDATA[C_PojoOut__Container]]></ElementClass>
+						<ElementClass><![CDATA[C_PojoOut__Scenario]]></ElementClass>
 						<ValueElementClass><![CDATA[String]]></ValueElementClass>
 					</Properties>
 
@@ -509,8 +509,8 @@ getExperiment().getEngine();
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[C_PojoOut__Container dataOut = new C_PojoOut__Container(scenario);
-col_PojoOutContainers.add(dataOut);
+					<Action><![CDATA[C_PojoOut__Scenario dataOut = new C_PojoOut__Scenario(scenario);
+col_PojoOutScenarios.add(dataOut);
 ]]></Action>
 				</Event>
 			</Events>
@@ -524,7 +524,7 @@ col_PojoOutContainers.add(dataOut);
 
 Attention: The pojoOutContainer object that is created here, keeps the initial model data setup of the model. Other pojoOutContainer objects are created to keep the model data through time.
 Attention: The experiment is the only object that can create an engine. We cannot create engines from within the agents.]]></Description>
-					<X>770</X><Y>140</Y>
+					<X>770</X><Y>330</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -532,6 +532,10 @@ Attention: The experiment is the only object that can create an engine. We canno
 					<Parameter>
 						<Name><![CDATA[arg_Engine]]></Name>
 						<Type><![CDATA[Engine]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_SelectedViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
 					</Parameter>
 					<Parameter>
 						<Name><![CDATA[arg_PojoIn_Households]]></Name>
@@ -549,26 +553,23 @@ Attention: The experiment is the only object that can create an engine. We canno
 						<Name><![CDATA[arg_PojoIn_LVDistributionFeeders]]></Name>
 						<Type><![CDATA[List<C_PojoIn_ElectricityGrid>]]></Type>
 					</Parameter>
-					<Parameter>
-						<Name><![CDATA[arg_SelectedViewArea]]></Name>
-						<Type><![CDATA[ViewArea]]></Type>
-					</Parameter>
 					<Body><![CDATA[/* Create initial embedded objects */
 
 /* FIRST: PojoInContainer setup */
-C_PojoIn__Container dataIn = new C_PojoIn__Container(  arg_Engine 
-													 , p_EnergyUsageResolution
-													 , arg_PojoIn_Households
-													 , arg_PojoIn_EnergyCommunities
-													 , arg_PojoIn_DistributionSystemOperators
-													 , arg_PojoIn_LVDistributionFeeders
+C_PojoIn__Scenario dataIn = new C_PojoIn__Scenario( arg_Engine 
+													, p_EnergyUsageResolution
+													, p_ProsumerHouseholdRatio
+													, arg_PojoIn_Households
+													, arg_PojoIn_EnergyCommunities
+													, arg_PojoIn_DistributionSystemOperators
+													, arg_PojoIn_LVDistributionFeeders
 );
 
 //Sanity check
-if(col_PojoInContainers.size() != 0) {
-	error(col_PojoInContainers.size() + " PojoInContainers are created");
+if(col_PojoInScenarios.size() != 0) {
+	error(col_PojoInScenarios.size() + " PojoInContainers are created");
 } else {
-	col_PojoInContainers.add(dataIn);
+	col_PojoInScenarios.add(dataIn);
 } 
 	
 /* SECOND: Scenario setup */
@@ -591,24 +592,24 @@ if(pop_Dashboards.size() != 0) {
 	dashboard = add_pop_Dashboards(scenario, arg_SelectedViewArea);
 }
 
-/* FOURTH: PojoOutContainer setup */
-C_PojoOut__Container dataOut = new C_PojoOut__Container(scenario);
+
+/* TODO FOURTH: PojoOutContainer setup */
+/* C_PojoOut__Scenario dataOut = new C_PojoOut__Scenario( scenario );
 
 //Sanity check
-if(col_PojoOutContainers.size() != 0) {
-	error(col_PojoOutContainers.size() + " PojoOutContainers are created before model creation");
+if(col_PojoOutScenarios.size() != 0) {
+	error(col_PojoOutScenarios.size() + " PojoOutContainers are created before model creation");
 } else {
-	col_PojoOutContainers.add(dataOut);
-}
- 
-	]]></Body>
+	col_PojoOutScenarios.add( dataOut );
+} 
+*/]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[Engine]]></ReturnType>
 					<Id>1690035012094</Id>
 					<Name><![CDATA[f_GetEngine]]></Name>
-					<X>770</X><Y>170</Y>
+					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -620,7 +621,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690035690544</Id>
 					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
-					<X>770</X><Y>340</Y>
+					<X>770</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -636,7 +637,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[ViewArea]]></ReturnType>
 					<Id>1690035690546</Id>
 					<Name><![CDATA[f_GetSelectedViewArea]]></Name>
-					<X>770</X><Y>190</Y>
+					<X>770</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -648,7 +649,7 @@ if(col_PojoOutContainers.size() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690278618575</Id>
 					<Name><![CDATA[f_Navigate]]></Name>
-					<X>770</X><Y>310</Y>
+					<X>770</X><Y>210</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -666,35 +667,26 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[List<C_PojoIn_Household>]]></ReturnType>
 					<Id>1690399731031</Id>
 					<Name><![CDATA[f_LoadHouseholdsData]]></Name>
-					<X>770</X><Y>260</Y>
+					<X>770</X><Y>280</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[//Create the PojoIn list
+					<Body><![CDATA[/* Create the PojoIn list */
 List<C_PojoIn_Household> pojoInList = new ArrayList<>();
 
-//Populate the PojoIn list
+/* Populate the PojoIn list */
 for( int i = 0 ; i < p_HouseholdPopulation; i++ ) {
-	pojoInList.add(new C_PojoIn_Household());
-}
-
-/* Load energy resolution */
-pojoInList.forEach( household -> household.f_Set_EnergyUsageResolution(p_EnergyUsageResolution));
-
-/* Load consumption and production profile */
-//Store the filled-in list of profiles in the corresponding PojoIn object
-//This should not be here! Here should be a loop over households pojo-in objects that give each one of those objects their parameters. 
-int i=0;
-for( Map<Integer,Double> profile : p_HouseholdsConsumptionProfiles ) {
-	pojoInList.get( i ).f_Set_ConsumptionProfile( profile );
-	i++;
-}
-
-int j=0;
-for( Map<Integer,Double> profile : p_HouseholdsProductionProfiles ) {
-	pojoInList.get( j ).f_Set_ProductionProfile( profile );
-	j++;
+	
+	pojoInList.add(new C_PojoIn_Household( p_EnergyUsageResolution
+										   , p_HouseholdsConsumptionProfiles.get(i)
+										   , p_HouseholdsGridUsageTypes.get(i)
+										   , p_HouseholdsProductionProfiles.get(i)
+										   , null //TODO p_MyGridBus 
+										   , null //TODO p_CommunityMemberType
+										   , null //TODO p_MyEnergyCommunity
+										 )
+	);
 }
 
 return pojoInList;]]></Body>
@@ -704,15 +696,15 @@ return pojoInList;]]></Body>
 					<ReturnType><![CDATA[List<C_PojoIn_Community>]]></ReturnType>
 					<Id>1690571266635</Id>
 					<Name><![CDATA[f_LoadEnergyCommunitiesData]]></Name>
-					<X>770</X><Y>240</Y>
+					<X>770</X><Y>260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[//Create the PojoIn list
+					<Body><![CDATA[/* Create the PojoIn list */
 List<C_PojoIn_Community> pojoInList = new ArrayList<>();
 
-//Populate the PojoIn list
+/* TODO Populate the PojoIn list */
 //for( int i = 0 ; i < ? ; i++ ) {
 //	pojoInList.add(new C_PojoIn_Community());
 //}
@@ -724,15 +716,15 @@ return pojoInList;]]></Body>
 					<ReturnType><![CDATA[List<C_PojoIn_ElectricityGrid>]]></ReturnType>
 					<Id>1690571574772</Id>
 					<Name><![CDATA[f_LoadLVDistributionFeedersData]]></Name>
-					<X>770</X><Y>280</Y>
+					<X>770</X><Y>300</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[//Create the PojoIn list
+					<Body><![CDATA[/* Create the PojoIn list */
 List<C_PojoIn_ElectricityGrid> pojoInList = new ArrayList<>();
 
-//Populate the PojoIn list
+/* TODO Populate the PojoIn list */
 //for( int i = 0 ; i < ? ; i++ ) {
 //	pojoInList.add(new C_PojoIn_ElectricityGrid());
 //}
@@ -744,15 +736,15 @@ return pojoInList;]]></Body>
 					<ReturnType><![CDATA[List<C_PojoIn_ElectricityGridOperator>]]></ReturnType>
 					<Id>1690571675702</Id>
 					<Name><![CDATA[f_LoadDistributionSystemOperatorsData]]></Name>
-					<X>770</X><Y>220</Y>
+					<X>770</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[//Create the PojoIn list
+					<Body><![CDATA[/* Create the PojoIn list */
 List<C_PojoIn_ElectricityGridOperator> pojoInList = new ArrayList<>();
 
-//Populate the PojoIn list
+/* TODO Populate the PojoIn list */
 //for( int i = 0 ; i < ? ; i++ ) {
 //	pojoInList.add(new C_PojoIn_ElectricityGridOperator());
 //}
@@ -806,7 +798,7 @@ return pojoInList;]]></Body>
 					</GenericParameterSubstitute>
 					<Parameters>
 						<Parameter>
-							<Name><![CDATA[p_MyPojoInContainer]]></Name>
+							<Name><![CDATA[p_MyPojoInScenario]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>true</ReplicationFlag>
@@ -1396,7 +1388,7 @@ return pojoInList;]]></Body>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[self.setEnabled(false);
 
-f_CreateModel(f_GetEngine(), f_LoadHouseholdsData(), f_LoadEnergyCommunitiesData(), f_LoadDistributionSystemOperatorsData(), f_LoadLVDistributionFeedersData(), f_GetSelectedViewArea());
+f_CreateModel(f_GetEngine(), f_GetSelectedViewArea(), f_LoadHouseholdsData(), f_LoadEnergyCommunitiesData(), f_LoadDistributionSystemOperatorsData(), f_LoadLVDistributionFeedersData());
 
 button_ModelDashboard.setEnabled(true);
 ]]></ActionCode>
@@ -1947,52 +1939,7 @@ button_ToHouseholdConsumptionProfileSelection.setEnabled(true);]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>false</Enabled>
-						<ActionCode><![CDATA[button_ToHouseholdProductionProfileSelection.setEnabled(true);
-
-//The value of this radio button is not and should not be a parameter for households! It is a parameter for the scenario!
-//It should help to set the parameter of "Grid Usage Type" for households.
-
-//Set the single value of a related parameter 
-switch( value ) {
-	case 0:
-		set_p_ProsumerHouseholdRatio(0.0);
-		break;
-		
-	case 1:
-		set_p_ProsumerHouseholdRatio(0.25);
-		break;
-
-	case 2:
-		set_p_ProsumerHouseholdRatio(0.50);
-		break;
-		
-	case 3:
-		set_p_ProsumerHouseholdRatio(0.75);
-		break;
-
-	case 4:
-		set_p_ProsumerHouseholdRatio(1.0);
-		break;
-}
-
-//Set the list values of a related parameter 
-List<OL_GridUsageType> HouseholdsGridUsageTypes = new ArrayList<>();
-
-for( int i = 0; i < p_HouseholdPopulation; i++ ) {
-	HouseholdsGridUsageTypes.add( OL_GridUsageType.CONSUMER );
-}
-
-double ratio = 0.0;
-
-while ( ratio < p_ProsumerHouseholdRatio ) {
-	int prosumerIndex = uniform_discr( HouseholdsGridUsageTypes.size() - 1 );
-	HouseholdsGridUsageTypes.set( prosumerIndex,  OL_GridUsageType.PROSUMER); //test
-	ratio = ( HouseholdsGridUsageTypes.stream().filter( t -> t.equals(OL_GridUsageType.PROSUMER) ).count() ) / p_HouseholdPopulation;
-	traceln(ratio); //TODO START HERE!
-} 
-traceln(ratio);
-set_p_HouseholdsGridUsageTypes( HouseholdsGridUsageTypes );
-]]></ActionCode>
+						<ActionCode><![CDATA[// The functionality of radio buttons is in their "next" button.]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -2425,6 +2372,54 @@ v_HouseholdConsumptionProfileCB.setEnabled(true);]]></ActionCode>
 
 self.setEnabled(false);
 
+/* Set the single value of a related parameter */ 
+switch( radio_ProsumerHouseholdRatio.getValue() ) {
+	case 0:
+		set_p_ProsumerHouseholdRatio(0.0);
+		break;
+		
+	case 1:
+		set_p_ProsumerHouseholdRatio(0.25);
+		break;
+
+	case 2:
+		set_p_ProsumerHouseholdRatio(0.50);
+		break;
+		
+	case 3:
+		set_p_ProsumerHouseholdRatio(0.75);
+		break;
+
+	case 4:
+		set_p_ProsumerHouseholdRatio(1.0);
+		break;
+}
+
+/* Set the list values of a related parameter */ 
+List<OL_GridUsageType> HouseholdsGridUsageTypes = new ArrayList<>();
+
+//Initially, make all the population consumers
+for( int i = 0; i < p_HouseholdPopulation; i++ ) {
+	HouseholdsGridUsageTypes.add( OL_GridUsageType.CONSUMER );
+}
+
+//Then, make some of the population prosumers
+
+double ratio = 0.0;
+
+while ( ratio < p_ProsumerHouseholdRatio ) {
+	
+	int candidateProsumerIndex = uniform_discr( HouseholdsGridUsageTypes.size() - 1 );
+	
+	HouseholdsGridUsageTypes.set( candidateProsumerIndex, OL_GridUsageType.PROSUMER);
+	
+	ratio = (double) HouseholdsGridUsageTypes.stream().filter( t -> t.equals(OL_GridUsageType.PROSUMER) ).count()
+			/ p_HouseholdPopulation;
+} 
+
+set_p_HouseholdsGridUsageTypes( HouseholdsGridUsageTypes );
+
+/* UI adaptation based on the selected ratio */
 switch (radio_ProsumerHouseholdRatio.getValue()) {
 
 	case 0:
@@ -3050,7 +3045,7 @@ if(this.getIndex() != 0) {
 	error(this.getIndex() + " scenarios are created.");
 }
 
-//f_CreateScenario( f_GetMyPojoInContainer() );]]></StartupCode>
+f_CreateScenario( f_GetMyPojoInScenario() );]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689252665124</Id>
@@ -3145,23 +3140,23 @@ if(this.getIndex() != 0) {
 			<Variables>
 				<Variable Class="PlainVariable">
 					<Id>1689442134270</Id>
-					<Name><![CDATA[v_MyPojoInContainer]]></Name>
-					<X>530</X><Y>160</Y>
+					<Name><![CDATA[v_MyPojoInScenario]]></Name>
+					<X>530</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
-						<Type><![CDATA[C_PojoIn__Container]]></Type>        
+						<Type><![CDATA[C_PojoIn__Scenario]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[p_MyPojoInContainer]]></Code>
+							<Code><![CDATA[p_MyPojoInScenario]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="PlainVariable">
 					<Id>1690035202844</Id>
 					<Name><![CDATA[v_Engine]]></Name>
-					<X>530</X><Y>140</Y>
+					<X>530</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3169,7 +3164,7 @@ if(this.getIndex() != 0) {
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[Engine]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[f_GetMyPojoInContainer().f_GetEngine()]]></Code>
+							<Code><![CDATA[f_GetMyPojoInScenario().f_GetEngine()]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -3184,20 +3179,35 @@ if(this.getIndex() != 0) {
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[OL_EnergyUsageResolution]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[f_GetMyPojoInContainer().f_Get_EnergyUsageResolution()]]></Code>
+							<Code><![CDATA[f_GetMyPojoInScenario().f_Get_EnergyUsageResolution()]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1691764554171</Id>
+					<Name><![CDATA[v_ProsumerHouseholdRatio]]></Name>
+					<X>530</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[f_GetMyPojoInScenario().f_Get_ProsumerHouseholdRatio()]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689346312586</Id>
-					<Name><![CDATA[p_MyPojoInContainer]]></Name>
+					<Name><![CDATA[p_MyPojoInScenario]]></Name>
 					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[C_PojoIn__Container]]></Type>
+						<Type><![CDATA[C_PojoIn__Scenario]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -3217,111 +3227,41 @@ if(this.getIndex() != 0) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689346698198</Id>
 					<Name><![CDATA[f_CreateScenario]]></Name>
-					<ExcludeFromBuild>true</ExcludeFromBuild>
+					<X>770</X><Y>230</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_MyPojoInScenario]]></Name>
+						<Type><![CDATA[C_PojoIn__Scenario]]></Type>
+					</Parameter>
+					<Body><![CDATA[/* Create initial embedded objects */
+
+//Household instantiation
+arg_MyPojoInScenario.f_Get_PojoIn_Households().forEach( currHouseholdData -> add_pop_Logic_Households( currHouseholdData ) );
+
+//Energy community instantitation
+arg_MyPojoInScenario.f_Get_PojoIn_EnergyCommunities().forEach(currCommunityData -> add_pop_Logic_EnergyCommunities(currCommunityData));
+
+//Distribution system operator instantiation
+arg_MyPojoInScenario.f_Get_PojoIn_DistributionSystemOperators().forEach( currElectricityGridOperatorData -> add_pop_Logic_DistributionSystemOperators( currElectricityGridOperatorData ) );
+
+//LV distribution feeder instantiation
+arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectricityGridData -> add_pop_Logic_LVDistributionFeeders( currElectricityGridData ) );
+]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[C_PojoIn__Scenario]]></ReturnType>
+					<Id>1689673620224</Id>
+					<Name><![CDATA[f_GetMyPojoInScenario]]></Name>
 					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Parameter>
-						<Name><![CDATA[arg_MyPojoInContainer]]></Name>
-						<Type><![CDATA[C_PojoIn__Container]]></Type>
-					</Parameter>
-					<Body><![CDATA[//Create variables------------------------------------------
-//Nothing available
-
-//Create initial embedded objects---------------------------
-
-//Household instantiation
-arg_MyPojoInContainer.f_Get_PojoIn_Households().forEach(currHouseholdData -> add_pop_Logic_Households(currHouseholdData));
-
-/*
-//Energy community instantitation
-if(arg_MyPojoInContainer.f_Get_PojoIn_EnergyCommunities() == null) {
-	//Do nothing
-} else {
-	//Instantiate the energy community
-	arg_MyPojoInContainer.f_Get_PojoIn_EnergyCommunities().forEach(currCommunityData -> add_pop_Logic_EnergyCommunities(currCommunityData));
-}
-
-//LV distribution feeder and its operator instantiation
-if(arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders() == null) {
-	//Do nothing
-} else {
-	//Instantiate the LV distribution feeder and its operator
-	arg_MyPojoInContainer.f_Get_PojoIn_DistributionSystemOperators().forEach(currElectricityGridOperatorData -> add_pop_Logic_DistributionSystemOperators(currElectricityGridOperatorData));
-	arg_MyPojoInContainer.f_Get_PojoIn_LVDistributionFeeders().forEach(currElectricityGridData -> add_pop_Logic_LVDistributionFeeders(currElectricityGridData));
-}
-*/
-
-
-]]></Body>
-				</Function>
-				<Function AccessType="private" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[C_PojoIn__Container]]></ReturnType>
-					<Id>1689673620224</Id>
-					<Name><![CDATA[f_GetMyPojoInContainer]]></Name>
-					<X>770</X><Y>180</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return v_MyPojoInContainer;]]></Body>
-				</Function>
-				<Function AccessType="private" StaticFunction="false">
-					<ReturnModificator>VOID</ReturnModificator>
-					<ReturnType><![CDATA[DB_In_C_01POJOs]]></ReturnType>
-					<Id>1689844894377</Id>
-					<Name><![CDATA[f_SetScenarioInputData]]></Name>
-					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>240</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Parameter>
-						<Name><![CDATA[arg_ScenarioInputData]]></Name>
-						<Type><![CDATA[ArrayList<C_PojoIn__Container>]]></Type>
-					</Parameter>
-					<Body><![CDATA[//col_Models = arg_ScenarioInputData;]]></Body>
-				</Function>
-				<Function AccessType="private" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[ArrayList<C_PojoIn__Container>]]></ReturnType>
-					<Id>1689844894381</Id>
-					<Name><![CDATA[f_GetScenarioInputData]]></Name>
-					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>200</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[//col_Models]]></Body>
-				</Function>
-				<Function AccessType="private" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[ArrayList<C_PojoIn__Container>]]></ReturnType>
-					<Id>1689844894383</Id>
-					<Name><![CDATA[f_LoadScenarioInputData]]></Name>
-					<Description><![CDATA[Load input data for a scenario from the Anylogic database]]></Description>
-					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>220</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[// TODO After the database is designed, give the arguments.
-ArrayList<C_PojoIn__Container> c = new ArrayList<C_PojoIn__Container>();
-
-//for(c.add()
-
-//for(C_PojoIn__Container h: ) {
-//	
-//}
-
-//col_Models.add(new C_PojoOut_POJOContainer(,,,));
-return null;]]></Body>
+					<Body><![CDATA[return v_MyPojoInScenario;]]></Body>
 				</Function>
 				<Function AccessType="public" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
@@ -3334,6 +3274,30 @@ return null;]]></Body>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return v_Engine;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[OL_EnergyUsageResolution]]></ReturnType>
+					<Id>1691764823038</Id>
+					<Name><![CDATA[f_GetEnergyUsageResolution]]></Name>
+					<X>770</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_EnergyUsageResolution;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1691765001605</Id>
+					<Name><![CDATA[f_GetProsumerHouseholdRatio]]></Name>
+					<X>770</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_ProsumerHouseholdRatio;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -3939,7 +3903,7 @@ if(this.getIndex() != 0) {
 /* Link the dashboard to the scenario */
 link_MyScenario.connectTo(p_MyScenario);
 
-//f_CreateDashboard( link_MyScenario.getConnectedAgent() );
+f_CreateDashboard( link_MyScenario.getConnectedAgent(), f_GetSelectedViewArea() );
 	
 
 ]]></StartupCode>
@@ -4114,8 +4078,7 @@ link_MyScenario.connectTo(p_MyScenario);
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689353056488</Id>
 					<Name><![CDATA[f_CreateDashboard]]></Name>
-					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>770</X><Y>140</Y>
+					<X>770</X><Y>260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4130,30 +4093,25 @@ link_MyScenario.connectTo(p_MyScenario);
 					</Parameter>
 					<Body><![CDATA[// Create initial embedded objects
 
+//Household UI instantiation
 arg_MyScenario.pop_Logic_Households.forEach( household -> add_pop_UI_Households( household, arg_SelectedViewArea ) );
+
+//Energy community UI instantitation
 arg_MyScenario.pop_Logic_EnergyCommunities.forEach( community -> add_pop_UI_EnergyCommunities(community, arg_SelectedViewArea ) );
+
+//Distribution system operator UI instantiation
 arg_MyScenario.pop_Logic_DistributionSystemOperators.forEach( electricityGridOperator -> add_pop_UI_DistributionSystemOperators( electricityGridOperator, arg_SelectedViewArea ) );
+
+//LV distribution feeder UI instantiation
 arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach( electricityGrid -> add_pop_UI_LVDistributionFeeders( electricityGrid, arg_SelectedViewArea ) );
 ]]></Body>
-				</Function>
-				<Function AccessType="private" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[A_Logic__Scenario]]></ReturnType>
-					<Id>1689673799720</Id>
-					<Name><![CDATA[f_GetMyScenario]]></Name>
-					<X>770</X><Y>160</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return link_MyScenario.getConnectedAgent();]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>VOID</ReturnModificator>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689855523658</Id>
 					<Name><![CDATA[f_Navigate]]></Name>
-					<X>770</X><Y>220</Y>
+					<X>770</X><Y>230</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4171,7 +4129,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689855996394</Id>
 					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
-					<X>770</X><Y>240</Y>
+					<X>770</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4187,7 +4145,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[ViewArea]]></ReturnType>
 					<Id>1689859102887</Id>
 					<Name><![CDATA[f_GetSelectedViewArea]]></Name>
-					<X>770</X><Y>200</Y>
+					<X>770</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4199,7 +4157,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[ViewArea]]></ReturnType>
 					<Id>1690036603733</Id>
 					<Name><![CDATA[f_GetReferenceViewArea]]></Name>
-					<X>770</X><Y>180</Y>
+					<X>770</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5137,11 +5095,11 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[f_GetMyScenario().f_GetEngine().getState() == f_GetMyScenario().f_GetEngine().PAUSED]]></EnableExpression>
-						<ActionCode><![CDATA[if(f_GetMyScenario().f_GetEngine().run()) {
+						<EnableExpression><![CDATA[link_MyScenario.getConnectedAgent().f_GetEngine().getState() == link_MyScenario.getConnectedAgent().f_GetEngine().PAUSED]]></EnableExpression>
+						<ActionCode><![CDATA[if(link_MyScenario.getConnectedAgent().f_GetEngine().run()) {
 	traceln("The engine is run.");
 } else { //sanity check
-	error("The engine is not run at the click of the button. The engine state is: " + f_GetMyScenario().f_GetEngine().getState());
+	error("The engine is not run at the click of the button. The engine state is: " + link_MyScenario.getConnectedAgent().f_GetEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -5164,11 +5122,11 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>false</Enabled>
-						<EnableExpression><![CDATA[f_GetMyScenario().f_GetEngine().getState() == f_GetMyScenario().f_GetEngine().RUNNING]]></EnableExpression>
-						<ActionCode><![CDATA[if(f_GetMyScenario().f_GetEngine().pause()) {
+						<EnableExpression><![CDATA[link_MyScenario.getConnectedAgent().f_GetEngine().getState() == link_MyScenario.getConnectedAgent().f_GetEngine().RUNNING]]></EnableExpression>
+						<ActionCode><![CDATA[if(link_MyScenario.getConnectedAgent().f_GetEngine().pause()) {
 	traceln("The engine is paused.");
 } else { //sanity check
-	error("The engine is not paused at the click of the button. The engine state is: " + f_GetMyScenario().f_GetEngine().getState());
+	error("The engine is not paused at the click of the button. The engine state is: " + link_MyScenario.getConnectedAgent().f_GetEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -5191,11 +5149,11 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[f_GetMyScenario().f_GetEngine().getState() != f_GetMyScenario().f_GetEngine().IDLE]]></EnableExpression>
-						<ActionCode><![CDATA[if(f_GetMyScenario().f_GetEngine().stop()) {
+						<EnableExpression><![CDATA[link_MyScenario.getConnectedAgent().f_GetEngine().getState() != link_MyScenario.getConnectedAgent().f_GetEngine().IDLE]]></EnableExpression>
+						<ActionCode><![CDATA[if(link_MyScenario.getConnectedAgent().f_GetEngine().stop()) {
 	traceln("The engine is stopped.");
 } else { //sanity check
-	error("The engine is not stopped at the click of the button. The engine state is: " + f_GetMyScenario().f_GetEngine().getState());
+	error("The engine is not stopped at the click of the button. The engine state is: " + link_MyScenario.getConnectedAgent().f_GetEngine().getState());
 }]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
@@ -5217,11 +5175,11 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[f_GetMyScenario().f_GetEngine().getState() == f_GetMyScenario().f_GetEngine().RUNNING || f_GetMyScenario().f_GetEngine().getState() == f_GetMyScenario().f_GetEngine().PAUSED]]></EnableExpression>
-						<ActionCode><![CDATA[if(f_GetMyScenario().f_GetEngine().finish()) {
+						<EnableExpression><![CDATA[link_MyScenario.getConnectedAgent().f_GetEngine().getState() == link_MyScenario.getConnectedAgent().f_GetEngine().RUNNING || link_MyScenario.getConnectedAgent().f_GetEngine().getState() == link_MyScenario.getConnectedAgent().f_GetEngine().PAUSED]]></EnableExpression>
+						<ActionCode><![CDATA[if(link_MyScenario.getConnectedAgent().f_GetEngine().finish()) {
 	traceln("The engine run is finished.");
 } else { //sanity check
-	error("The engine run is not finished at the click of the button. The engine state is: " + f_GetMyScenario().f_GetEngine().getState());
+	error("The engine run is not finished at the click of the button. The engine state is: " + link_MyScenario.getConnectedAgent().f_GetEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -5270,6 +5228,17 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
+			<StartupCode><![CDATA[/* Set the consumption profile */
+col_ConsumptionProfile = f_GetMyPojoInHousehold().f_Get_ConsumptionProfile();
+
+/* Set the production profile */
+col_ProductionProfile = f_GetMyPojoInHousehold().f_Get_ProductionProfile();
+
+/* Link the electricity grid and the household */
+link_MyGridBus.connectTo(f_GetMyPojoInHousehold().f_Get_MyGridBus());
+
+/* Link the energy community and the household */
+link_MyEnergyCommunity.connectTo(f_GetMyPojoInHousehold().f_Get_MyEnergyCommunity());]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689260063075</Id>
@@ -5377,6 +5346,51 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1691774092654</Id>
+					<Name><![CDATA[v_EnergyUsageResolution]]></Name>
+					<X>530</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[OL_EnergyUsageResolution]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[f_GetMyPojoInHousehold().f_Get_EnergyUsageResolution()]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1691774531918</Id>
+					<Name><![CDATA[v_GridUsageType]]></Name>
+					<X>530</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[OL_GridUsageType]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[f_GetMyPojoInHousehold().f_Get_GridUsageType()]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1691775191726</Id>
+					<Name><![CDATA[v_CommunityMemberType]]></Name>
+					<X>530</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[OL_CommunityMemberType]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[f_GetMyPojoInHousehold().f_Get_CommunityMemberType()]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689348892437</Id>
 					<Name><![CDATA[p_MyPojoInHousehold]]></Name>
@@ -5398,6 +5412,36 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 						</ParameterEditor>
 					</Properties>                 
 				</Variable>
+				<Variable Class="CollectionVariable">
+					<Id>1691777203044</Id>
+					<Name><![CDATA[col_ProductionProfile]]></Name>
+					<X>530</X><Y>240</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
+						<CollectionClass><![CDATA[LinkedHashMap]]></CollectionClass>
+						<ElementClass><![CDATA[Integer]]></ElementClass>
+						<ValueElementClass><![CDATA[Double]]></ValueElementClass>
+					</Properties>
+
+				</Variable>
+				<Variable Class="CollectionVariable">
+					<Id>1691777584946</Id>
+					<Name><![CDATA[col_ConsumptionProfile]]></Name>
+					<X>530</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
+						<CollectionClass><![CDATA[LinkedHashMap]]></CollectionClass>
+						<ElementClass><![CDATA[Integer]]></ElementClass>
+						<ValueElementClass><![CDATA[Double]]></ValueElementClass>
+					</Properties>
+
+				</Variable>
 			</Variables>
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
@@ -5412,6 +5456,66 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return v_MyPojoInHousehold;]]></Body>
 				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[OL_EnergyUsageResolution]]></ReturnType>
+					<Id>1691778267291</Id>
+					<Name><![CDATA[f_GetEnergyUsageResolution]]></Name>
+					<X>770</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_EnergyUsageResolution;]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[OL_GridUsageType]]></ReturnType>
+					<Id>1691778310394</Id>
+					<Name><![CDATA[f_GetGridUsageType]]></Name>
+					<X>770</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_GridUsageType;]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[OL_CommunityMemberType]]></ReturnType>
+					<Id>1691778425208</Id>
+					<Name><![CDATA[f_GetCommunityMemberType]]></Name>
+					<X>770</X><Y>200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_CommunityMemberType;]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[Map<Integer,Double>]]></ReturnType>
+					<Id>1691778500263</Id>
+					<Name><![CDATA[f_GetConsumptionProfile]]></Name>
+					<X>770</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return col_ConsumptionProfile;]]></Body>
+				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[Map<Integer,Double>]]></ReturnType>
+					<Id>1691778570530</Id>
+					<Name><![CDATA[f_GetProductionProfile]]></Name>
+					<X>770</X><Y>240</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return col_ProductionProfile;]]></Body>
+				</Function>
 			</Functions>
 			<AgentLinks>
 				<AgentLink>
@@ -5425,6 +5529,48 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<HandleReceiveInConnections>false</HandleReceiveInConnections>
 					<AgentLinkType>COLLECTION_OF_LINKS</AgentLinkType>
 					<AgentLinkBidirectional>true</AgentLinkBidirectional>
+					<MessageType><![CDATA[Object]]></MessageType>
+					<LineStyle>SOLID</LineStyle>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineZOrder>UNDER_AGENTS</LineZOrder>
+					<LineArrow>NONE</LineArrow>
+					<LineArrowPosition>END</LineArrowPosition>
+				</AgentLink>
+				<AgentLink>
+					<Id>1691775246749</Id>
+					<Name><![CDATA[link_MyGridBus]]></Name>
+					<X>530</X><Y>260</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<HandleReceiveInConnections>false</HandleReceiveInConnections>
+					<AgentLinkType>SINGLE_LINK</AgentLinkType>
+					<AgentReferenceId>1689260704431</AgentReferenceId>
+					<AgentLinkBidirectional>true</AgentLinkBidirectional>
+					<BidirectionalPeerId>1691775772431</BidirectionalPeerId>
+					<MessageType><![CDATA[Object]]></MessageType>
+					<LineStyle>SOLID</LineStyle>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineZOrder>UNDER_AGENTS</LineZOrder>
+					<LineArrow>NONE</LineArrow>
+					<LineArrowPosition>END</LineArrowPosition>
+				</AgentLink>
+				<AgentLink>
+					<Id>1691775920612</Id>
+					<Name><![CDATA[link_MyEnergyCommunity]]></Name>
+					<X>530</X><Y>280</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<HandleReceiveInConnections>false</HandleReceiveInConnections>
+					<AgentLinkType>SINGLE_LINK</AgentLinkType>
+					<AgentReferenceId>1689260380180</AgentReferenceId>
+					<AgentLinkBidirectional>true</AgentLinkBidirectional>
+					<BidirectionalPeerId>1691776077822</BidirectionalPeerId>
 					<MessageType><![CDATA[Object]]></MessageType>
 					<LineStyle>SOLID</LineStyle>
 					<LineWidth>1</LineWidth>
@@ -5916,6 +6062,27 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<LineArrow>NONE</LineArrow>
 					<LineArrowPosition>END</LineArrowPosition>
 				</AgentLink>
+				<AgentLink>
+					<Id>1691776077822</Id>
+					<Name><![CDATA[link_MyMembers]]></Name>
+					<X>540</X><Y>160</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<HandleReceiveInConnections>false</HandleReceiveInConnections>
+					<AgentLinkType>COLLECTION_OF_LINKS</AgentLinkType>
+					<AgentReferenceId>1689260063080</AgentReferenceId>
+					<AgentLinkBidirectional>true</AgentLinkBidirectional>
+					<BidirectionalPeerId>1691775920612</BidirectionalPeerId>
+					<MessageType><![CDATA[Object]]></MessageType>
+					<LineStyle>SOLID</LineStyle>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineZOrder>UNDER_AGENTS</LineZOrder>
+					<LineArrow>NONE</LineArrow>
+					<LineArrowPosition>END</LineArrowPosition>
+				</AgentLink>
 			</AgentLinks>
 
 			<ContainerLinks>
@@ -6389,6 +6556,27 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
 					<HandleReceiveInConnections>false</HandleReceiveInConnections>
 					<AgentLinkType>COLLECTION_OF_LINKS</AgentLinkType>
 					<AgentLinkBidirectional>true</AgentLinkBidirectional>
+					<MessageType><![CDATA[Object]]></MessageType>
+					<LineStyle>SOLID</LineStyle>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineZOrder>UNDER_AGENTS</LineZOrder>
+					<LineArrow>NONE</LineArrow>
+					<LineArrowPosition>END</LineArrowPosition>
+				</AgentLink>
+				<AgentLink>
+					<Id>1691775772431</Id>
+					<Name><![CDATA[link_MyHousehold]]></Name>
+					<X>530</X><Y>160</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<HandleReceiveInConnections>false</HandleReceiveInConnections>
+					<AgentLinkType>SINGLE_LINK</AgentLinkType>
+					<AgentReferenceId>1689260063080</AgentReferenceId>
+					<AgentLinkBidirectional>true</AgentLinkBidirectional>
+					<BidirectionalPeerId>1691775246749</BidirectionalPeerId>
 					<MessageType><![CDATA[Object]]></MessageType>
 					<LineStyle>SOLID</LineStyle>
 					<LineWidth>1</LineWidth>
@@ -10807,51 +10995,49 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689264100926</Id>
-			<Name><![CDATA[C_PojoIn__Container]]></Name>
+			<Name><![CDATA[C_PojoIn__Scenario]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the input data of agents and classes in this POJOs holder class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * C_PojoIn__Container
+ * C_PojoIn__Scenario
+ * This class store scenario input data. 
+ * It should be instantiated only once.
  */	
-public class C_PojoIn__Container implements Serializable {
+public class C_PojoIn__Scenario implements Serializable {
 
 	// **********VARIABLES**********
 	private final Engine v_Engine;
-	private OL_EnergyUsageResolution v_EnergyUsageResolution;
+	private final OL_EnergyUsageResolution v_EnergyUsageResolution;
+	private final double v_ProsumerHouseholdRatio;
 	
 	// **********EMBEDDED STRUCTURE**********
-	private List<C_PojoIn_Household> col_PojoIn_Households;
-	private List<C_PojoIn_Community> col_PojoIn_EnergyCommunities;
-	private List<C_PojoIn_ElectricityGridOperator> col_PojoIn_DistributionSystemOperators;
-	private List<C_PojoIn_ElectricityGrid> col_PojoIn_LVDistributionFeeders;
+	private final List<C_PojoIn_Household> col_PojoIn_Households;
+	private final List<C_PojoIn_Community> col_PojoIn_EnergyCommunities;
+	private final List<C_PojoIn_ElectricityGridOperator> col_PojoIn_DistributionSystemOperators;
+	private final List<C_PojoIn_ElectricityGrid> col_PojoIn_LVDistributionFeeders;
 	
 	// **********CONSTRUCTORS**********
 	/**
      * Create an instance of a scenario input
      * @param p_Engine the Anylogic engine that simulate the top-level agent
-     */
-    public C_PojoIn__Container (Engine p_Engine) {
-    	this.v_Engine = p_Engine;
-    }
-	
-	/**
-     * Create an instance of a scenario input
-     * @param p_Engine the Anylogic engine that simulate the top-level agent
      * @param p_Resolution Energy usage resolution
+     * @param p_ProsumerHouseholdRatio Prosumer households to all households ratio
      * @param p_PojoIn_Households A list of C_PojoIn_Household POJOs
      * @param p_PojoIn_EnergyCommunities A list of C_PojoIn_Community POJOs
      * @param p_PojoIn_DistributionSystemOperators A list of C_PojoIn_ElectricityGridOperator POJOs
      * @param p_PojoIn_LVDistributionFeeders A list of C_PojoIn_ElectricityGrid POJOs
      */
-    public C_PojoIn__Container (Engine p_Engine,
-    							OL_EnergyUsageResolution p_EnergyUsageResolution,
-    							List<C_PojoIn_Household> p_PojoIn_Households,
-    							List<C_PojoIn_Community> p_PojoIn_EnergyCommunities,
-    							List<C_PojoIn_ElectricityGridOperator> p_PojoIn_DistributionSystemOperators,
-    							List<C_PojoIn_ElectricityGrid> p_PojoIn_LVDistributionFeeders) {
+    public C_PojoIn__Scenario (Engine p_Engine,
+    						   OL_EnergyUsageResolution p_EnergyUsageResolution,
+    						   double p_ProsumerHouseholdRatio,
+    						   List<C_PojoIn_Household> p_PojoIn_Households,
+    						   List<C_PojoIn_Community> p_PojoIn_EnergyCommunities,
+    						   List<C_PojoIn_ElectricityGridOperator> p_PojoIn_DistributionSystemOperators,
+    						   List<C_PojoIn_ElectricityGrid> p_PojoIn_LVDistributionFeeders) {
     	this.v_Engine = p_Engine;
     	this.v_EnergyUsageResolution = p_EnergyUsageResolution;
+    	this.v_ProsumerHouseholdRatio = p_ProsumerHouseholdRatio;
     	this.col_PojoIn_Households = p_PojoIn_Households;
     	this.col_PojoIn_EnergyCommunities = p_PojoIn_EnergyCommunities;
     	this.col_PojoIn_DistributionSystemOperators = p_PojoIn_DistributionSystemOperators;
@@ -10865,6 +11051,10 @@ public class C_PojoIn__Container implements Serializable {
     
     public OL_EnergyUsageResolution f_Get_EnergyUsageResolution() {
     	return v_EnergyUsageResolution;
+    }
+    
+    public double f_Get_ProsumerHouseholdRatio() {
+    	return v_ProsumerHouseholdRatio;
     }
     
     public List<C_PojoIn_Household> f_Get_PojoIn_Households() {
@@ -10884,9 +11074,7 @@ public class C_PojoIn__Container implements Serializable {
     }
     
     // **********SETTERS**********
-    public void f_Set_EnergyUsageResolution(OL_EnergyUsageResolution arg_EnergyUsageResolution) {
-    	v_EnergyUsageResolution = arg_EnergyUsageResolution;
-    }
+    // All fields are final, thus no setter function exists for this class.
     
 	@Override
 	public String toString() {
@@ -10904,15 +11092,16 @@ public class C_PojoIn__Container implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689264269520</Id>
-			<Name><![CDATA[C_PojoOut__Container]]></Name>
+			<Name><![CDATA[C_PojoOut__Scenario]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the output data of agents and classes in this POJOs class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * C_PojoOut__Container
- * This class store model data at a point in time.
+ * C_PojoOut__Scenario
+ * This class store scenario output data.
+ * It should be instantiated regularly.
  */	
-public class C_PojoOut__Container implements Serializable {
+public class C_PojoOut__Scenario implements Serializable {
 
 	// **********VARIABLES**********
 	private final A_Logic__Scenario v_MyScenario;
@@ -10929,7 +11118,7 @@ public class C_PojoOut__Container implements Serializable {
      * Create an instance of a scenario output
      * @param p_MyScenario
      */    
-    public C_PojoOut__Container (A_Logic__Scenario p_MyScenario) {
+    public C_PojoOut__Scenario (A_Logic__Scenario p_MyScenario) {
     	this.v_MyScenario = p_MyScenario;
     	f_CreatePojoOut__Container(this.v_MyScenario);
     }
@@ -11084,106 +11273,74 @@ public class C_PojoIn_ElectricityGridOperator implements Serializable {
  */	
 public class C_PojoIn_Household implements Serializable {
 
-	// **********FIELDS**********
-	private OL_GridUsageType v_GridUsageType;
-	private LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> link_MyGridBus;
-	private OL_EnergyUsageResolution v_EnergyUsageResolution;
-	private Map<Integer,Double> col_ConsumptionProfile;
-	private Map<Integer,Double> col_ProductionProfile;
-	private OL_CommunityMemberType v_CommunityMemberType;
-	private LinkToAgentCollection<A_Logic_Community,A_Logic_Household> link_MyEnergyCommunity;
+	/* *********FIELDS********* */
+	private final OL_EnergyUsageResolution v_EnergyUsageResolution;
+	private final LinkedHashMap<Integer,Double> col_ConsumptionProfile;
+	private final OL_GridUsageType v_GridUsageType;
+	private final LinkedHashMap<Integer,Double> col_ProductionProfile;
+	private final A_Logic_ElectricityGrid v_MyGridBus; //TODO The type should be changed.
+	private final OL_CommunityMemberType v_CommunityMemberType;
+	private final A_Logic_Community v_MyEnergyCommunity;
 	
-	// **********CONSTRUCTORS**********
-    
+	/* *********CONSTRUCTORS********* */ 
 	/**
      * Create an instance of a household
-     */
-    public C_PojoIn_Household() {
-    }
-	
-	/**
-     * Create an instance of a household
-     * @param p_GridUserType An Enum
-     * @param p_MyGridBus A bidirectional link to the grid
      * @param p_EnergyUsageResolution An Enum
      * @param p_ConsumptionProfile A collection of time and electricity consumption
+     * @param p_GridUsageType An Enum
      * @param p_ProductionProfile A collection of time and electricity production
+     * @param p_MyGridBus A reference to the connected grid bus
      * @param p_CommunityMemberType An Enum
-     * @param p_MyEnergyCommunity A collection of bidirectional links to communities 
+     * @param p_MyEnergyCommunity A reference to the joined community 
      */
-    public C_PojoIn_Household(OL_GridUsageType p_GridUsageType,
-    						 LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> p_MyGridBus,
-    						 OL_EnergyUsageResolution p_EnergyUsageResolution,
-    						 Map<Integer,Double> p_ConsumptionProfile,
-    						 Map<Integer,Double> p_ProductionProfile,
-    						 OL_CommunityMemberType p_CommunityMemberType,
-    						 LinkToAgentCollection<A_Logic_Community,A_Logic_Household> p_MyEnergyCommunity) {
-    	this.v_GridUsageType = p_GridUsageType;
-    	this.link_MyGridBus = p_MyGridBus;
+    public C_PojoIn_Household( OL_EnergyUsageResolution p_EnergyUsageResolution
+    						   , LinkedHashMap<Integer,Double> p_ConsumptionProfile
+    						   , OL_GridUsageType p_GridUsageType
+    						   , LinkedHashMap<Integer,Double> p_ProductionProfile
+    						   , A_Logic_ElectricityGrid p_MyGridBus //TODO The type should be changed.
+    						   , OL_CommunityMemberType p_CommunityMemberType
+    						   , A_Logic_Community p_MyEnergyCommunity
+    ) {
     	this.v_EnergyUsageResolution = p_EnergyUsageResolution;
     	this.col_ConsumptionProfile = p_ConsumptionProfile;
+    	this.v_GridUsageType = p_GridUsageType;
     	this.col_ProductionProfile = p_ProductionProfile;
+    	this.v_MyGridBus = p_MyGridBus;
     	this.v_CommunityMemberType = p_CommunityMemberType;
-    	this.link_MyEnergyCommunity = p_MyEnergyCommunity;
+    	this.v_MyEnergyCommunity = p_MyEnergyCommunity;
     }
     
-    // **********GETTERS**********
-    public OL_GridUsageType f_Get_GridUsageType() {
-    	return v_GridUsageType;
-    }
-    
-    public LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> f_Get_MyGridBus() {
-    	return link_MyGridBus;
-    }
-
+    /* *********GETTERS********* */
     public OL_EnergyUsageResolution f_Get_EnergyUsageResolution() {
     	return v_EnergyUsageResolution;
     }
     
-    public Map<Integer,Double> f_Get_ConsumptionProfile() {
+    public LinkedHashMap<Integer,Double> f_Get_ConsumptionProfile() {
     	return col_ConsumptionProfile;
     }
+
+    public OL_GridUsageType f_Get_GridUsageType() {
+    	return v_GridUsageType;
+    }
     
-    public Map<Integer,Double> f_Get_ProductionProfile() {
+    public LinkedHashMap<Integer,Double> f_Get_ProductionProfile() {
     	return col_ProductionProfile;
+    }
+
+    public A_Logic_ElectricityGrid f_Get_MyGridBus() {
+    	return v_MyGridBus;
     }
     
     public OL_CommunityMemberType f_Get_CommunityMemberType() {
     	return v_CommunityMemberType;
     }
     
-    public LinkToAgentCollection<A_Logic_Community,A_Logic_Household> f_Get_MyEnergyCommunity() {
-    	return link_MyEnergyCommunity;
+    public A_Logic_Community f_Get_MyEnergyCommunity() {
+    	return v_MyEnergyCommunity;
     }
     
-    // **********SETTERS**********
-    public void f_Set_GridUsageType(OL_GridUsageType arg_GridUsageType) {
-    	v_GridUsageType = arg_GridUsageType;
-    }
-    
-    public void f_Set_MyGridBus(LinkToAgent<A_Logic_ElectricityGrid,A_Logic_Household> arg_MyGridBus) {
-    	link_MyGridBus = arg_MyGridBus;
-    }
-    
-    public void f_Set_EnergyUsageResolution(OL_EnergyUsageResolution arg_EnergyUsageResolution) {
-    	v_EnergyUsageResolution = arg_EnergyUsageResolution;
-    }
-    
-    public void f_Set_ConsumptionProfile(Map<Integer,Double> arg_ConsumptionProfile) {
-    	col_ConsumptionProfile = arg_ConsumptionProfile;
-    }
-    
-    public void f_Set_ProductionProfile(Map<Integer,Double> arg_ProductionProfile) {
-    	col_ProductionProfile = arg_ProductionProfile;
-    }
-    
-    public void f_Set_CommunityMemberType(OL_CommunityMemberType arg_CommunityMemberType) {
-    	v_CommunityMemberType = arg_CommunityMemberType;
-    }
-    
-    public void f_Set_MyEnergyCommunity(LinkToAgentCollection<A_Logic_Community,A_Logic_Household> arg_MyEnergyCommunity) {
-    	link_MyEnergyCommunity = arg_MyEnergyCommunity;
-    }
+    /* *********SETTERS********* */
+    // All fields are final, thus no setter function exists for this class.
     
 	@Override
 	public String toString() {
@@ -11195,8 +11352,8 @@ public class C_PojoIn_Household implements Serializable {
 	 * It needs to be changed when this class gets changed
 	 */ 
 	private static final long serialVersionUID = 1L;
-
-}]]></Text>
+}
+]]></Text>
 		</JavaClass>
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
