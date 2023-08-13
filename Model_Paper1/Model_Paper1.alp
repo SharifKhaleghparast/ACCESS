@@ -73,8 +73,8 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689246676490</Id>
-			<Name><![CDATA[A___ModelManager]]></Name>
-			<Description><![CDATA[Holds and handles the model (logic scenarios, database in & out POJOs, and UI dashboards).
+			<Name><![CDATA[A___ScenarioManager]]></Name>
+			<Description><![CDATA[Holds and handles the scenario (scenario logic, input POJO, output POJOs, and UI).
 @author Sharif_Khaleghparast
 @since 13_July_2023
 ]]></Description>
@@ -202,8 +202,8 @@ f_Navigate(f_GetSelectedViewArea());
 1) The Anylogic engine is created by an experiment. The top-level Agent is also created by that experiment. The Anylogic engine has already contained the top-level Agent when top-level Agent is On startup.
 
 2) The experiment has a function that passes the Anylogic engine to the top-level Agent at its startup:
-public A___ModelManager createRoot( Engine engine ) {
-    return new A___ModelManager( engine, null, null );
+public A___ScenarioManager createRoot( Engine engine ) {
+    return new A___ScenarioManager( engine, null, null );
 }
 
 1,2) Thus, the Anylogic engine and the top-level Agent are bidirectionally linked to each other.
@@ -426,7 +426,7 @@ getExperiment().getEngine();
 					<Name><![CDATA[col_PojoOutScenarios]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 19_July_2023]]></Description>
-					<X>50</X><Y>160</Y>
+					<X>50</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -443,7 +443,7 @@ getExperiment().getEngine();
 				<Event>
 					<Id>1690274864232</Id>
 					<Name><![CDATA[e_InitialEnginePause]]></Name>
-					<X>30</X><Y>540</Y>
+					<X>30</X><Y>570</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -479,11 +479,11 @@ getExperiment().getEngine();
 				<Event>
 					<Id>1690301529614</Id>
 					<Name><![CDATA[e_CyclicPojoOutContainerCreator]]></Name>
-					<Description><![CDATA[It stores all the model data during the simulation run cyclicly, to enable the modelers write them in the database output tables at once at the end of the simulation run.
+					<Description><![CDATA[It stores all the scenario data during the simulation run cyclicly, to enable the modelers write them in the database output tables at once at the end of the simulation run.
 
 // Ignore this event untill when we really make the pojoOutContainers work.]]></Description>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>30</X><Y>560</Y>
+					<X>30</X><Y>590</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -515,95 +515,6 @@ col_PojoOutScenarios.add(dataOut);
 				</Event>
 			</Events>
 			<Functions>
-				<Function AccessType="private" StaticFunction="false">
-					<ReturnModificator>VOID</ReturnModificator>
-					<ReturnType><![CDATA[double]]></ReturnType>
-					<Id>1689349242260</Id>
-					<Name><![CDATA[f_CreateModel]]></Name>
-					<Description><![CDATA[It does not let more than one model being created by limiting the number of scenarios, dashboards, pojoInContainers and pojoOutContainers to one. This is because we want to keep the one-to-one ratio between the number of the model and the engine. We do not want to use one engine to run more than one model.
-
-Attention: The pojoOutContainer object that is created here, keeps the initial model data setup of the model. Other pojoOutContainer objects are created to keep the model data through time.
-Attention: The experiment is the only object that can create an engine. We cannot create engines from within the agents.]]></Description>
-					<X>770</X><Y>330</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Parameter>
-						<Name><![CDATA[arg_Engine]]></Name>
-						<Type><![CDATA[Engine]]></Type>
-					</Parameter>
-					<Parameter>
-						<Name><![CDATA[arg_SelectedViewArea]]></Name>
-						<Type><![CDATA[ViewArea]]></Type>
-					</Parameter>
-					<Parameter>
-						<Name><![CDATA[arg_PojoIn_Households]]></Name>
-						<Type><![CDATA[List<C_PojoIn_Household>]]></Type>
-					</Parameter>
-					<Parameter>
-						<Name><![CDATA[arg_PojoIn_EnergyCommunities]]></Name>
-						<Type><![CDATA[List<C_PojoIn_Community>]]></Type>
-					</Parameter>
-					<Parameter>
-						<Name><![CDATA[arg_PojoIn_DistributionSystemOperators]]></Name>
-						<Type><![CDATA[List<C_PojoIn_ElectricityGridOperator>]]></Type>
-					</Parameter>
-					<Parameter>
-						<Name><![CDATA[arg_PojoIn_LVDistributionFeeders]]></Name>
-						<Type><![CDATA[List<C_PojoIn_ElectricityGrid>]]></Type>
-					</Parameter>
-					<Body><![CDATA[/* Create initial embedded objects */
-
-/* FIRST: PojoInContainer setup */
-C_PojoIn__Scenario dataIn = new C_PojoIn__Scenario( arg_Engine 
-													, p_EnergyUsageResolution
-													, p_ProsumerHouseholdRatio
-													, arg_PojoIn_Households
-													, arg_PojoIn_EnergyCommunities
-													, arg_PojoIn_DistributionSystemOperators
-													, arg_PojoIn_LVDistributionFeeders
-);
-
-//Sanity check
-if(col_PojoInScenarios.size() != 0) {
-	error(col_PojoInScenarios.size() + " PojoInContainers are created");
-} else {
-	col_PojoInScenarios.add(dataIn);
-} 
-	
-/* SECOND: Scenario setup */
-A_Logic__Scenario scenario = new A_Logic__Scenario();
-
-//Sanity check
-if(pop_Scenarios.size() != 0) {
-	error(pop_Scenarios.size() + " scenarios are created before model creation.");
-} else {
-	scenario = add_pop_Scenarios(dataIn);
-}
-
-/* THIRD: Dashboard setup */
-A_UI__Dashboard dashboard = new A_UI__Dashboard();
-
-//Sanity check
-if(pop_Dashboards.size() != 0) {
-	error(pop_Dashboards.size() + " dashboards are created before model creation.");
-} else {
-	dashboard = add_pop_Dashboards(scenario, arg_SelectedViewArea);
-}
-
-
-/* TODO FOURTH: PojoOutContainer setup */
-/* C_PojoOut__Scenario dataOut = new C_PojoOut__Scenario( scenario );
-
-//Sanity check
-if(col_PojoOutScenarios.size() != 0) {
-	error(col_PojoOutScenarios.size() + " PojoOutContainers are created before model creation");
-} else {
-	col_PojoOutScenarios.add( dataOut );
-} 
-*/]]></Body>
-				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[Engine]]></ReturnType>
@@ -751,6 +662,95 @@ List<C_PojoIn_ElectricityGridOperator> pojoInList = new ArrayList<>();
 
 return pojoInList;]]></Body>
 				</Function>
+				<Function AccessType="private" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1691926574974</Id>
+					<Name><![CDATA[f_CreateScenario]]></Name>
+					<Description><![CDATA[It does not let more than one scenario being created by limiting the number of scenario logic, UI, pojoIn and pojoOut objects to one. This is because we want to keep the one-to-one ratio between the number of the scenario and the engine. We do not want to use one engine to run more than one scenario.
+
+//TODO Attention: The pojoOutScenario object that is created here, keeps the initial data setup of the scenario. Other pojoOutScenario objects are created to keep the scenario data through time.
+Attention: The experiment is the only object that can create an engine. We cannot create engines from within the agents.]]></Description>
+					<X>770</X><Y>330</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_Engine]]></Name>
+						<Type><![CDATA[Engine]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_SelectedViewArea]]></Name>
+						<Type><![CDATA[ViewArea]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_PojoIn_Households]]></Name>
+						<Type><![CDATA[List<C_PojoIn_Household>]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_PojoIn_EnergyCommunities]]></Name>
+						<Type><![CDATA[List<C_PojoIn_Community>]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_PojoIn_DistributionSystemOperators]]></Name>
+						<Type><![CDATA[List<C_PojoIn_ElectricityGridOperator>]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_PojoIn_LVDistributionFeeders]]></Name>
+						<Type><![CDATA[List<C_PojoIn_ElectricityGrid>]]></Type>
+					</Parameter>
+					<Body><![CDATA[/* Create initial embedded objects */
+
+/* FIRST: PojoInScenario setup */
+C_PojoIn__Scenario dataIn = new C_PojoIn__Scenario( arg_Engine 
+													, p_EnergyUsageResolution
+													, p_ProsumerHouseholdRatio
+													, arg_PojoIn_Households
+													, arg_PojoIn_EnergyCommunities
+													, arg_PojoIn_DistributionSystemOperators
+													, arg_PojoIn_LVDistributionFeeders
+);
+
+//Sanity check
+if(col_PojoInScenarios.size() != 0) {
+	error(col_PojoInScenarios.size() + " scenario PojoIns are created");
+} else {
+	col_PojoInScenarios.add(dataIn);
+} 
+	
+/* SECOND: LogicScenario setup */
+A_Logic__Scenario logic = new A_Logic__Scenario();
+
+//Sanity check
+if(pop_LogicScenarios.size() != 0) {
+	error( pop_LogicScenarios.size() + " scenario logics are created before scenario creation." );
+} else {
+	logic = add_pop_LogicScenarios( dataIn );
+} 
+
+/* THIRD: UIScenario setup */
+A_UI__Scenario UI = new A_UI__Scenario();
+
+//Sanity check
+if(pop_UIScenarios.size() != 0) {
+	error(pop_UIScenarios.size() + " scenario UIs are created before scenario creation.");
+} else {
+	UI = add_pop_UIScenarios( logic, arg_SelectedViewArea );
+}
+
+
+/* TODO FOURTH: PojoOutScenario setup */
+/* C_PojoOut__Scenario dataOut = new C_PojoOut__Scenario( logic );
+
+//Sanity check
+if(col_PojoOutScenarios.size() != 0) {
+	error( col_PojoOutScenarios.size() + " scenario PojoOuts are created before scenario creation" );
+} else {
+	col_PojoOutScenarios.add( dataOut );
+} 
+*/]]></Body>
+				</Function>
 			</Functions>
 			<AgentLinks>
 				<AgentLink>
@@ -777,10 +777,10 @@ return pojoInList;]]></Body>
 			<EmbeddedObjects>
 				<EmbeddedObject>
 					<Id>1689326573229</Id>
-					<Name><![CDATA[pop_Scenarios]]></Name>
+					<Name><![CDATA[pop_LogicScenarios]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
-					<X>50</X><Y>200</Y>
+					<X>50</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -843,7 +843,7 @@ return pojoInList;]]></Body>
 				</EmbeddedObject>
 				<EmbeddedObject>
 					<Id>1689327412871</Id>
-					<Name><![CDATA[pop_Dashboards]]></Name>
+					<Name><![CDATA[pop_UIScenarios]]></Name>
 					<Description><![CDATA[@author Sharif_Khaleghparast
 @since 14_July_2023]]></Description>
 					<X>50</X><Y>180</Y>
@@ -853,18 +853,18 @@ return pojoInList;]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Scenario]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
+							<ClassName><![CDATA[A_UI__Scenario]]></ClassName>
 							<ItemName><![CDATA[1689252963333]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
 					<Parameters>
 						<Parameter>
-							<Name><![CDATA[p_MyScenario]]></Name>
+							<Name><![CDATA[p_MyLogic]]></Name>
 						</Parameter>
 						<Parameter>
 							<Name><![CDATA[p_ReferenceViewArea]]></Name>
@@ -982,7 +982,7 @@ return pojoInList;]]></Body>
 				</Rectangle>
 				<Text>
 					<Id>1690285359960</Id>
-					<Name><![CDATA[text_ModelAssumptions]]></Name>
+					<Name><![CDATA[text_ScenarioAssumptions]]></Name>
 					<X>30</X><Y>10</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -993,7 +993,7 @@ return pojoInList;]]></Body>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Model Assumptions]]></Text>
+					<Text><![CDATA[Scenario Assumptions]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>24</Size>
@@ -1171,7 +1171,7 @@ return pojoInList;]]></Body>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>970</Width>
-					<Height>330</Height>
+					<Height>480</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-4144960</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -1193,7 +1193,7 @@ return pojoInList;]]></Body>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>230</Width>
-					<Height>200</Height>
+					<Height>440</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-32944</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -1236,7 +1236,7 @@ return pojoInList;]]></Body>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>230</Width>
-					<Height>200</Height>
+					<Height>440</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-10496</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -1279,7 +1279,7 @@ return pojoInList;]]></Body>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>230</Width>
-					<Height>290</Height>
+					<Height>440</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-16728065</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -1322,7 +1322,7 @@ return pojoInList;]]></Body>
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>230</Width>
-					<Height>200</Height>
+					<Height>440</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-6632142</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -1361,7 +1361,7 @@ return pojoInList;]]></Body>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[A___ModelManager: holds and handles the model (logic scenarios, database in & out POJOs, and UI dashboards)]]></Text>
+					<Text><![CDATA[A___ScenarioManager: holds and handles the scenario (scenario logic, input POJO, output POJOs, and UI)]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -1375,7 +1375,7 @@ return pojoInList;]]></Body>
 				<Control Type="Button">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689622781504</Id>
-					<Name><![CDATA[button_CreateModel]]></Name>
+					<Name><![CDATA[button_CreateScenario]]></Name>
 					<X>440</X><Y>1140</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -1388,20 +1388,20 @@ return pojoInList;]]></Body>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[self.setEnabled(false);
 
-f_CreateModel(f_GetEngine(), f_GetSelectedViewArea(), f_LoadHouseholdsData(), f_LoadEnergyCommunitiesData(), f_LoadDistributionSystemOperatorsData(), f_LoadLVDistributionFeedersData());
+f_CreateScenario( f_GetEngine(), f_GetSelectedViewArea(), f_LoadHouseholdsData(), f_LoadEnergyCommunitiesData(), f_LoadDistributionSystemOperatorsData(), f_LoadLVDistributionFeedersData() );
 
-button_ModelDashboard.setEnabled(true);
+button_ScenarioUI.setEnabled(true);
 ]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
-						<LabelText><![CDATA[Create Model]]></LabelText>
+						<LabelText><![CDATA[Create Scenario]]></LabelText>
 					</ExtendedProperties>
 				</Control>
 				<Control Type="Button">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1689845556266</Id>
-					<Name><![CDATA[button_ModelDashboard]]></Name>
+					<Name><![CDATA[button_ScenarioUI]]></Name>
 					<X>440</X><Y>1180</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -1411,14 +1411,14 @@ button_ModelDashboard.setEnabled(true);
 					<BasicProperties Width="120" Height="30">
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
-						<VisibleCode><![CDATA[//!(button_CreateModel.isEnabled())]]></VisibleCode>
+						<VisibleCode><![CDATA[//!(button_LoadScenario.isEnabled())]]></VisibleCode>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[// TODO Later check that where it should exactly f_Navigate to.
-pop_Dashboards.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
+pop_UIScenarios.get(0).f_GetSelectedViewArea().navigateTo();;]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
-						<LabelText><![CDATA[Model Dashboard]]></LabelText>
+						<LabelText><![CDATA[Scenario UI]]></LabelText>
 					</ExtendedProperties>
 				</Control>
 				<Control Type="Button">
@@ -2204,7 +2204,7 @@ switch (value) {
 //Set the parameter to the filled list
 set_p_HouseholdsProductionProfiles( householdsProductionProfiles );		
 
-button_ToCreateModel.setEnabled(true);	]]></ActionCode>
+button_ToLoadScenario.setEnabled(true);	]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -2262,7 +2262,7 @@ switch (value) {
 //Set the parameter to the filled list
 set_p_HouseholdsProductionProfiles( householdsProductionProfiles );		
 
-button_ToCreateModel.setEnabled(true);	]]></ActionCode>
+button_ToLoadScenario.setEnabled(true);	]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -2319,7 +2319,7 @@ switch (value) {
 //Set the parameter to the filled list
 set_p_HouseholdsProductionProfiles( householdsProductionProfiles );	
 
-button_ToCreateModel.setEnabled(true);	]]></ActionCode>
+button_ToLoadScenario.setEnabled(true);	]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -2466,7 +2466,7 @@ button_ToHouseholdProductionProfileSelection.setEnabled(true);]]></ActionCode>
 				<Control Type="Button">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690650766140</Id>
-					<Name><![CDATA[button_ToCreateModel]]></Name>
+					<Name><![CDATA[button_ToLoadScenario]]></Name>
 					<X>580</X><Y>40</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
@@ -2481,7 +2481,7 @@ button_ToHouseholdProductionProfileSelection.setEnabled(true);]]></ActionCode>
 
 self.setEnabled(false);
 
-button_CreateModel.setEnabled(true);]]></ActionCode>
+button_CreateScenario.setEnabled(true);]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
 						<Font Name="Dialog" Size="11" Style="0"/>
@@ -3045,7 +3045,7 @@ if(this.getIndex() != 0) {
 	error(this.getIndex() + " scenarios are created.");
 }
 
-f_CreateScenario( f_GetMyPojoInScenario() );]]></StartupCode>
+f_CreateLogic( f_GetMyPojoInScenario() );]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689252665124</Id>
@@ -3226,7 +3226,7 @@ f_CreateScenario( f_GetMyPojoInScenario() );]]></StartupCode>
 					<ReturnModificator>VOID</ReturnModificator>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689346698198</Id>
-					<Name><![CDATA[f_CreateScenario]]></Name>
+					<Name><![CDATA[f_CreateLogic]]></Name>
 					<X>770</X><Y>230</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -3325,7 +3325,7 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689326574859</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -3334,7 +3334,7 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -3887,8 +3887,8 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689252963338</Id>
-			<Name><![CDATA[A_UI__Dashboard]]></Name>
-			<Description><![CDATA[Holds and handles UI agents and classes for this dashboard.
+			<Name><![CDATA[A_UI__Scenario]]></Name>
+			<Description><![CDATA[Holds and handles UI agents and classes for scenarios.
 
 Attention: No navigation through agent populations in the logic tab during the runtime. All navigations should be done in the overview tab.
 
@@ -3897,16 +3897,14 @@ Attention: No navigation through agent populations in the logic tab during the r
 ]]></Description>
 			<StartupCode><![CDATA[/* Sanity check */
 if(this.getIndex() != 0) {
-	error(this.getIndex() + " dashboards are created.");
+	error(this.getIndex() + " scenario UIs are created.");
 }
 
-/* Link the dashboard to the scenario */
-link_MyScenario.connectTo(p_MyScenario);
+/* Link the UI to the logic */
+link_MyLogic.connectTo(p_MyLogic);
 
-f_CreateDashboard( link_MyScenario.getConnectedAgent(), f_GetSelectedViewArea() );
-	
-
-]]></StartupCode>
+f_CreateUI( link_MyLogic.getConnectedAgent(), f_GetSelectedViewArea() );
+	]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689252963333</Id>
@@ -4031,7 +4029,7 @@ f_CreateDashboard( link_MyScenario.getConnectedAgent(), f_GetSelectedViewArea() 
 				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689352743394</Id>
-					<Name><![CDATA[p_MyScenario]]></Name>
+					<Name><![CDATA[p_MyLogic]]></Name>
 					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -4077,7 +4075,7 @@ f_CreateDashboard( link_MyScenario.getConnectedAgent(), f_GetSelectedViewArea() 
 					<ReturnModificator>VOID</ReturnModificator>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689353056488</Id>
-					<Name><![CDATA[f_CreateDashboard]]></Name>
+					<Name><![CDATA[f_CreateUI]]></Name>
 					<X>770</X><Y>260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -4187,7 +4185,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 				</AgentLink>
 				<AgentLink>
 					<Id>1689777709914</Id>
-					<Name><![CDATA[link_MyScenario]]></Name>
+					<Name><![CDATA[link_MyLogic]]></Name>
 					<X>530</X><Y>140</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -4210,7 +4208,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689327416018</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -4219,7 +4217,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -4624,7 +4622,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 				</Text>
 				<Text>
 					<Id>1690286116259</Id>
-					<Name><![CDATA[text_ModelBehavior]]></Name>
+					<Name><![CDATA[text_ScenarioBehavior]]></Name>
 					<X>30</X><Y>10</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -4635,7 +4633,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Model Assumptions > Model Behavior]]></Text>
+					<Text><![CDATA[Scenario Assumptions > Scenario Behavior]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>24</Size>
@@ -5001,7 +4999,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[A_UI__Dashboard: holds and handles UI agents and classes for this dashboard]]></Text>
+					<Text><![CDATA[A_UI__Scenario: holds and handles UI agents and classes for scenarios]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -5095,11 +5093,11 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[link_MyScenario.getConnectedAgent().f_GetEngine().getState() == link_MyScenario.getConnectedAgent().f_GetEngine().PAUSED]]></EnableExpression>
-						<ActionCode><![CDATA[if(link_MyScenario.getConnectedAgent().f_GetEngine().run()) {
+						<EnableExpression><![CDATA[link_MyLogic.getConnectedAgent().f_GetEngine().getState() == link_MyLogic.getConnectedAgent().f_GetEngine().PAUSED]]></EnableExpression>
+						<ActionCode><![CDATA[if(link_MyLogic.getConnectedAgent().f_GetEngine().run()) {
 	traceln("The engine is run.");
 } else { //sanity check
-	error("The engine is not run at the click of the button. The engine state is: " + link_MyScenario.getConnectedAgent().f_GetEngine().getState());
+	error("The engine is not run at the click of the button. The engine state is: " + link_MyLogic.getConnectedAgent().f_GetEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -5122,11 +5120,11 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>false</Enabled>
-						<EnableExpression><![CDATA[link_MyScenario.getConnectedAgent().f_GetEngine().getState() == link_MyScenario.getConnectedAgent().f_GetEngine().RUNNING]]></EnableExpression>
-						<ActionCode><![CDATA[if(link_MyScenario.getConnectedAgent().f_GetEngine().pause()) {
+						<EnableExpression><![CDATA[link_MyLogic.getConnectedAgent().f_GetEngine().getState() == link_MyLogic.getConnectedAgent().f_GetEngine().RUNNING]]></EnableExpression>
+						<ActionCode><![CDATA[if(link_MyLogic.getConnectedAgent().f_GetEngine().pause()) {
 	traceln("The engine is paused.");
 } else { //sanity check
-	error("The engine is not paused at the click of the button. The engine state is: " + link_MyScenario.getConnectedAgent().f_GetEngine().getState());
+	error("The engine is not paused at the click of the button. The engine state is: " + link_MyLogic.getConnectedAgent().f_GetEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -5149,11 +5147,11 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[link_MyScenario.getConnectedAgent().f_GetEngine().getState() != link_MyScenario.getConnectedAgent().f_GetEngine().IDLE]]></EnableExpression>
-						<ActionCode><![CDATA[if(link_MyScenario.getConnectedAgent().f_GetEngine().stop()) {
+						<EnableExpression><![CDATA[link_MyLogic.getConnectedAgent().f_GetEngine().getState() != link_MyLogic.getConnectedAgent().f_GetEngine().IDLE]]></EnableExpression>
+						<ActionCode><![CDATA[if(link_MyLogic.getConnectedAgent().f_GetEngine().stop()) {
 	traceln("The engine is stopped.");
 } else { //sanity check
-	error("The engine is not stopped at the click of the button. The engine state is: " + link_MyScenario.getConnectedAgent().f_GetEngine().getState());
+	error("The engine is not stopped at the click of the button. The engine state is: " + link_MyLogic.getConnectedAgent().f_GetEngine().getState());
 }]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
@@ -5175,11 +5173,11 @@ f_SetScenarioInputData(f_LoadScenarioInputData());]]></ActionCode>
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[link_MyScenario.getConnectedAgent().f_GetEngine().getState() == link_MyScenario.getConnectedAgent().f_GetEngine().RUNNING || link_MyScenario.getConnectedAgent().f_GetEngine().getState() == link_MyScenario.getConnectedAgent().f_GetEngine().PAUSED]]></EnableExpression>
-						<ActionCode><![CDATA[if(link_MyScenario.getConnectedAgent().f_GetEngine().finish()) {
+						<EnableExpression><![CDATA[link_MyLogic.getConnectedAgent().f_GetEngine().getState() == link_MyLogic.getConnectedAgent().f_GetEngine().RUNNING || link_MyLogic.getConnectedAgent().f_GetEngine().getState() == link_MyLogic.getConnectedAgent().f_GetEngine().PAUSED]]></EnableExpression>
+						<ActionCode><![CDATA[if(link_MyLogic.getConnectedAgent().f_GetEngine().finish()) {
 	traceln("The engine run is finished.");
 } else { //sanity check
-	error("The engine run is not finished at the click of the button. The engine state is: " + link_MyScenario.getConnectedAgent().f_GetEngine().getState());
+	error("The engine run is not finished at the click of the button. The engine state is: " + link_MyLogic.getConnectedAgent().f_GetEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -5598,7 +5596,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoInHousehold().f_Get_MyEnergyCommunit
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689338288549</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -5607,7 +5605,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoInHousehold().f_Get_MyEnergyCommunit
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -6101,7 +6099,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoInHousehold().f_Get_MyEnergyCommunit
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689328691578</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -6109,7 +6107,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoInHousehold().f_Get_MyEnergyCommunit
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -6603,7 +6601,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoInHousehold().f_Get_MyEnergyCommunit
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689338612791</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -6611,7 +6609,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoInHousehold().f_Get_MyEnergyCommunit
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -7084,7 +7082,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoInHousehold().f_Get_MyEnergyCommunit
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689338728774</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -7092,7 +7090,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoInHousehold().f_Get_MyEnergyCommunit
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -7666,7 +7664,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689339981054</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -7675,12 +7673,12 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689339981056</Id>
-					<Name><![CDATA[a_UI__Dashboard]]></Name>
+					<Name><![CDATA[a_UI__Scenario]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -7689,7 +7687,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Scenario]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -8060,7 +8058,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Model Assumptions > Model Behavior > Agent Behavior]]></Text>
+					<Text><![CDATA[Scenario Assumptions > Scenario Behavior > Agent Behavior]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>24</Size>
@@ -8526,7 +8524,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689339323418</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -8535,12 +8533,12 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689339323420</Id>
-					<Name><![CDATA[a_UI__Dashboard]]></Name>
+					<Name><![CDATA[a_UI__Scenario]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -8549,7 +8547,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Scenario]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -8687,7 +8685,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Model Assumptions > Model Behavior > Agent Behavior]]></Text>
+					<Text><![CDATA[Scenario Assumptions > Scenario Behavior > Agent Behavior]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>24</Size>
@@ -9386,7 +9384,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689340162477</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -9395,12 +9393,12 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689340162479</Id>
-					<Name><![CDATA[a_UI__Dashboard]]></Name>
+					<Name><![CDATA[a_UI__Scenario]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -9409,7 +9407,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Scenario]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -9780,7 +9778,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Model Assumptions > Model Behavior > Agent Behavior]]></Text>
+					<Text><![CDATA[Scenario Assumptions > Scenario Behavior > Agent Behavior]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>24</Size>
@@ -10246,7 +10244,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 			<ContainerLinks>
 				<ContainerLink>
 					<Id>1689340120435</Id>
-					<Name><![CDATA[a___ModelManager]]></Name>
+					<Name><![CDATA[a___ScenarioManager]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>50</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -10255,12 +10253,12 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A___ModelManager]]></ClassName>
+						<ClassName><![CDATA[A___ScenarioManager]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 				<ContainerLink>
 					<Id>1689340120437</Id>
-					<Name><![CDATA[a_UI__Dashboard]]></Name>
+					<Name><![CDATA[a_UI__Scenario]]></Name>
 					<ExcludeFromBuild>true</ExcludeFromBuild>
 					<X>60</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
@@ -10269,7 +10267,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A_UI__Dashboard]]></ClassName>
+						<ClassName><![CDATA[A_UI__Scenario]]></ClassName>
 					</ActiveObjectClass>
 				</ContainerLink>
 			</ContainerLinks>
@@ -10640,7 +10638,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Model Assumptions > Model Behavior > Agent Behavior]]></Text>
+					<Text><![CDATA[Scenario Assumptions > Scenario Behavior > Agent Behavior]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>24</Size>
@@ -10899,7 +10897,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 
 //traceln("Anylogic engine state:" + getEngine().getState());
 ]]></BeforeEachExperimentRunCode>
-			<BeforeSimulationRunCode><![CDATA[//This code box is located inside the onBeforeSimulationRun_xjal( A___ModelManager root ) function body of the experiment Simulation class.
+			<BeforeSimulationRunCode><![CDATA[//This code box is located inside the onBeforeSimulationRun_xjal( A___ScenarioManager root ) function body of the experiment Simulation class.
 //The top-level Agent was created before, and was passed to this function.
 
 //The code here runs everytime a top-level Agent is going to be simulated.
@@ -10915,7 +10913,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 
 //traceln("Anylogic engine state:" + getEngine().getState());
 ]]></BeforeSimulationRunCode>
-			<AfterSimulationRunCode><![CDATA[//This code box is located inside the onAfterSimulationRun_xjal( A___ModelManager root ) function body of the experiment Simulation class.
+			<AfterSimulationRunCode><![CDATA[//This code box is located inside the onAfterSimulationRun_xjal( A___ScenarioManager root ) function body of the experiment Simulation class.
 
 //The code here runs everytime a top-level Agent was stopped being simulated, either by clicking on the stop button or by the arrival of the Anylogic engine stop time.
 //traceln("\n" + "After simulation run code box");
@@ -10976,7 +10974,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 			<PresentationProperties>
 				<EnableZoomAndPanning>true</EnableZoomAndPanning>
 				<ExecutionMode><![CDATA[realTimeScaled]]></ExecutionMode>
-				<Title><![CDATA[Paper1_Model : Simulation]]></Title>	
+				<Title><![CDATA[Model_Paper1 : Simulation]]></Title>	
 				<EnableDeveloperPanel>true</EnableDeveloperPanel>
 				<ShowDeveloperPanelOnStart>true</ShowDeveloperPanelOnStart>
 				<RealTimeScale>1.0</RealTimeScale>
