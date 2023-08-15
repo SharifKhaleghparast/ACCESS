@@ -319,13 +319,13 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1690559676374</Id>
 					<Name><![CDATA[p_HouseholdsConsumptionProfiles]]></Name>
-					<X>290</X><Y>180</Y>
+					<X>290</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[List<LinkedHashMap<Integer, Double>>]]></Type>
+						<Type><![CDATA[ArrayList<ArrayList<Double>>]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -341,13 +341,13 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1690561618963</Id>
 					<Name><![CDATA[p_HouseholdsProductionProfiles]]></Name>
-					<X>290</X><Y>240</Y>
+					<X>290</X><Y>260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[List<LinkedHashMap<Integer, Double>>]]></Type>
+						<Type><![CDATA[ArrayList<ArrayList<Double>>]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -363,7 +363,7 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1690568577254</Id>
 					<Name><![CDATA[p_HouseholdPopulation]]></Name>
-					<X>290</X><Y>160</Y>
+					<X>290</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -384,7 +384,7 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1691585693291</Id>
 					<Name><![CDATA[p_HouseholdsGridUsageTypes]]></Name>
-					<X>290</X><Y>220</Y>
+					<X>290</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -405,7 +405,7 @@ getExperiment().getEngine();
 				<Variable Class="Parameter">
 					<Id>1691588920682</Id>
 					<Name><![CDATA[p_ProsumerHouseholdRatio]]></Name>
-					<X>290</X><Y>200</Y>
+					<X>290</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -417,6 +417,27 @@ getExperiment().getEngine();
 						<SdArray>false</SdArray>
 						<ParameterEditor>
 							<Id>1691588920680</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
+				<Variable Class="Parameter">
+					<Id>1692107047223</Id>
+					<Name><![CDATA[p_NumberOfDailyTimeSteps]]></Name>
+					<X>290</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[int]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1692107047221</Id>
 							<EditorContolType>TEXT_BOX</EditorContolType>
 							<MinSliderValue><![CDATA[0]]></MinSliderValue>
 							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
@@ -489,10 +510,10 @@ getExperiment().getEngine();
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[if(f_GetEngine().pause()) {
+					<Action><![CDATA[if(getEngine().pause()) {
 	traceln("The engine is paused.");
 } else { //sanity check
-	error("The engine is not paused at the initialization of the model. The engine state is: " + f_GetEngine().getState());
+	error("The engine is not paused at the initialization of the model. The engine state is: " + getEngine().getState());
 }
 ]]></Action>
 				</Event>
@@ -535,18 +556,6 @@ col_PojoOutScenarios.add(dataOut);
 				</Event>
 			</Events>
 			<Functions>
-				<Function AccessType="private" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[Engine]]></ReturnType>
-					<Id>1690035012094</Id>
-					<Name><![CDATA[f_GetEngine]]></Name>
-					<X>770</X><Y>140</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return v_Engine;]]></Body>
-				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>VOID</ReturnModificator>
 					<ReturnType><![CDATA[double]]></ReturnType>
@@ -611,6 +620,7 @@ for( int i = 0 ; i < p_HouseholdPopulation; i++ ) {
 	
 	pojoInList.add(new C_PojoIn_Household( String.valueOf( i )
 										   , p_EnergyUsageResolution
+										   , p_NumberOfDailyTimeSteps
 										   , p_HouseholdsConsumptionProfiles.get( i )
 										   , p_HouseholdsGridUsageTypes.get( i )
 										   , p_HouseholdsProductionProfiles.get( i )
@@ -698,10 +708,6 @@ Attention: The experiment is the only object that can create an engine. We canno
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Parameter>
-						<Name><![CDATA[arg_Engine]]></Name>
-						<Type><![CDATA[Engine]]></Type>
-					</Parameter>
-					<Parameter>
 						<Name><![CDATA[arg_SelectedViewArea]]></Name>
 						<Type><![CDATA[ViewArea]]></Type>
 					</Parameter>
@@ -724,8 +730,8 @@ Attention: The experiment is the only object that can create an engine. We canno
 					<Body><![CDATA[/* Create initial embedded objects */
 
 /* FIRST: PojoInScenario setup */
-C_PojoIn__Scenario dataIn = new C_PojoIn__Scenario( arg_Engine 
-													, p_EnergyUsageResolution
+C_PojoIn__Scenario dataIn = new C_PojoIn__Scenario( p_EnergyUsageResolution
+													, p_NumberOfDailyTimeSteps
 													, p_ProsumerHouseholdRatio
 													, arg_PojoIn_Households
 													, arg_PojoIn_EnergyCommunities
@@ -819,7 +825,7 @@ if(col_PojoOutScenarios.size() != 0) {
 					</GenericParameterSubstitute>
 					<Parameters>
 						<Parameter>
-							<Name><![CDATA[p_MyPojoInScenario]]></Name>
+							<Name><![CDATA[p_MyPojoIn]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>true</ReplicationFlag>
@@ -1409,7 +1415,7 @@ if(col_PojoOutScenarios.size() != 0) {
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[self.setEnabled( false );
 
-f_CreateScenario( f_GetEngine(), f_GetSelectedViewArea(), f_LoadHouseholdsData(), f_LoadEnergyCommunitiesData(), f_LoadDistributionSystemOperatorsData(), f_LoadLVDistributionFeedersData() );
+f_CreateScenario( f_GetSelectedViewArea(), f_LoadHouseholdsData(), f_LoadEnergyCommunitiesData(), f_LoadDistributionSystemOperatorsData(), f_LoadLVDistributionFeedersData() );
 
 button_ScenarioUI.setEnabled( true );
 ]]></ActionCode>
@@ -1456,11 +1462,11 @@ button_ScenarioUI.setEnabled( true );
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[f_GetEngine().getState() != f_GetEngine().IDLE]]></EnableExpression>
-						<ActionCode><![CDATA[if(f_GetEngine().stop()) {
+						<EnableExpression><![CDATA[getEngine().getState() != getEngine().IDLE]]></EnableExpression>
+						<ActionCode><![CDATA[if(getEngine().stop()) {
 	traceln("The engine is stopped.");
 } else { //sanity check
-	error("The engine is not stopped at the click of the button. The engine state is: " + f_GetEngine().getState());
+	error("The engine is not stopped at the click of the button. The engine state is: " + getEngine().getState());
 }]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
@@ -1482,11 +1488,11 @@ button_ScenarioUI.setEnabled( true );
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[f_GetEngine().getState() == f_GetEngine().RUNNING || f_GetEngine().getState() == f_GetEngine().PAUSED]]></EnableExpression>
-						<ActionCode><![CDATA[if(f_GetEngine().finish()) {
+						<EnableExpression><![CDATA[getEngine().getState() == getEngine().RUNNING || getEngine().getState() == getEngine().PAUSED]]></EnableExpression>
+						<ActionCode><![CDATA[if(getEngine().finish()) {
 	traceln("The engine run is finished.");
 } else { //sanity check
-	error("The engine run is not finished at the click of the button. The engine state is: " + f_GetEngine().getState());
+	error("The engine run is not finished at the click of the button. The engine state is: " + getEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -1991,10 +1997,10 @@ button_ToHouseholdConsumptionProfileSelection.setEnabled(true);]]></ActionCode>
 						<VisibleCode><![CDATA[//false]]></VisibleCode>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[//Create an empty list of consumption profiles
-List<LinkedHashMap<Integer, Double>> householdsConsumptionProfiles = new ArrayList<>();
+ArrayList<ArrayList<Double>> householdsConsumptionProfiles = new ArrayList<>();
 
-for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
-	householdsConsumptionProfiles.add( new LinkedHashMap<>() );
+for( int i = 0; i < p_HouseholdPopulation; i++ ) {
+	householdsConsumptionProfiles.add( new ArrayList<>() );
 }
 
 //Create a temporary list of corresponding consumption DB table
@@ -2006,24 +2012,20 @@ switch (value) {
 	case "CHOOSE":
 		error("Household consumption profile has not been set!");
 		break;
-				
+			
 	case "zero":
 		householdsConsumptionProfiles.forEach( profile -> 
 		  	consumption_hour_rows.forEach( row -> 
-				profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
-							 row.get( db_in_consumption_profiles_24hours.zero_kwh ) 
-			   )
+				profile.add( row.get( db_in_consumption_profiles_24hours.zero_kwh ) )
 			)
 		);
 		break;
-			
+		
 	case "household_cbs_noon_peak":
 		//An stochastic noise of type triangular distribution is multiplied.  
 		householdsConsumptionProfiles.forEach( profile -> 
 		  	consumption_hour_rows.forEach( row -> 
-				profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
-							 row.get( db_in_consumption_profiles_24hours.household_cbs_noon_peak_kwh ) * triangular(0, 2, 1)
-			   )
+				profile.add( row.get( db_in_consumption_profiles_24hours.household_cbs_noon_peak_kwh ) * triangular(0, 2, 1) )
 			)
 		);		
 		break;
@@ -2032,9 +2034,7 @@ switch (value) {
 		//An stochastic noise of type triangular distribution is multiplied.
 		householdsConsumptionProfiles.forEach( profile -> 
 		  	consumption_hour_rows.forEach( row -> 
-				profile.put( row.get( db_in_consumption_profiles_24hours.time_hour ), 
-							 row.get( db_in_consumption_profiles_24hours.household_cbs_morning_evening_peak_kwh ) * triangular(0, 2, 1)
-			   )
+				profile.add( row.get( db_in_consumption_profiles_24hours.household_cbs_morning_evening_peak_kwh ) * triangular(0, 2, 1) )
 			)
 		);		
 		break;
@@ -2072,10 +2072,10 @@ button_ToProsumerHouseholdRatioSelection.setEnabled(true);]]></ActionCode>
 						<VisibleCode><![CDATA[//false]]></VisibleCode>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[//Create an empty list of consumption profiles
-List<LinkedHashMap<Integer, Double>> householdsConsumptionProfiles = new ArrayList<>();
+ArrayList<ArrayList<Double>> householdsConsumptionProfiles = new ArrayList<>();
 
 for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
-	householdsConsumptionProfiles.add( new LinkedHashMap<>() );
+	householdsConsumptionProfiles.add( new ArrayList<>() );
 }
 
 //Create a temporary list of corresponding consumption DB table
@@ -2090,9 +2090,7 @@ switch (value) {
 	case "zero":
 		householdsConsumptionProfiles.forEach( profile -> 
 			consumption_quarter_rows.forEach( row -> 
-				profile.put( row.get( db_in_consumption_profiles_96quarters.time_quarter ) 
-							 , row.get( db_in_consumption_profiles_96quarters.zero_kwh ) 
-				)
+				profile.add( row.get( db_in_consumption_profiles_96quarters.zero_kwh ) )
 			)
 		);
 		break;
@@ -2128,10 +2126,10 @@ button_ToProsumerHouseholdRatioSelection.setEnabled(true);]]></ActionCode>
 						<VisibleCode><![CDATA[//false]]></VisibleCode>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[//Create an empty list of consumption profiles
-List<LinkedHashMap<Integer, Double>> householdsConsumptionProfiles = new ArrayList<>();
+ArrayList<ArrayList<Double>> householdsConsumptionProfiles = new ArrayList<>();
 
 for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
-	householdsConsumptionProfiles.add( new LinkedHashMap<>() );
+	householdsConsumptionProfiles.add( new ArrayList<>() );
 }
 
 //Create a temporary list of corresponding consumption DB table
@@ -2140,15 +2138,13 @@ List<Tuple> consumption_minute_rows = selectFrom(db_in_consumption_profiles_1440
 //Fill-in the empty list of consumption profiles
 switch (value) {
 	case "CHOOSE":
-		error("Household consumption profile has not been set!");
+		error( "Household consumption profile has not been set!" );
 		break;
-				
+		
 	case "zero":
 		householdsConsumptionProfiles.forEach( profile -> 
 			consumption_minute_rows.forEach( row -> 
-				profile.put( row.get( db_in_consumption_profiles_1440minutes.time_minute ), 
-							 row.get( db_in_consumption_profiles_1440minutes.zero_kwh ) 
-				)
+				profile.add( row.get( db_in_consumption_profiles_1440minutes.zero_kwh ) )
 			)
 		);
 		break;
@@ -2184,10 +2180,10 @@ button_ToProsumerHouseholdRatioSelection.setEnabled(true);]]></ActionCode>
 						<VisibleCode><![CDATA[//false]]></VisibleCode>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[//Create an empty list of production profiles
-List<LinkedHashMap<Integer, Double>> householdsProductionProfiles = new ArrayList<>();
+ArrayList<ArrayList<Double>> householdsProductionProfiles = new ArrayList<>();
 
 for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
-	householdsProductionProfiles.add( new LinkedHashMap<>() );
+	householdsProductionProfiles.add( new ArrayList<>() );
 }
 
 //Create a temporary list of corresponding production DB table
@@ -2203,9 +2199,7 @@ switch (value) {
 	case "zero":
 		householdsProductionProfiles.forEach( profile -> 
 		  	production_hour_rows.forEach( row -> 
-				profile.put( row.get( db_in_production_profiles_24hours.time_hour ) 
-							 , row.get( db_in_production_profiles_24hours.zero_kwh ) 
-				)
+				profile.add( row.get( db_in_production_profiles_24hours.zero_kwh ) )
 			)
 		);
 		break;
@@ -2219,16 +2213,12 @@ switch (value) {
 				
 				//An stochastic noise of type triangular distribution is multiplied. 
 				production_hour_rows.forEach( row -> 
-					householdsProductionProfiles.get( currIndex ).put( row.get( db_in_production_profiles_24hours.time_hour ) 
-							 								   , row.get( db_in_production_profiles_24hours.household_sample_solar_kwh ) * triangular( 0, 2, 1 )
-					)
+					householdsProductionProfiles.get( currIndex ).add( row.get( db_in_production_profiles_24hours.household_sample_solar_kwh ) * triangular( 0, 2, 1 )	)
 				);
 			} else if( p_HouseholdsGridUsageTypes.get( currIndex ).equals(CONSUMER) ) {
 				
 				production_hour_rows.forEach( row -> 
-					householdsProductionProfiles.get( currIndex ).put( row.get( db_in_production_profiles_24hours.time_hour ) 
-							 								   , row.get( db_in_production_profiles_24hours.zero_kwh )
-					)
+					householdsProductionProfiles.get( currIndex ).add( row.get( db_in_production_profiles_24hours.zero_kwh ) )
 				);
 			}
 		}
@@ -2266,10 +2256,10 @@ button_ToCreateScenario.setEnabled(true);	]]></ActionCode>
 						<VisibleCode><![CDATA[//false]]></VisibleCode>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[//Create an empty list of production profiles
-List<LinkedHashMap<Integer, Double>> householdsProductionProfiles = new ArrayList<>();
+ArrayList<ArrayList<Double>> householdsProductionProfiles = new ArrayList<>();
 
 for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
-	householdsProductionProfiles.add( new LinkedHashMap<>() );
+	householdsProductionProfiles.add( new ArrayList<>() );
 }
 
 //Create a temporary list of corresponding Production DB table
@@ -2285,9 +2275,7 @@ switch (value) {
 	case "zero":
 		householdsProductionProfiles.forEach( profile -> 
 		  	production_quarter_rows.forEach( row -> 
-				profile.put( row.get( db_in_production_profiles_96quarters.time_quarter ), 
-							 row.get( db_in_production_profiles_96quarters.zero_kwh ) 
-			   )
+				profile.add( row.get( db_in_production_profiles_96quarters.zero_kwh ) )
 			)
 		);
 		break;
@@ -2323,10 +2311,10 @@ button_ToCreateScenario.setEnabled(true);	]]></ActionCode>
 						<VisibleCode><![CDATA[//false]]></VisibleCode>
 						<Enabled>false</Enabled>
 						<ActionCode><![CDATA[//Create an empty list of production profiles
-List<LinkedHashMap<Integer, Double>> householdsProductionProfiles = new ArrayList<>();
+ArrayList<ArrayList<Double>> householdsProductionProfiles = new ArrayList<>();
 
 for( int i = 0 ; i < p_HouseholdPopulation ; i++ ) {
-	householdsProductionProfiles.add( new LinkedHashMap<>() );
+	householdsProductionProfiles.add( new ArrayList<>() );
 }
 
 //Create a temporary list of corresponding Production DB table
@@ -2342,9 +2330,7 @@ switch (value) {
 	case "zero":
 		householdsProductionProfiles.forEach( profile -> 
 		  	production_minute_rows.forEach( row -> 
-				profile.put( row.get( db_in_production_profiles_1440minutes.time_minute ), 
-							 row.get( db_in_production_profiles_1440minutes.zero_kwh ) 
-			   )
+				profile.add( row.get( db_in_production_profiles_1440minutes.zero_kwh ) )
 			)
 		);
 		break;
@@ -2546,17 +2532,20 @@ switch ( value ) {
 	
 	case "MINUTES":
 		set_p_EnergyUsageResolution( OL_EnergyUsageResolution.MINUTES );
-		v_Engine.setStopTime( 1439.1, MINUTE );
+		set_p_NumberOfDailyTimeSteps(1440);
+		v_Engine.setStopTime( ( p_NumberOfDailyTimeSteps - 1 ), v_Engine.getTimeUnit() );
 		break;
 	
 	case "HOURS":
 		set_p_EnergyUsageResolution( OL_EnergyUsageResolution.HOURS );
-		v_Engine.setStopTime( 23.1, MINUTE );
+		set_p_NumberOfDailyTimeSteps(24);
+		v_Engine.setStopTime( ( p_NumberOfDailyTimeSteps - 1 ), v_Engine.getTimeUnit() );
 		break;
 			
 	case "QUARTERS":
 		set_p_EnergyUsageResolution( OL_EnergyUsageResolution.QUARTERS );
-		v_Engine.setStopTime( 95.1, MINUTE );
+		set_p_NumberOfDailyTimeSteps(96);
+		v_Engine.setStopTime( ( p_NumberOfDailyTimeSteps - 1 ), v_Engine.getTimeUnit() );
 		break;
 }
 
@@ -3126,8 +3115,11 @@ if(this.getIndex() != 0) {
 }
 
 /* Create initial embedded objects */ 
-f_CreateLogic( f_GetMyPojoInScenario() );
-]]></StartupCode>
+f_CreateLogic( f_GetMyPojoIn() );
+
+/* Set variables */
+f_SetInitialConsumptionProfile( pop_Logic_Households, f_GetNumberOfDailyTimeSteps() );
+f_SetInitialProductionProfile( pop_Logic_Households, f_GetNumberOfDailyTimeSteps() );]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1689252665124</Id>
@@ -3231,29 +3223,14 @@ f_CreateLogic( f_GetMyPojoInScenario() );
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[C_PojoIn__Scenario]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[p_MyPojoInScenario]]></Code>
-						</InitialValue>
-					</Properties>
-				</Variable>
-				<Variable Class="PlainVariable">
-					<Id>1690035202844</Id>
-					<Name><![CDATA[v_Engine]]></Name>
-					<X>530</X><Y>160</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
-						<Type><![CDATA[Engine]]></Type>        
-						<InitialValue Class="CodeValue">
-							<Code><![CDATA[f_GetMyPojoInScenario().f_GetEngine()]]></Code>
+							<Code><![CDATA[p_MyPojoIn]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="PlainVariable">
 					<Id>1690447561272</Id>
 					<Name><![CDATA[v_EnergyUsageResolution]]></Name>
-					<X>530</X><Y>180</Y>
+					<X>530</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3261,7 +3238,7 @@ f_CreateLogic( f_GetMyPojoInScenario() );
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[OL_EnergyUsageResolution]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[f_GetMyPojoInScenario().f_Get_EnergyUsageResolution()]]></Code>
+							<Code><![CDATA[f_GetMyPojoIn().f_Get_EnergyUsageResolution()]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -3276,13 +3253,28 @@ f_CreateLogic( f_GetMyPojoInScenario() );
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
 						<Type><![CDATA[double]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[f_GetMyPojoInScenario().f_Get_ProsumerHouseholdRatio()]]></Code>
+							<Code><![CDATA[f_GetMyPojoIn().f_Get_ProsumerHouseholdRatio()]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1692108011105</Id>
+					<Name><![CDATA[v_NumberOfDailyTimeSteps]]></Name>
+					<X>530</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[f_GetMyPojoIn().f_Get_NumberOfDailyTimeSteps()]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689346312586</Id>
-					<Name><![CDATA[p_MyPojoInScenario]]></Name>
+					<Name><![CDATA[p_MyPojoIn]]></Name>
 					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -3304,77 +3296,42 @@ f_CreateLogic( f_GetMyPojoInScenario() );
 				</Variable>
 				<Variable Class="CollectionVariable">
 					<Id>1692040398621</Id>
-					<Name><![CDATA[col_HouseholdsConsumptionProfile]]></Name>
-					<X>530</X><Y>240</Y>
+					<Name><![CDATA[col_InitialConsumptionProfile]]></Name>
+					<X>530</X><Y>230</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
-						<CollectionClass><![CDATA[LinkedHashMap]]></CollectionClass>
-						<ElementClass><![CDATA[Integer]]></ElementClass>
+						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
+						<ElementClass><![CDATA[Double]]></ElementClass>
 						<ValueElementClass><![CDATA[Double]]></ValueElementClass>
 					</Properties>
 
 				</Variable>
 				<Variable Class="CollectionVariable">
 					<Id>1692040611884</Id>
-					<Name><![CDATA[col_HouseholdsProductionProfile]]></Name>
-					<X>530</X><Y>260</Y>
+					<Name><![CDATA[col_InitialProductionProfile]]></Name>
+					<X>530</X><Y>270</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
-						<CollectionClass><![CDATA[LinkedHashMap]]></CollectionClass>
-						<ElementClass><![CDATA[Integer]]></ElementClass>
+						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
+						<ElementClass><![CDATA[Double]]></ElementClass>
 						<ValueElementClass><![CDATA[Double]]></ValueElementClass>
 					</Properties>
 
 				</Variable>
 			</Variables>
-			<Events>
-				<Event>
-					<Id>1692040857739</Id>
-					<Name><![CDATA[e_Calculate]]></Name>
-					<X>30</X><Y>340</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Properties TriggerType="timeout" Mode="cyclic">
-						<Timeout Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[MINUTE]]></Unit>
-						</Timeout>
-						<Rate Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="RateUnits"><![CDATA[PER_MINUTE]]></Unit>
-						</Rate>
-						<OccurrenceAtTime>true</OccurrenceAtTime>
-						<OccurrenceDate>1692086400000</OccurrenceDate>
-						<OccurrenceTime Class="CodeUnitValue">
-							<Code><![CDATA[0]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[MINUTE]]></Unit>
-						</OccurrenceTime>
-						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[MINUTE]]></Unit>
-						</RecurrenceCode>
-						<Condition><![CDATA[false]]></Condition>
-					</Properties>
-					<Action><![CDATA[col_HouseholdsConsumptionProfile.put(  (int) time( MINUTE ), pop_Logic_Households.statistics_ElectricityConsumption() );
-col_HouseholdsProductionProfile.put(  (int) time( MINUTE ), pop_Logic_Households.statistics_ElectricityProduction() );
-]]></Action>
-				</Event>
-			</Events>
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>VOID</ReturnModificator>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1689346698198</Id>
 					<Name><![CDATA[f_CreateLogic]]></Name>
-					<X>770</X><Y>220</Y>
+					<X>770</X><Y>320</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3402,7 +3359,7 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[C_PojoIn__Scenario]]></ReturnType>
 					<Id>1689673620224</Id>
-					<Name><![CDATA[f_GetMyPojoInScenario]]></Name>
+					<Name><![CDATA[f_GetMyPojoIn]]></Name>
 					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -3412,22 +3369,10 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 				</Function>
 				<Function AccessType="public" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[Engine]]></ReturnType>
-					<Id>1690035238394</Id>
-					<Name><![CDATA[f_GetEngine]]></Name>
-					<X>770</X><Y>160</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return v_Engine;]]></Body>
-				</Function>
-				<Function AccessType="public" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
 					<ReturnType><![CDATA[OL_EnergyUsageResolution]]></ReturnType>
 					<Id>1691764823038</Id>
 					<Name><![CDATA[f_GetEnergyUsageResolution]]></Name>
-					<X>770</X><Y>180</Y>
+					<X>770</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -3448,27 +3393,95 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 				</Function>
 				<Function AccessType="public" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[Map<Integer,Double>]]></ReturnType>
+					<ReturnType><![CDATA[ArrayList<Double>]]></ReturnType>
 					<Id>1692040519422</Id>
-					<Name><![CDATA[f_GetHouseholdsConsumptionProfile]]></Name>
-					<X>770</X><Y>240</Y>
+					<Name><![CDATA[f_GetInitialConsumptionProfile]]></Name>
+					<X>770</X><Y>230</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return col_HouseholdsConsumptionProfile;]]></Body>
+					<Body><![CDATA[return col_InitialConsumptionProfile;]]></Body>
 				</Function>
 				<Function AccessType="public" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[Map<Integer,Double>]]></ReturnType>
+					<ReturnType><![CDATA[ArrayList<Double>]]></ReturnType>
 					<Id>1692040611886</Id>
-					<Name><![CDATA[f_GetHouseholdsProductionProfile]]></Name>
-					<X>770</X><Y>260</Y>
+					<Name><![CDATA[f_GetInitialProductionProfile]]></Name>
+					<X>770</X><Y>270</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return col_HouseholdsProductionProfile;]]></Body>
+					<Body><![CDATA[return col_InitialProductionProfile;]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1692105951609</Id>
+					<Name><![CDATA[f_SetInitialConsumptionProfile]]></Name>
+					<X>770</X><Y>250</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_Logic_Households]]></Name>
+						<Type><![CDATA[AgentArrayList<A_Logic_Household>]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_NumberOfDailyTimeSteps]]></Name>
+						<Type><![CDATA[int]]></Type>
+					</Parameter>
+					<Body><![CDATA[for( int i = 0; i < arg_NumberOfDailyTimeSteps ; i++ ) {
+	
+	double aggregateConsumption = 0;
+	
+	for( A_Logic_Household p : arg_Logic_Households ) {
+		aggregateConsumption += p.f_GetInitialConsumptionProfile().get( i );
+	}
+	col_InitialConsumptionProfile.add( aggregateConsumption );
+}]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int]]></ReturnType>
+					<Id>1692108097072</Id>
+					<Name><![CDATA[f_GetNumberOfDailyTimeSteps]]></Name>
+					<X>770</X><Y>180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_NumberOfDailyTimeSteps;]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1692115984379</Id>
+					<Name><![CDATA[f_SetInitialProductionProfile]]></Name>
+					<X>770</X><Y>290</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[arg_Logic_Households]]></Name>
+						<Type><![CDATA[AgentArrayList<A_Logic_Household>]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[arg_NumberOfDailyTimeSteps]]></Name>
+						<Type><![CDATA[int]]></Type>
+					</Parameter>
+					<Body><![CDATA[for( int i = 0; i < arg_NumberOfDailyTimeSteps ; i++ ) {
+	
+	double aggregateProduction = 0;
+	
+	for( A_Logic_Household p : arg_Logic_Households ) {
+		aggregateProduction += p.f_GetInitialProductionProfile().get( i );
+	}
+	col_InitialProductionProfile.add( aggregateProduction );
+}]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -3611,14 +3624,14 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 						<Id>1692038145668</Id>
 						<Name><![CDATA[statistics_ElectricityConsumption]]></Name>
 						<Type>sum</Type>
-						<Expression><![CDATA[item.f_GetConsumptionProfile().get( (int) time( MINUTE ) ) ]]></Expression>
+						<Expression><![CDATA[item.f_GetInitialConsumptionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression>
 						<Condition><![CDATA[]]></Condition>
 					</StatisticsItem>
 					<StatisticsItem>
 						<Id>1692039726437</Id>
 						<Name><![CDATA[statistics_ElectricityProduction]]></Name>
 						<Type>sum</Type>
-						<Expression><![CDATA[item.f_GetProductionProfile().get( (int) time( MINUTE ) ) ]]></Expression>
+						<Expression><![CDATA[item.f_GetInitialProductionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression>
 						<Condition><![CDATA[]]></Condition>
 					</StatisticsItem>
 					<InEnvironment>true</InEnvironment>	
@@ -3836,7 +3849,7 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>970</Width>
-					<Height>240</Height>
+					<Height>430</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-4144960</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -3858,7 +3871,7 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>230</Width>
-					<Height>200</Height>
+					<Height>390</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-16728065</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -3901,7 +3914,7 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>230</Width>
-					<Height>200</Height>
+					<Height>390</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-10496</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -3944,7 +3957,7 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>230</Width>
-					<Height>200</Height>
+					<Height>390</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-6632142</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -3987,7 +4000,7 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 					<LineMaterial>null</LineMaterial>
 					<LineStyle>SOLID</LineStyle>
 					<Width>230</Width>
-					<Height>200</Height>
+					<Height>390</Height>
 					<Rotation>0.0</Rotation>
 					<FillColor>-32944</FillColor>
 					<FillMaterial>null</FillMaterial>
@@ -5227,47 +5240,25 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 			</Presentation>
 
 				</Group>
-				<Text>
-					<Id>1689847406860</Id>
-					<Name><![CDATA[text_Agents]]></Name>
-					<ExcludeFromBuild>true</ExcludeFromBuild>
-					<X>20</X><Y>690</Y>
-					<Label><X>0</X><Y>-10</Y></Label>
-					<PublicFlag>true</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<DrawMode>SHAPE_DRAW_2D</DrawMode>
-					<EmbeddedIcon>false</EmbeddedIcon>
-					<Z>0</Z>
-					<Rotation>0.0</Rotation>
-					<Color>-16777216</Color>
-					<Text><![CDATA[Agents]]></Text>
-					<Font>
-						<Name>SansSerif</Name>
-						<Size>14</Size>
-						<Style>0</Style>
-					</Font>
-					<Alignment>LEFT</Alignment>
-				</Text>
 				<Control Type="Button">
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690039752120</Id>
 					<Name><![CDATA[button2]]></Name>
-					<X>890</X><Y>1060</Y>
+					<X>10</X><Y>685</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<BasicProperties Width="100" Height="30">
+					<BasicProperties Width="70" Height="30">
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[link_MyLogic.getConnectedAgent().f_GetEngine().getState() == link_MyLogic.getConnectedAgent().f_GetEngine().PAUSED]]></EnableExpression>
-						<ActionCode><![CDATA[if(link_MyLogic.getConnectedAgent().f_GetEngine().run()) {
+						<EnableExpression><![CDATA[getEngine().getState() == getEngine().PAUSED]]></EnableExpression>
+						<ActionCode><![CDATA[if(getEngine().run()) {
 	traceln("The engine is run.");
 } else { //sanity check
-	error("The engine is not run at the click of the button. The engine state is: " + link_MyLogic.getConnectedAgent().f_GetEngine().getState());
+	error("The engine is not run at the click of the button. The engine state is: " + getEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -5280,21 +5271,21 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690039752122</Id>
 					<Name><![CDATA[button5]]></Name>
-					<X>890</X><Y>1100</Y>
+					<X>80</X><Y>685</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<BasicProperties Width="100" Height="30">
+					<BasicProperties Width="70" Height="30">
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>false</Enabled>
-						<EnableExpression><![CDATA[link_MyLogic.getConnectedAgent().f_GetEngine().getState() == link_MyLogic.getConnectedAgent().f_GetEngine().RUNNING]]></EnableExpression>
-						<ActionCode><![CDATA[if(link_MyLogic.getConnectedAgent().f_GetEngine().pause()) {
+						<EnableExpression><![CDATA[getEngine().getState() == getEngine().RUNNING]]></EnableExpression>
+						<ActionCode><![CDATA[if(getEngine().pause()) {
 	traceln("The engine is paused.");
 } else { //sanity check
-	error("The engine is not paused at the click of the button. The engine state is: " + link_MyLogic.getConnectedAgent().f_GetEngine().getState());
+	error("The engine is not paused at the click of the button. The engine state is: " + getEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -5307,21 +5298,21 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690291596103</Id>
 					<Name><![CDATA[button_Stop]]></Name>
-					<X>890</X><Y>1180</Y>
+					<X>220</X><Y>685</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<BasicProperties Width="100" Height="30">
+					<BasicProperties Width="70" Height="30">
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[link_MyLogic.getConnectedAgent().f_GetEngine().getState() != link_MyLogic.getConnectedAgent().f_GetEngine().IDLE]]></EnableExpression>
-						<ActionCode><![CDATA[if(link_MyLogic.getConnectedAgent().f_GetEngine().stop()) {
+						<EnableExpression><![CDATA[getEngine().getState() != getEngine().IDLE]]></EnableExpression>
+						<ActionCode><![CDATA[if(getEngine().stop()) {
 	traceln("The engine is stopped.");
 } else { //sanity check
-	error("The engine is not stopped at the click of the button. The engine state is: " + link_MyLogic.getConnectedAgent().f_GetEngine().getState());
+	error("The engine is not stopped at the click of the button. The engine state is: " + getEngine().getState());
 }]]></ActionCode>
 					</BasicProperties>
 					<ExtendedProperties>
@@ -5333,21 +5324,21 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1690291596110</Id>
 					<Name><![CDATA[button_Finish]]></Name>
-					<X>890</X><Y>1140</Y>
+					<X>150</X><Y>685</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>false</ShowLabel>
 					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<BasicProperties Width="100" Height="30">
+					<BasicProperties Width="70" Height="30">
                         <EmbeddedIcon>false</EmbeddedIcon>	
 						<TextColor/>
 						<Enabled>true</Enabled>
-						<EnableExpression><![CDATA[link_MyLogic.getConnectedAgent().f_GetEngine().getState() == link_MyLogic.getConnectedAgent().f_GetEngine().RUNNING || link_MyLogic.getConnectedAgent().f_GetEngine().getState() == link_MyLogic.getConnectedAgent().f_GetEngine().PAUSED]]></EnableExpression>
-						<ActionCode><![CDATA[if(link_MyLogic.getConnectedAgent().f_GetEngine().finish()) {
+						<EnableExpression><![CDATA[getEngine().getState() == getEngine().RUNNING || getEngine().getState() == getEngine().PAUSED]]></EnableExpression>
+						<ActionCode><![CDATA[if(getEngine().finish()) {
 	traceln("The engine run is finished.");
 } else { //sanity check
-	error("The engine run is not finished at the click of the button. The engine state is: " + link_MyLogic.getConnectedAgent().f_GetEngine().getState());
+	error("The engine run is not finished at the click of the button. The engine state is: " + getEngine().getState());
 }
 ]]></ActionCode>
 					</BasicProperties>
@@ -5360,7 +5351,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 				 	<EmbeddedIcon>false</EmbeddedIcon>				
 					<Id>1691938725407</Id>
 					<Name><![CDATA[button_HouseholdsUI]]></Name>
-					<X>10</X><Y>1180</Y>
+					<X>850</X><Y>685</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5381,7 +5372,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
     			<TimePlot>
 					<Id>1692041479989</Id>
 					<Name><![CDATA[plot_Usage]]></Name>
-					<X>350</X><Y>740</Y>
+					<X>0</X><Y>720</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5391,7 +5382,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 					<OccurrenceAtTime>true</OccurrenceAtTime>
 					<OccurrenceDate>1692086400000</OccurrenceDate>
 					<OccurrenceTime Class="CodeUnitValue">
-						<Code><![CDATA[0.000001]]></Code>
+						<Code><![CDATA[0]]></Code>
 						<Unit Class="TimeUnits"><![CDATA[MINUTE]]></Unit>
 					</OccurrenceTime>
 					<RecurrenceCode Class="CodeUnitValue">
@@ -5399,15 +5390,15 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 						<Unit Class="TimeUnits"><![CDATA[MINUTE]]></Unit>
 					</RecurrenceCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
-					<Width>580</Width>
-					<Height>250</Height>
+					<Width>1000</Width>
+					<Height>270</Height>
 					<BackgroundColor/>
 					<BorderColor/>
 					<ChartArea>
 						<XOffset>50</XOffset>
 						<YOffset>30</YOffset>
-						<Width>500</Width>
-						<Height>160</Height>
+						<Width>920</Width>
+						<Height>180</Height>
 						<BackgroundColor>-1</BackgroundColor>
 						<BorderColor>-16777216</BorderColor>
 						<GridColor>-12566464</GridColor>
@@ -5429,29 +5420,29 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
 					<VerScaleType>AUTO</VerScaleType>
 					<DrawLine>true</DrawLine>
-					<Interpolation>LINEAR</Interpolation>
+					<Interpolation>STEP</Interpolation>
 					<DatasetExpression>  
-						<Title><![CDATA[Electricity Consumption]]></Title>
+						<Title><![CDATA[Initial Consumption Profile]]></Title>
 					<Id>1692041484704</Id>
 					<Expression><![CDATA[my_dataset]]></Expression>
 					<Color>-65536</Color>
-					<Expression2><![CDATA[link_MyLogic.getConnectedAgent().f_GetHouseholdsConsumptionProfile().get( (int) time( MINUTE ) ) ]]></Expression2>
+					<Expression2><![CDATA[f_GetMyLogic().f_GetInitialConsumptionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression2>
 					<Expression2Flag>true</Expression2Flag>
-						<PointStyle>CIRCLE</PointStyle>
+						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
 					</DatasetExpression>
 					<DatasetExpression>  
-						<Title><![CDATA[Electricity Production]]></Title>
+						<Title><![CDATA[Initial Production Profile]]></Title>
 					<Id>1692041575287</Id>
 					<Expression><![CDATA[my_dataset1]]></Expression>
 					<Color>-16711936</Color>
-					<Expression2><![CDATA[link_MyLogic.getConnectedAgent().f_GetHouseholdsProductionProfile().get( (int) time( MINUTE ) ) ]]></Expression2>
+					<Expression2><![CDATA[f_GetMyLogic().f_GetInitialProductionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression2>
 					<Expression2Flag>true</Expression2Flag>
-						<PointStyle>CIRCLE</PointStyle>
+						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
 					</DatasetExpression>
-					<SamplesToKeep>100</SamplesToKeep>
-					<TimeWindowExpression><![CDATA[(int) ( f_GetMyLogic().f_GetEngine().getStopTime( MINUTE ) )
+					<SamplesToKeep>1440</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[f_GetMyLogic().f_GetNumberOfDailyTimeSteps() - 1
 ]]></TimeWindowExpression>
 					<FillAreaUnderLine>false</FillAreaUnderLine>
 					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
@@ -5497,10 +5488,10 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 @since 13_July_2023
 ]]></Description>
 			<StartupCode><![CDATA[/* Set the consumption profile */
-col_ConsumptionProfile = f_GetMyPojoIn().f_Get_ConsumptionProfile();
+col_InitialConsumptionProfile = f_GetMyPojoIn().f_Get_InitialConsumptionProfile();
 
 /* Set the production profile */
-col_ProductionProfile = f_GetMyPojoIn().f_Get_ProductionProfile();
+col_InitialProductionProfile = f_GetMyPojoIn().f_Get_InitialProductionProfile();
 
 /* Link the electricity grid and the household */
 link_MyGridBus.connectTo(f_GetMyPojoIn().f_Get_MyGridBus());
@@ -5633,7 +5624,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 				<Variable Class="PlainVariable">
 					<Id>1691774531918</Id>
 					<Name><![CDATA[v_GridUsageType]]></Name>
-					<X>530</X><Y>220</Y>
+					<X>530</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5648,7 +5639,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 				<Variable Class="PlainVariable">
 					<Id>1691775191726</Id>
 					<Name><![CDATA[v_CommunityMemberType]]></Name>
-					<X>530</X><Y>240</Y>
+					<X>530</X><Y>260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5690,6 +5681,21 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1692112886822</Id>
+					<Name><![CDATA[v_NumberOfDailyTimeSteps]]></Name>
+					<X>530</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[f_GetMyPojoIn().f_Get_NumberOfDailyTimeSteps()]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689348892437</Id>
 					<Name><![CDATA[p_MyPojoIn]]></Name>
@@ -5713,30 +5719,30 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 				</Variable>
 				<Variable Class="CollectionVariable">
 					<Id>1691777203044</Id>
-					<Name><![CDATA[col_ProductionProfile]]></Name>
-					<X>530</X><Y>280</Y>
+					<Name><![CDATA[col_InitialProductionProfile]]></Name>
+					<X>530</X><Y>300</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
-						<CollectionClass><![CDATA[LinkedHashMap]]></CollectionClass>
-						<ElementClass><![CDATA[Integer]]></ElementClass>
+						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
+						<ElementClass><![CDATA[Double]]></ElementClass>
 						<ValueElementClass><![CDATA[Double]]></ValueElementClass>
 					</Properties>
 
 				</Variable>
 				<Variable Class="CollectionVariable">
 					<Id>1691777584946</Id>
-					<Name><![CDATA[col_ConsumptionProfile]]></Name>
-					<X>530</X><Y>260</Y>
+					<Name><![CDATA[col_InitialConsumptionProfile]]></Name>
+					<X>530</X><Y>280</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
-						<CollectionClass><![CDATA[LinkedHashMap]]></CollectionClass>
-						<ElementClass><![CDATA[Integer]]></ElementClass>
+						<CollectionClass><![CDATA[ArrayList]]></CollectionClass>
+						<ElementClass><![CDATA[Double]]></ElementClass>
 						<ValueElementClass><![CDATA[Double]]></ValueElementClass>
 					</Properties>
 
@@ -5772,7 +5778,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 					<ReturnType><![CDATA[OL_GridUsageType]]></ReturnType>
 					<Id>1691778310394</Id>
 					<Name><![CDATA[f_GetGridUsageType]]></Name>
-					<X>770</X><Y>220</Y>
+					<X>770</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5784,7 +5790,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 					<ReturnType><![CDATA[OL_CommunityMemberType]]></ReturnType>
 					<Id>1691778425208</Id>
 					<Name><![CDATA[f_GetCommunityMemberType]]></Name>
-					<X>770</X><Y>240</Y>
+					<X>770</X><Y>260</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5793,27 +5799,27 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 				</Function>
 				<Function AccessType="public" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[Map<Integer,Double>]]></ReturnType>
+					<ReturnType><![CDATA[ArrayList<Double>]]></ReturnType>
 					<Id>1691778500263</Id>
-					<Name><![CDATA[f_GetConsumptionProfile]]></Name>
-					<X>770</X><Y>260</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return col_ConsumptionProfile;]]></Body>
-				</Function>
-				<Function AccessType="public" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[Map<Integer,Double>]]></ReturnType>
-					<Id>1691778570530</Id>
-					<Name><![CDATA[f_GetProductionProfile]]></Name>
+					<Name><![CDATA[f_GetInitialConsumptionProfile]]></Name>
 					<X>770</X><Y>280</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return col_ProductionProfile;]]></Body>
+					<Body><![CDATA[return col_InitialConsumptionProfile;]]></Body>
+				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[ArrayList<Double>]]></ReturnType>
+					<Id>1691778570530</Id>
+					<Name><![CDATA[f_GetInitialProductionProfile]]></Name>
+					<X>770</X><Y>300</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return col_InitialProductionProfile;]]></Body>
 				</Function>
 				<Function AccessType="public" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
@@ -5839,6 +5845,18 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[return v_Name;]]></Body>
 				</Function>
+				<Function AccessType="public" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int]]></ReturnType>
+					<Id>1692112886671</Id>
+					<Name><![CDATA[f_GetNumberOfDailyTimeSteps]]></Name>
+					<X>770</X><Y>220</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[return v_NumberOfDailyTimeSteps;]]></Body>
+				</Function>
 			</Functions>
 			<AgentLinks>
 				<AgentLink>
@@ -5863,7 +5881,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 				<AgentLink>
 					<Id>1691775246749</Id>
 					<Name><![CDATA[link_MyGridBus]]></Name>
-					<X>530</X><Y>300</Y>
+					<X>530</X><Y>320</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -5884,7 +5902,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 				<AgentLink>
 					<Id>1691775920612</Id>
 					<Name><![CDATA[link_MyEnergyCommunity]]></Name>
-					<X>530</X><Y>320</Y>
+					<X>530</X><Y>340</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -8700,6 +8718,10 @@ if( this.getIndex() != link_MyLogic.getConnectedAgent().getIndex() ) {
 				<Variable Class="PlainVariable">
 					<Id>1692027456041</Id>
 					<Name><![CDATA[v_MyLogic]]></Name>
+					<Description><![CDATA[This reference should be unidirectional, becasue the UI object spies the logic object.
+
+@author Sharif_Khaleghparast
+@since 15_August_2023]]></Description>
 					<X>530</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -8761,7 +8783,7 @@ if( this.getIndex() != link_MyLogic.getConnectedAgent().getIndex() ) {
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690309587154</Id>
 					<Name><![CDATA[f_Navigate]]></Name>
-					<X>770</X><Y>220</Y>
+					<X>770</X><Y>230</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -8779,7 +8801,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[double]]></ReturnType>
 					<Id>1690309587156</Id>
 					<Name><![CDATA[f_SetSelectedViewArea]]></Name>
-					<X>770</X><Y>240</Y>
+					<X>770</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -8795,7 +8817,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[ViewArea]]></ReturnType>
 					<Id>1690309587158</Id>
 					<Name><![CDATA[f_GetSelectedViewArea]]></Name>
-					<X>770</X><Y>200</Y>
+					<X>770</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -8807,7 +8829,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ReturnType><![CDATA[ViewArea]]></ReturnType>
 					<Id>1690309587160</Id>
 					<Name><![CDATA[f_GetReferenceViewArea]]></Name>
-					<X>770</X><Y>180</Y>
+					<X>770</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -8820,30 +8842,6 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Id>1692027544408</Id>
 					<Name><![CDATA[f_GetMyLogic]]></Name>
 					<X>770</X><Y>140</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return v_MyLogic;]]></Body>
-				</Function>
-				<Function AccessType="private" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[A_Logic_Household]]></ReturnType>
-					<Id>1692041975499</Id>
-					<Name><![CDATA[f_GetMyLogic1]]></Name>
-					<X>220</X><Y>60</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return v_MyLogic;]]></Body>
-				</Function>
-				<Function AccessType="private" StaticFunction="false">
-					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[A_Logic_Household]]></ReturnType>
-					<Id>1692041988055</Id>
-					<Name><![CDATA[f_GetMyLogic2]]></Name>
-					<X>170</X><Y>300</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -9598,7 +9596,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
     			<TimePlot>
 					<Id>1692016656873</Id>
 					<Name><![CDATA[plot_Usage]]></Name>
-					<X>540</X><Y>750</Y>
+					<X>0</X><Y>720</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -9616,15 +9614,15 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 						<Unit Class="TimeUnits"><![CDATA[MINUTE]]></Unit>
 					</RecurrenceCode>
 					<EmbeddedIcon>false</EmbeddedIcon>
-					<Width>420</Width>
-					<Height>240</Height>
+					<Width>1000</Width>
+					<Height>270</Height>
 					<BackgroundColor/>
 					<BorderColor/>
 					<ChartArea>
 						<XOffset>50</XOffset>
 						<YOffset>30</YOffset>
-						<Width>340</Width>
-						<Height>150</Height>
+						<Width>920</Width>
+						<Height>180</Height>
 						<BackgroundColor>-1</BackgroundColor>
 						<BorderColor>-16777216</BorderColor>
 						<GridColor>-12566464</GridColor>
@@ -9643,32 +9641,32 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
 					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
 					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
-					<VerScaleToExpression><![CDATA[1.2]]></VerScaleToExpression>
-					<VerScaleType>FIXED</VerScaleType>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
 					<DrawLine>true</DrawLine>
-					<Interpolation>LINEAR</Interpolation>
+					<Interpolation>STEP</Interpolation>
 					<DatasetExpression>  
-						<Title><![CDATA[Electricity Consumption]]></Title>
+						<Title><![CDATA[Initial Consumption Profile]]></Title>
 					<Id>1692016659714</Id>
 					<Expression><![CDATA[my_dataset]]></Expression>
 					<Color>-65536</Color>
-					<Expression2><![CDATA[link_MyLogic.getConnectedAgent().f_GetConsumptionProfile().get( (int) time( MINUTE ) ) ]]></Expression2>
-					<Expression2Flag>true</Expression2Flag>
-						<PointStyle>CIRCLE</PointStyle>
-						<LineWidth>1.0</LineWidth>
-					</DatasetExpression>
-					<DatasetExpression>  
-						<Title><![CDATA[Electricity Production]]></Title>
-					<Id>1692031738375</Id>
-					<Expression><![CDATA[my_dataset1]]></Expression>
-					<Color>-16711936</Color>
-					<Expression2><![CDATA[link_MyLogic.getConnectedAgent().f_GetProductionProfile().get( (int) time( MINUTE ) ) ]]></Expression2>
+					<Expression2><![CDATA[f_GetMyLogic().f_GetInitialConsumptionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression2>
 					<Expression2Flag>true</Expression2Flag>
 						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
 					</DatasetExpression>
-					<SamplesToKeep>100</SamplesToKeep>
-					<TimeWindowExpression><![CDATA[f_GetMyLogic().f_GetConsumptionProfile().size() - 1]]></TimeWindowExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[Initial Production Profile]]></Title>
+					<Id>1692031738375</Id>
+					<Expression><![CDATA[my_dataset1]]></Expression>
+					<Color>-16711936</Color>
+					<Expression2><![CDATA[f_GetMyLogic().f_GetInitialProductionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression2>
+					<Expression2Flag>true</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>1440</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[f_GetMyLogic().f_GetNumberOfDailyTimeSteps() - 1]]></TimeWindowExpression>
 					<FillAreaUnderLine>false</FillAreaUnderLine>
 					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
     			</TimePlot>
@@ -11580,6 +11578,9 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 				<Parameter>
 					<ParameterName><![CDATA[p_ProsumerHouseholdRatio]]></ParameterName>
 				</Parameter>
+				<Parameter>
+					<ParameterName><![CDATA[p_NumberOfDailyTimeSteps]]></ParameterName>
+				</Parameter>
 			</Parameters>			
 			<PresentationProperties>
 				<EnableZoomAndPanning>false</EnableZoomAndPanning>
@@ -11615,8 +11616,8 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 public class C_PojoIn__Scenario implements Serializable {
 
 	// **********VARIABLES**********
-	private final Engine v_Engine;
 	private final OL_EnergyUsageResolution v_EnergyUsageResolution;
+	private final int v_NumberOfDailyTimeSteps;
 	private final double v_ProsumerHouseholdRatio;
 	
 	// **********EMBEDDED STRUCTURE**********
@@ -11628,23 +11629,23 @@ public class C_PojoIn__Scenario implements Serializable {
 	// **********CONSTRUCTORS**********
 	/**
      * Create an instance of a scenario input
-     * @param p_Engine the Anylogic engine that simulate the top-level agent
-     * @param p_Resolution Energy usage resolution
+     * @param p_EnergyUsageResolution Energy usage resolution
+     * @param p_NumberOfDailyTimeSteps Number of daily time steps
      * @param p_ProsumerHouseholdRatio Prosumer households to all households ratio
      * @param p_PojoIn_Households A list of C_PojoIn_Household POJOs
      * @param p_PojoIn_EnergyCommunities A list of C_PojoIn_Community POJOs
      * @param p_PojoIn_DistributionSystemOperators A list of C_PojoIn_ElectricityGridOperator POJOs
      * @param p_PojoIn_LVDistributionFeeders A list of C_PojoIn_ElectricityGrid POJOs
      */
-    public C_PojoIn__Scenario (Engine p_Engine,
-    						   OL_EnergyUsageResolution p_EnergyUsageResolution,
-    						   double p_ProsumerHouseholdRatio,
-    						   List<C_PojoIn_Household> p_PojoIn_Households,
-    						   List<C_PojoIn_Community> p_PojoIn_EnergyCommunities,
-    						   List<C_PojoIn_ElectricityGridOperator> p_PojoIn_DistributionSystemOperators,
-    						   List<C_PojoIn_ElectricityGrid> p_PojoIn_LVDistributionFeeders) {
-    	this.v_Engine = p_Engine;
+    public C_PojoIn__Scenario ( OL_EnergyUsageResolution p_EnergyUsageResolution
+    						    , int p_NumberOfDailyTimeSteps
+    							, double p_ProsumerHouseholdRatio
+    						    , List<C_PojoIn_Household> p_PojoIn_Households
+    						    , List<C_PojoIn_Community> p_PojoIn_EnergyCommunities
+    						    , List<C_PojoIn_ElectricityGridOperator> p_PojoIn_DistributionSystemOperators
+    						    , List<C_PojoIn_ElectricityGrid> p_PojoIn_LVDistributionFeeders ) {
     	this.v_EnergyUsageResolution = p_EnergyUsageResolution;
+    	this.v_NumberOfDailyTimeSteps = p_NumberOfDailyTimeSteps;
     	this.v_ProsumerHouseholdRatio = p_ProsumerHouseholdRatio;
     	this.col_PojoIn_Households = p_PojoIn_Households;
     	this.col_PojoIn_EnergyCommunities = p_PojoIn_EnergyCommunities;
@@ -11653,12 +11654,12 @@ public class C_PojoIn__Scenario implements Serializable {
     }
     
     // **********GETTERS**********
-    public Engine f_GetEngine() {
-    	return v_Engine;
-    }
-    
     public OL_EnergyUsageResolution f_Get_EnergyUsageResolution() {
     	return v_EnergyUsageResolution;
+    }
+    
+    public int f_Get_NumberOfDailyTimeSteps() {
+    	return v_NumberOfDailyTimeSteps;
     }
     
     public double f_Get_ProsumerHouseholdRatio() {
@@ -11885,9 +11886,10 @@ public class C_PojoIn_Household implements Serializable {
 	private final OL_AgentType v_AgentType = OL_AgentType.HOUSEHOLD;
 	private final String v_name;
 	private final OL_EnergyUsageResolution v_EnergyUsageResolution;
-	private final LinkedHashMap<Integer,Double> col_ConsumptionProfile;
+	private final int v_NumberOfDailyTimeSteps;
+	private final ArrayList<Double> col_InitialConsumptionProfile;
 	private final OL_GridUsageType v_GridUsageType;
-	private final LinkedHashMap<Integer,Double> col_ProductionProfile;
+	private final ArrayList<Double> col_InitialProductionProfile;
 	private final A_Logic_ElectricityGrid v_MyGridBus; //TODO The type should be changed.
 	private final OL_CommunityMemberType v_CommunityMemberType;
 	private final A_Logic_Community v_MyEnergyCommunity;
@@ -11897,27 +11899,30 @@ public class C_PojoIn_Household implements Serializable {
      * Create an instance of a household
      * @param p_name Name of the household
      * @param p_EnergyUsageResolution An Enum
-     * @param p_ConsumptionProfile A collection of time and electricity consumption
+     * @param p_NumberOfDailyTimeSteps Number of daily time steps
+     * @param p_InitialConsumptionProfile A collection of electricity consumption
      * @param p_GridUsageType An Enum
-     * @param p_ProductionProfile A collection of time and electricity production
+     * @param p_InitialProductionProfile A collection of electricity production
      * @param p_MyGridBus A reference to the connected grid bus
      * @param p_CommunityMemberType An Enum
      * @param p_MyEnergyCommunity A reference to the joined community 
      */
     public C_PojoIn_Household( String p_name
     						   , OL_EnergyUsageResolution p_EnergyUsageResolution
-    						   , LinkedHashMap<Integer,Double> p_ConsumptionProfile
+    						   , int p_NumberOfDailyTimeSteps
+    						   , ArrayList<Double> p_InitialConsumptionProfile
     						   , OL_GridUsageType p_GridUsageType
-    						   , LinkedHashMap<Integer,Double> p_ProductionProfile
+    						   , ArrayList<Double> p_InitialProductionProfile
     						   , A_Logic_ElectricityGrid p_MyGridBus //TODO The type should be changed.
     						   , OL_CommunityMemberType p_CommunityMemberType
     						   , A_Logic_Community p_MyEnergyCommunity
     ) {
     	this.v_name = v_AgentType.name() + " " + p_name;
     	this.v_EnergyUsageResolution = p_EnergyUsageResolution;
-    	this.col_ConsumptionProfile = p_ConsumptionProfile;
+    	this.v_NumberOfDailyTimeSteps = p_NumberOfDailyTimeSteps;
+    	this.col_InitialConsumptionProfile = p_InitialConsumptionProfile;
     	this.v_GridUsageType = p_GridUsageType;
-    	this.col_ProductionProfile = p_ProductionProfile;
+    	this.col_InitialProductionProfile = p_InitialProductionProfile;
     	this.v_MyGridBus = p_MyGridBus;
     	this.v_CommunityMemberType = p_CommunityMemberType;
     	this.v_MyEnergyCommunity = p_MyEnergyCommunity;
@@ -11932,16 +11937,20 @@ public class C_PojoIn_Household implements Serializable {
     	return v_EnergyUsageResolution;
     }
     
-    public LinkedHashMap<Integer,Double> f_Get_ConsumptionProfile() {
-    	return col_ConsumptionProfile;
+    public int f_Get_NumberOfDailyTimeSteps() {
+    	return v_NumberOfDailyTimeSteps;
+    }
+    
+    public ArrayList<Double> f_Get_InitialConsumptionProfile() {
+    	return col_InitialConsumptionProfile;
     }
 
     public OL_GridUsageType f_Get_GridUsageType() {
     	return v_GridUsageType;
     }
     
-    public LinkedHashMap<Integer,Double> f_Get_ProductionProfile() {
-    	return col_ProductionProfile;
+    public ArrayList<Double> f_Get_InitialProductionProfile() {
+    	return col_InitialProductionProfile;
     }
 
     public A_Logic_ElectricityGrid f_Get_MyGridBus() {
