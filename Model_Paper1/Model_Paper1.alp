@@ -11473,8 +11473,15 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 		<SimulationExperiment ActiveObjectClassId="1689246676490">
 			<Id>1689246676499</Id>
 			<Name><![CDATA[Simulation]]></Name>
+			<Import><![CDATA[/* Packages for setting the PowSyBl log level */
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+]]></Import>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
-			<InitialSetupCode><![CDATA[//This code box is located inside the setup() function body of the experiment Simulation class.
+			<InitialSetupCode><![CDATA[/* INTRO */
+
+//This code box is located inside the setup() function body of the experiment Simulation class.
 
 //The code here only runs once when the program window open. 
 //The program window open by clicking on the Anylogic green-circle run icon or by pressing F5.
@@ -11490,11 +11497,17 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 
 //The next (and last) built-in code line is:
 //runAndShowRoot_xjal();
+
+/* Setting the PowSyBl log level */
+ch.qos.logback.classic.Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+logger.setLevel(Level.ERROR);
 ]]></InitialSetupCode>
 			<MaximumMemory>512</MaximumMemory>
 			<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
 			<CustomGeneratorCode>new Random()</CustomGeneratorCode>
-			<BeforeEachExperimentRunCode><![CDATA[//This code box is located inside the reset() function body of the experiment Simulation class.
+			<BeforeEachExperimentRunCode><![CDATA[/* INTRO */
+
+//This code box is located inside the reset() function body of the experiment Simulation class.
 
 //The code here runs everytime the experiment resets.
 //The experiment resets by clicking on the stop button and then play button on the program window.
@@ -11505,7 +11518,9 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 
 //traceln("Anylogic engine state:" + getEngine().getState());
 ]]></BeforeEachExperimentRunCode>
-			<BeforeSimulationRunCode><![CDATA[//This code box is located inside the onBeforeSimulationRun_xjal( A___ScenarioManager root ) function body of the experiment Simulation class.
+			<BeforeSimulationRunCode><![CDATA[/* INTRO */
+
+//This code box is located inside the onBeforeSimulationRun_xjal( A___ScenarioManager root ) function body of the experiment Simulation class.
 //The top-level Agent was created before, and was passed to this function.
 
 //The code here runs everytime a top-level Agent is going to be simulated.
@@ -11521,7 +11536,9 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 
 //traceln("Anylogic engine state:" + getEngine().getState());
 ]]></BeforeSimulationRunCode>
-			<AfterSimulationRunCode><![CDATA[//This code box is located inside the onAfterSimulationRun_xjal( A___ScenarioManager root ) function body of the experiment Simulation class.
+			<AfterSimulationRunCode><![CDATA[/* INTRO */
+
+//This code box is located inside the onAfterSimulationRun_xjal( A___ScenarioManager root ) function body of the experiment Simulation class.
 
 //The code here runs everytime a top-level Agent was stopped being simulated, either by clicking on the stop button or by the arrival of the Anylogic engine stop time.
 //traceln("\n" + "After simulation run code box");
@@ -12144,11 +12161,25 @@ public class C_PojoOut_Household implements Serializable {
 }]]></Text>
 		</JavaClass>
 	</JavaClasses>
+	<ModelResources>
+		<Resource>
+			<Path><![CDATA[powsybl_starter-2023.2.4-jar-with-dependencies.jar]]></Path>
+			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+		</Resource>
+	</ModelResources>
     <RequiredLibraryReference>
 		<LibraryName><![CDATA[com.anylogic.libraries.modules.markup_descriptors]]></LibraryName>
 		<VersionMajor>1</VersionMajor>
 		<VersionMinor>0</VersionMinor>
 		<VersionBuild>0</VersionBuild>
     </RequiredLibraryReference>
+	<ClassPathEntry>
+		<ResourceReference>
+			<PackageName><![CDATA[model_paper1]]></PackageName>
+			<ClassName><![CDATA[powsybl_starter-2023.2.4-jar-with-dependencies.jar]]></ClassName>
+		</ResourceReference>
+		<Imported>true</Imported>
+		<Folder>false</Folder>
+	</ClassPathEntry>
 </Model>
 </AnyLogicWorkspace>
