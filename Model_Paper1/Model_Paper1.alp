@@ -675,7 +675,7 @@ return pojoInList;]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[List<C_PojoIn_ElectricityGridOperator>]]></ReturnType>
+					<ReturnType><![CDATA[List<C_PojoIn_GridOperator>]]></ReturnType>
 					<Id>1690571675702</Id>
 					<Name><![CDATA[f_LoadDistributionSystemOperatorsData]]></Name>
 					<X>770</X><Y>240</Y>
@@ -684,11 +684,11 @@ return pojoInList;]]></Body>
 					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[/* Create the PojoIn list */
-List<C_PojoIn_ElectricityGridOperator> pojoInList = new ArrayList<>();
+List<C_PojoIn_GridOperator> pojoInList = new ArrayList<>();
 
 /* TODO Populate the PojoIn list */
 //for( int i = 0 ; i < ? ; i++ ) {
-//	pojoInList.add(new C_PojoIn_ElectricityGridOperator());
+//	pojoInList.add(new C_PojoIn_GridOperator());
 //}
 
 return pojoInList;]]></Body>
@@ -721,7 +721,7 @@ Attention: The experiment is the only object that can create an engine. We canno
 					</Parameter>
 					<Parameter>
 						<Name><![CDATA[arg_PojoIn_DistributionSystemOperators]]></Name>
-						<Type><![CDATA[List<C_PojoIn_ElectricityGridOperator>]]></Type>
+						<Type><![CDATA[List<C_PojoIn_GridOperator>]]></Type>
 					</Parameter>
 					<Parameter>
 						<Name><![CDATA[arg_PojoIn_LVDistributionFeeders]]></Name>
@@ -3349,7 +3349,7 @@ arg_MyPojoInScenario.f_Get_PojoIn_Households().forEach( currHouseholdData -> add
 arg_MyPojoInScenario.f_Get_PojoIn_EnergyCommunities().forEach(currCommunityData -> add_pop_Logic_EnergyCommunities(currCommunityData));
 
 //Distribution system operator instantiation
-arg_MyPojoInScenario.f_Get_PojoIn_DistributionSystemOperators().forEach( currElectricityGridOperatorData -> add_pop_Logic_DistributionSystemOperators( currElectricityGridOperatorData ) );
+arg_MyPojoInScenario.f_Get_PojoIn_DistributionSystemOperators().forEach( currGridOperatorData -> add_pop_Logic_DistributionSystemOperators( currGridOperatorData ) );
 
 //LV distribution feeder instantiation
 arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectricityGridData -> add_pop_Logic_LVDistributionFeeders( currElectricityGridData ) );
@@ -3747,18 +3747,18 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A_Logic_ElectricityGridOperator]]></ClassName>
+						<ClassName><![CDATA[A_Logic_GridOperator]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[A_Logic_ElectricityGridOperator]]></ClassName>
+							<ClassName><![CDATA[A_Logic_GridOperator]]></ClassName>
 							<ItemName><![CDATA[1689261067003]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
 					<Parameters>
 						<Parameter>
-							<Name><![CDATA[p_MyPojoInElectricityGridOperator]]></Name>
+							<Name><![CDATA[p_MyPojoInGridOperator]]></Name>
 						</Parameter>
 					</Parameters>
 					<ReplicationFlag>true</ReplicationFlag>
@@ -4312,7 +4312,7 @@ arg_MyLogic.pop_Logic_Households.forEach( household -> add_pop_UI_Households( ho
 arg_MyLogic.pop_Logic_EnergyCommunities.forEach( community -> add_pop_UI_EnergyCommunities(community, arg_SelectedViewArea ) );
 
 //Distribution system operator UI instantiation
-arg_MyLogic.pop_Logic_DistributionSystemOperators.forEach( electricityGridOperator -> add_pop_UI_DistributionSystemOperators( electricityGridOperator, arg_SelectedViewArea ) );
+arg_MyLogic.pop_Logic_DistributionSystemOperators.forEach( GridOperator -> add_pop_UI_DistributionSystemOperators( GridOperator, arg_SelectedViewArea ) );
 
 //LV distribution feeder UI instantiation
 arg_MyLogic.pop_Logic_LVDistributionFeeders.forEach( electricityGrid -> add_pop_UI_LVDistributionFeeders( electricityGrid, arg_SelectedViewArea ) );
@@ -4602,18 +4602,18 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<ShowLabel>true</ShowLabel>
 					<ActiveObjectClass>
 						<PackageName><![CDATA[model_paper1]]></PackageName>
-						<ClassName><![CDATA[A_UI_ElectricityGridOperator]]></ClassName>
+						<ClassName><![CDATA[A_UI_GridOperator]]></ClassName>
 					</ActiveObjectClass>
 					<GenericParameterSubstitute>
 						<GenericParameterSubstituteReference>
 							<PackageName><![CDATA[model_paper1]]></PackageName>
-							<ClassName><![CDATA[A_UI_ElectricityGridOperator]]></ClassName>
+							<ClassName><![CDATA[A_UI_GridOperator]]></ClassName>
 							<ItemName><![CDATA[1689262910843]]></ItemName>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
 					<Parameters>
 						<Parameter>
-							<Name><![CDATA[p_MyMyElectricityGridOperator]]></Name>
+							<Name><![CDATA[p_MyMyGridOperator]]></Name>
 						</Parameter>
 						<Parameter>
 							<Name><![CDATA[p_ReferenceViewArea]]></Name>
@@ -7239,7 +7239,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689261067008</Id>
-			<Name><![CDATA[A_Logic_ElectricityGridOperator]]></Name>
+			<Name><![CDATA[A_Logic_GridOperator]]></Name>
 			<Description><![CDATA[Holds and handles the logic of an electricity grid operator.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -7338,29 +7338,29 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 			<Variables>
 				<Variable Class="PlainVariable">
 					<Id>1689447967144</Id>
-					<Name><![CDATA[v_MyPojoInElectricityGridOperator]]></Name>
+					<Name><![CDATA[v_MyPojoInGridOperator]]></Name>
 					<X>530</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="private" StaticVariable="false">
-						<Type><![CDATA[C_PojoIn_ElectricityGridOperator]]></Type>        
+						<Type><![CDATA[C_PojoIn_GridOperator]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[p_MyPojoInElectricityGridOperator]]></Code>
+							<Code><![CDATA[p_MyPojoInGridOperator]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689349083557</Id>
-					<Name><![CDATA[p_MyPojoInElectricityGridOperator]]></Name>
+					<Name><![CDATA[p_MyPojoInGridOperator]]></Name>
 					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[C_PojoIn_ElectricityGridOperator]]></Type>
+						<Type><![CDATA[C_PojoIn_GridOperator]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -7376,15 +7376,15 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[C_PojoIn_ElectricityGridOperator]]></ReturnType>
+					<ReturnType><![CDATA[C_PojoIn_GridOperator]]></ReturnType>
 					<Id>1689674334101</Id>
-					<Name><![CDATA[f_GetMyPojoInElectricityGridOperator]]></Name>
+					<Name><![CDATA[f_GetMyPojoInGridOperator]]></Name>
 					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return v_MyPojoInElectricityGridOperator;]]></Body>
+					<Body><![CDATA[return v_MyPojoInGridOperator;]]></Body>
 				</Function>
 			</Functions>
 			<AgentLinks>
@@ -7674,7 +7674,7 @@ link_MyEnergyCommunity.connectTo(f_GetMyPojoIn().f_Get_MyEnergyCommunity());
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[A_Logic_ElectricityGridOperator: holds and handles the logic of an electricity grid operator]]></Text>
+					<Text><![CDATA[A_Logic_GridOperator: holds and handles the logic of an electricity grid operator]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -10565,7 +10565,7 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 		<!--   =========   Active Object Class   ========  -->
 		<ActiveObjectClass>
 			<Id>1689262910848</Id>
-			<Name><![CDATA[A_UI_ElectricityGridOperator]]></Name>
+			<Name><![CDATA[A_UI_GridOperator]]></Name>
 			<Description><![CDATA[Holds and handles the UI of an electricity grid operator.
 @author Sharif_Khaleghparast
 @since 13_July_2023
@@ -10694,14 +10694,14 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 				</Variable>
 				<Variable Class="Parameter">
 					<Id>1689353865001</Id>
-					<Name><![CDATA[p_MyMyElectricityGridOperator]]></Name>
+					<Name><![CDATA[p_MyMyGridOperator]]></Name>
 					<X>290</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
-						<Type><![CDATA[A_Logic_ElectricityGridOperator]]></Type>
+						<Type><![CDATA[A_Logic_GridOperator]]></Type>
 						<UnitType><![CDATA[NONE]]></UnitType>
 						<SdArray>false</SdArray>
 						<ParameterEditor>
@@ -10738,15 +10738,15 @@ f_GetReferenceViewArea().navigateTo();]]></OnClickCode>
 			<Functions>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
-					<ReturnType><![CDATA[A_Logic_ElectricityGridOperator]]></ReturnType>
+					<ReturnType><![CDATA[A_Logic_GridOperator]]></ReturnType>
 					<Id>1689674102390</Id>
-					<Name><![CDATA[f_GetMyMyElectricityGridOperator]]></Name>
+					<Name><![CDATA[f_GetMyMyGridOperator]]></Name>
 					<X>770</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[return link_MyMyElectricityGridOperator.getConnectedAgent();]]></Body>
+					<Body><![CDATA[return link_MyMyGridOperator.getConnectedAgent();]]></Body>
 				</Function>
 				<Function AccessType="private" StaticFunction="false">
 					<ReturnModificator>VOID</ReturnModificator>
@@ -10829,7 +10829,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 				</AgentLink>
 				<AgentLink>
 					<Id>1689779091832</Id>
-					<Name><![CDATA[link_MyMyElectricityGridOperator]]></Name>
+					<Name><![CDATA[link_MyMyGridOperator]]></Name>
 					<X>530</X><Y>140</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
@@ -11116,7 +11116,7 @@ group_Background.setPos( arg_ViewArea.getX(), arg_ViewArea.getY() );]]></Body>
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[A_UI_ElectricityGridOperator: holds and handles the UI of an electricity grid operator]]></Text>
+					<Text><![CDATA[A_UI_GridOperator: holds and handles the UI of an electricity grid operator]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>14</Size>
@@ -11623,7 +11623,7 @@ public class C_PojoIn__Scenario implements Serializable {
 	// **********EMBEDDED STRUCTURE**********
 	private final List<C_PojoIn_Household> col_PojoIn_Households;
 	private final List<C_PojoIn_Community> col_PojoIn_EnergyCommunities;
-	private final List<C_PojoIn_ElectricityGridOperator> col_PojoIn_DistributionSystemOperators;
+	private final List<C_PojoIn_GridOperator> col_PojoIn_DistributionSystemOperators;
 	private final List<C_PojoIn_ElectricityGrid> col_PojoIn_LVDistributionFeeders;
 	
 	// **********CONSTRUCTORS**********
@@ -11634,7 +11634,7 @@ public class C_PojoIn__Scenario implements Serializable {
      * @param p_ProsumerHouseholdRatio Prosumer households to all households ratio
      * @param p_PojoIn_Households A list of C_PojoIn_Household POJOs
      * @param p_PojoIn_EnergyCommunities A list of C_PojoIn_Community POJOs
-     * @param p_PojoIn_DistributionSystemOperators A list of C_PojoIn_ElectricityGridOperator POJOs
+     * @param p_PojoIn_DistributionSystemOperators A list of C_PojoIn_GridOperator POJOs
      * @param p_PojoIn_LVDistributionFeeders A list of C_PojoIn_ElectricityGrid POJOs
      */
     public C_PojoIn__Scenario ( OL_EnergyUsageResolution p_EnergyUsageResolution
@@ -11642,7 +11642,7 @@ public class C_PojoIn__Scenario implements Serializable {
     							, double p_ProsumerHouseholdRatio
     						    , List<C_PojoIn_Household> p_PojoIn_Households
     						    , List<C_PojoIn_Community> p_PojoIn_EnergyCommunities
-    						    , List<C_PojoIn_ElectricityGridOperator> p_PojoIn_DistributionSystemOperators
+    						    , List<C_PojoIn_GridOperator> p_PojoIn_DistributionSystemOperators
     						    , List<C_PojoIn_ElectricityGrid> p_PojoIn_LVDistributionFeeders ) {
     	this.v_EnergyUsageResolution = p_EnergyUsageResolution;
     	this.v_NumberOfDailyTimeSteps = p_NumberOfDailyTimeSteps;
@@ -11674,7 +11674,7 @@ public class C_PojoIn__Scenario implements Serializable {
     	return col_PojoIn_EnergyCommunities;
     }
     
-    public List<C_PojoIn_ElectricityGridOperator> f_Get_PojoIn_DistributionSystemOperators() {
+    public List<C_PojoIn_GridOperator> f_Get_PojoIn_DistributionSystemOperators() {
     	return col_PojoIn_DistributionSystemOperators;
     }
     
@@ -11719,7 +11719,7 @@ public class C_PojoOut__Scenario implements Serializable {
 	
 	private List<C_PojoOut_Household> col_PojoOut_Households;
 	private List<C_PojoOut_Community> col_PojoOut_EnergyCommunities;
-	private List<C_PojoOut_ElectricityGridOperator> col_PojoOut_DistributionSystemOperators;
+	private List<C_PojoOut_GridOperator> col_PojoOut_DistributionSystemOperators;
 	private List<C_PojoOut_ElectricityGrid> col_PojoOut_LVDistributionFeeders;
 		
 	// **********CONSTRUCTORS**********
@@ -11745,7 +11745,7 @@ public class C_PojoOut__Scenario implements Serializable {
 	    return col_PojoOut_EnergyCommunities;
 	}
 	    
-	public List<C_PojoOut_ElectricityGridOperator> f_Get_PojoOut_DistributionSystemOperators() {
+	public List<C_PojoOut_GridOperator> f_Get_PojoOut_DistributionSystemOperators() {
 	    return col_PojoOut_DistributionSystemOperators;
 	}
 	    
@@ -11760,7 +11760,7 @@ public class C_PojoOut__Scenario implements Serializable {
 		
 		arg_MyScenario.pop_Logic_Households.forEach(currHousehold -> col_PojoOut_Households.add(new C_PojoOut_Household(currHousehold)));
 		arg_MyScenario.pop_Logic_EnergyCommunities.forEach(currCommunity -> col_PojoOut_EnergyCommunities.add(new C_PojoOut_Community(currCommunity)));
-		arg_MyScenario.pop_Logic_DistributionSystemOperators.forEach(currElectricityGridOperator -> col_PojoOut_DistributionSystemOperators.add(new C_PojoOut_ElectricityGridOperator(currElectricityGridOperator)));
+		arg_MyScenario.pop_Logic_DistributionSystemOperators.forEach(currGridOperator -> col_PojoOut_DistributionSystemOperators.add(new C_PojoOut_GridOperator(currGridOperator)));
 		arg_MyScenario.pop_Logic_LVDistributionFeeders.forEach(currElectricityGrid -> col_PojoOut_LVDistributionFeeders.add(new C_PojoOut_ElectricityGrid(currElectricityGrid)));
 	}
 
@@ -11842,19 +11842,19 @@ public class C_PojoIn_ElectricityGrid implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689268204129</Id>
-			<Name><![CDATA[C_PojoIn_ElectricityGridOperator]]></Name>
+			<Name><![CDATA[C_PojoIn_GridOperator]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the input data of an electricity grid operator in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * C_PojoIn_ElectricityGridOperator
+ * C_PojoIn_GridOperator
  */	
-public class C_PojoIn_ElectricityGridOperator implements Serializable {
+public class C_PojoIn_GridOperator implements Serializable {
 
     /**
      * Default constructor
      */
-    public C_PojoIn_ElectricityGridOperator() {
+    public C_PojoIn_GridOperator() {
     }
 
 	@Override
@@ -12067,30 +12067,30 @@ public class C_PojoOut_ElectricityGrid implements Serializable {
 		<!--   =========   Java Class   ========  -->
 		<JavaClass>
 			<Id>1689268386814</Id>
-			<Name><![CDATA[C_PojoOut_ElectricityGridOperator]]></Name>
+			<Name><![CDATA[C_PojoOut_GridOperator]]></Name>
 			<Description><![CDATA[Holds and handles database POJO classes for the output data of an electricity grid operator in this POJO class.  
 @author Sharif_Khaleghparast
 @since 13_July_2023]]></Description>
 			<Text><![CDATA[/**
- * C_PojoOut_ElectricityGridOperator
+ * C_PojoOut_GridOperator
  */	
-public class C_PojoOut_ElectricityGridOperator implements Serializable {
+public class C_PojoOut_GridOperator implements Serializable {
 
 	// **********VARIABLES**********
-	private final A_Logic_ElectricityGridOperator v_MyElectricityGridOperator;
+	private final A_Logic_GridOperator v_MyGridOperator;
 	
 	// **********CONSTRUCTORS**********
     /**
      * Create an instance of an electricity grid operator output
-     * @param p_MyElectricityGridOperator
+     * @param p_MyGridOperator
      */
-    public C_PojoOut_ElectricityGridOperator(A_Logic_ElectricityGridOperator p_MyElectricityGridOperator) {
-    	this.v_MyElectricityGridOperator = p_MyElectricityGridOperator;
+    public C_PojoOut_GridOperator(A_Logic_GridOperator p_MyGridOperator) {
+    	this.v_MyGridOperator = p_MyGridOperator;
     }
 
 	// **********GETTERS**********
-    public A_Logic_ElectricityGridOperator f_GetMyElectricityGridOperator() {
-    	return v_MyElectricityGridOperator;
+    public A_Logic_GridOperator f_GetMyGridOperator() {
+    	return v_MyGridOperator;
     }
     
 	/**
