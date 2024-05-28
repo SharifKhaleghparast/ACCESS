@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.4.202307131101" AlpVersion="8.8.2">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.6.202312140503" AlpVersion="8.8.3">
 <Model>
 	<Id>1689246676487</Id>
 	<Name><![CDATA[Model_Paper1]]></Name>
@@ -101,6 +101,11 @@ Model purpose: showing the effect of bottom-up collaboration on the grid status.
 			<Import><![CDATA[import java.util.stream.Collectors;
 import java.lang.reflect.Array;]]></Import>
 			<StartupCode><![CDATA[/* Intro */
+
+//The On startup code is executed first on the innermost agents and then up the model tree. 
+//The On startup code of the top-level agent is executed the last: after all of the agents throughout the entire model have been constructed, connected, and initialized, and before anything else is done. 
+//This is a place for some additional initialization and starting agents’ activities such as events.
+//[ This seems to be the only execution step that is done bottom-up. ]
 
 //The code here runs everytime this top-level Agent is being simulated in the Anylogic engine.
 traceln("\n" + "Top_level Agent On startup code box");
@@ -12165,6 +12170,7 @@ public class C_PojoOut_Household implements Serializable {
 		<Resource>
 			<Path><![CDATA[powsybl_starter-2023.2.4-jar-with-dependencies.jar]]></Path>
 			<ReferencedFromUserCode>false</ReferencedFromUserCode>
+			<Location>FILE_SYSTEM</Location>
 		</Resource>
 	</ModelResources>
     <RequiredLibraryReference>
