@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AnyLogicWorkspace splitVersion="1"
+                   WorkspaceVersion="1.9"
+                   AnyLogicVersion="8.9.0.202404161238"
+                   AlpVersion="8.9.0">
+	<Model>
+		<Id>1689246676487</Id>
+		<Name><![CDATA[Model_Paper1]]></Name>
+		<Description><![CDATA[This model comprise all the scenarios I want to discuss in my first Ph.D. paper. It is associated with a 3-layer architecture and naming convention. 
+
+Model purpose: showing the effect of bottom-up collaboration on the grid status.
+
+@author Sharif_Khaleghparast
+@since 13_July_2023
+@see Github_repository
+]]></Description>
+		<EngineVersion>6</EngineVersion>
+		<JavaPackageName><![CDATA[model_paper1]]></JavaPackageName>
+		<ModelTimeUnit>Minute</ModelTimeUnit>
+		<OptionLists>
+			<OptionList>
+				<Id>1689703136117</Id>
+				<Name><![CDATA[OL_CommunityMemberType]]></Name>
+				<Description><![CDATA[@author Sharif_Khaleghparast
+@since 18_July_2023]]></Description>
+				<Option>
+					<Id>1689703136119</Id>
+					<Name><![CDATA[COLLABORATIVE]]></Name>
+				</Option>
+				<Option>
+					<Id>1689703136121</Id>
+					<Name><![CDATA[NON_COLLABORATIVE]]></Name>
+				</Option>
+				<Option>
+					<Id>1689703215915</Id>
+					<Name><![CDATA[NON_MEMBER]]></Name>
+				</Option>
+			</OptionList>
+			<OptionList>
+				<Id>1689703148874</Id>
+				<Name><![CDATA[OL_GridUsageType]]></Name>
+				<Description><![CDATA[@author Sharif_Khaleghparast
+@since 18_July_2023]]></Description>
+				<Option>
+					<Id>1689703148876</Id>
+					<Name><![CDATA[CONSUMER]]></Name>
+				</Option>
+				<Option>
+					<Id>1689703148878</Id>
+					<Name><![CDATA[PROSUMER]]></Name>
+				</Option>
+			</OptionList>
+			<OptionList>
+				<Id>1690369068047</Id>
+				<Name><![CDATA[OL_EnergyUsageResolution]]></Name>
+				<Option>
+					<Id>1690369068048</Id>
+					<Name><![CDATA[MINUTES]]></Name>
+				</Option>
+				<Option>
+					<Id>1690369068049</Id>
+					<Name><![CDATA[QUARTERS]]></Name>
+				</Option>
+				<Option>
+					<Id>1690369068050</Id>
+					<Name><![CDATA[HOURS]]></Name>
+				</Option>
+			</OptionList>
+			<OptionList>
+				<Id>1691941824777</Id>
+				<Name><![CDATA[OL_AgentType]]></Name>
+				<Option>
+					<Id>1691941825226</Id>
+					<Name><![CDATA[HOUSEHOLD]]></Name>
+				</Option>
+				<Option>
+					<Id>1691941893025</Id>
+					<Name><![CDATA[ENERGY_COMMUNITY]]></Name>
+				</Option>
+				<Option>
+					<Id>1691941936777</Id>
+					<Name><![CDATA[DISTRIBUTION_SYSTEM_OPERATOR]]></Name>
+				</Option>
+				<Option>
+					<Id>1691941958023</Id>
+					<Name><![CDATA[LV_DISTRIBUTION_FEEDER]]></Name>
+				</Option>
+			</OptionList>
+		</OptionLists>
+		<ActiveObjectClasses/>
+		<DifferentialEquationsMethod>EULER</DifferentialEquationsMethod>
+		<MixedEquationsMethod>RK45_NEWTON</MixedEquationsMethod>
+		<AlgebraicEquationsMethod>MODIFIED_NEWTON</AlgebraicEquationsMethod>
+		<AbsoluteAccuracy>1.0E-5</AbsoluteAccuracy>
+		<FixedTimeStep>0.001</FixedTimeStep>
+		<RelativeAccuracy>1.0E-5</RelativeAccuracy>
+		<TimeAccuracy>1.0E-5</TimeAccuracy>
+		<Frame>
+			<Width>1000</Width>
+			<Height>600</Height>
+		</Frame>
+		<Database>
+			<Logging>false</Logging>
+			<AutoExport>false</AutoExport>
+			<ShutdownCompact>false</ShutdownCompact>
+			<ImportSettings/>
+			<ExportSettings/>
+		</Database>
+		<RunConfiguration ActiveObjectClassId="1689246676490">
+			<Id>1689246676502</Id>
+			<Name><![CDATA[RunConfiguration]]></Name>
+			<MaximumMemory>512</MaximumMemory>
+			<ModelTimeProperties>
+				<StopOption>Stop at specified time</StopOption>
+				<InitialDate>1689206400000</InitialDate>
+				<InitialTime>0.0</InitialTime>
+				<FinalDate>1691884800000</FinalDate>
+				<FinalTime>100.0</FinalTime>
+			</ModelTimeProperties>
+			<AnimationProperties>
+				<StopNever>true</StopNever>
+				<ExecutionMode>realTimeScaled</ExecutionMode>
+				<RealTimeScale>1.0</RealTimeScale>
+				<EnableZoomAndPanning>true</EnableZoomAndPanning>
+				<EnableDeveloperPanel>false</EnableDeveloperPanel>
+				<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
+			</AnimationProperties>
+			<Inputs/>
+			<Outputs/>
+		</RunConfiguration>
+		<JavaClasses>
+			<JavaClass>
+				<Id>1689264100926</Id>
+				<Name><![CDATA[C_PojoIn__Scenario]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the input data of agents and classes in this POJOs holder class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+			<JavaClass>
+				<Id>1689264269520</Id>
+				<Name><![CDATA[C_PojoOut__Scenario]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the output data of agents and classes in this POJOs class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+			<JavaClass>
+				<Id>1689267819650</Id>
+				<Name><![CDATA[C_PojoIn_Community]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the input data of a community in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+			<JavaClass>
+				<Id>1689267982610</Id>
+				<Name><![CDATA[C_PojoIn_ElectricityGrid]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the input data of an electricity grid in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+			<JavaClass>
+				<Id>1689268204129</Id>
+				<Name><![CDATA[C_PojoIn_GridOperator]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the input data of an electricity grid operator in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+			<JavaClass>
+				<Id>1689268300353</Id>
+				<Name><![CDATA[C_PojoIn_Household]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the input data of a household in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+			<JavaClass>
+				<Id>1689268386722</Id>
+				<Name><![CDATA[C_PojoOut_Community]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the output data of a community in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+			<JavaClass>
+				<Id>1689268386789</Id>
+				<Name><![CDATA[C_PojoOut_ElectricityGrid]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the output data of an electricity grid in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+			<JavaClass>
+				<Id>1689268386814</Id>
+				<Name><![CDATA[C_PojoOut_GridOperator]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the output data of an electricity grid operator in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+			<JavaClass>
+				<Id>1689268386829</Id>
+				<Name><![CDATA[C_PojoOut_Household]]></Name>
+				<Description><![CDATA[Holds and handles database POJO classes for the output data of a household in this POJO class.  
+@author Sharif_Khaleghparast
+@since 13_July_2023]]></Description>
+			</JavaClass>
+		</JavaClasses>
+		<RequiredLibraryReference>
+			<LibraryName>com.anylogic.libraries.modules.markup_descriptors</LibraryName>
+			<VersionMajor>1</VersionMajor>
+			<VersionMinor>0</VersionMinor>
+			<VersionBuild>0</VersionBuild>
+		</RequiredLibraryReference>
+		<ClassPathEntry>
+			<ResourceReference>
+				<PackageName>model_paper1</PackageName>
+				<ClassName>powsybl_starter-2023.2.4-jar-with-dependencies.jar</ClassName>
+			</ResourceReference>
+			<Imported>true</Imported>
+			<Folder>false</Folder>
+		</ClassPathEntry>
+	</Model>
+</AnyLogicWorkspace>

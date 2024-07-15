@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Experiments>
+	<SimulationExperiment ActiveObjectClassId="1689246676490">
+		<Id>1689246676499</Id>
+		<Name><![CDATA[Simulation]]></Name>
+		<Import><![CDATA[/* Packages for setting the PowSyBl log level */
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+]]></Import>
+		<CommandLineArguments/>
+		<InitialSetupCode>/* INTRO */
+
+//This code box is located inside the setup() function body of the experiment Simulation class.
+
+//The code here only runs once when the program window open. 
+//The program window open by clicking on the Anylogic green-circle run icon or by pressing F5.
+//traceln("Initial experiment setup code box");
+
+//This experiment and the Anylogic engine objects was created before:
+//traceln("Experiment host: " + getExperimentHost() + "\n" +
+//		"Experiment: " + getExperiment() + "\n" + 
+//		"Anylogic engine: " + getEngine());
+
+//No top-level Agent exists in the engine yet. The engine's root is null:
+//traceln("top-level Agent inside the Anylogic engine: " + getEngine().getRoot());
+
+//The next (and last) built-in code line is:
+//runAndShowRoot_xjal();
+
+/* Setting the PowSyBl log level */
+ch.qos.logback.classic.Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+logger.setLevel(Level.ERROR);
+</InitialSetupCode>
+		<MaximumMemory>512</MaximumMemory>
+		<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
+		<CustomGeneratorCode>new Random()</CustomGeneratorCode>
+		<BeforeEachExperimentRunCode>/* INTRO */
+
+//This code box is located inside the reset() function body of the experiment Simulation class.
+
+//The code here runs everytime the experiment resets.
+//The experiment resets by clicking on the stop button and then play button on the program window.
+//traceln("\n" + "Before each experiment run code box");
+
+//Still, no top-level Agent exists in the engine. The engine's root is null:
+//traceln("top-level Agent inside the Anylogic engine: " + getEngine().getRoot());
+
+//traceln("Anylogic engine state:" + getEngine().getState());
+</BeforeEachExperimentRunCode>
+		<BeforeSimulationRunCode>/* INTRO */
+
+//This code box is located inside the onBeforeSimulationRun_xjal( A___ScenarioManager root ) function body of the experiment Simulation class.
+//The top-level Agent was created before, and was passed to this function.
+
+//The code here runs everytime a top-level Agent is going to be simulated.
+//traceln("\n" + "Before simulation run code box");
+
+//This code box is the first point in this experiment that the top-level Agent can be accessed.
+//traceln("top-level Agent created: " + root);
+
+//root parameters' default values can be overriden here, before root is passed to the engine!
+
+//Still, no top-level Agent exists in the engine. The engine's root is null:
+//traceln("top-level Agent inside the Anylogic engine: " + getEngine().getRoot());
+
+//traceln("Anylogic engine state:" + getEngine().getState());
+</BeforeSimulationRunCode>
+		<AfterSimulationRunCode>/* INTRO */
+
+//This code box is located inside the onAfterSimulationRun_xjal( A___ScenarioManager root ) function body of the experiment Simulation class.
+
+//The code here runs everytime a top-level Agent was stopped being simulated, either by clicking on the stop button or by the arrival of the Anylogic engine stop time.
+//traceln("\n" + "After simulation run code box");
+
+//The top-level Agent still exists in the engine and it is accessible: 
+//traceln("top-level Agent: " + root);
+//traceln("top-level Agent inside the Anylogic engine: " + getEngine().getRoot());
+</AfterSimulationRunCode>
+		<SeedValue>1</SeedValue>
+		<SelectionModeForSimultaneousEvents>LIFO</SelectionModeForSimultaneousEvents>
+		<VmArgs/>
+		<LoadRootFromSnapshot>false</LoadRootFromSnapshot>
+		<Presentation>
+			<Text>
+				<Id>1689246676501</Id>
+				<Name><![CDATA[text]]></Name>
+				<X>50</X>
+				<Y>30</Y>
+				<Label>
+					<X>10</X>
+					<Y>0</Y>
+				</Label>
+				<PublicFlag>true</PublicFlag>
+				<PresentationFlag>true</PresentationFlag>
+				<ShowLabel>false</ShowLabel>
+				<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+				<EmbeddedIcon>false</EmbeddedIcon>
+				<Z>0</Z>
+				<Rotation>0.0</Rotation>
+				<Color>-12490271</Color>
+				<Text><![CDATA[Model_Paper1]]></Text>
+				<Font>
+					<Name><![CDATA[SansSerif]]></Name>
+					<Size>24</Size>
+					<Style>0</Style>
+				</Font>
+				<Alignment>LEFT</Alignment>
+			</Text>
+		</Presentation>
+		<Parameters>
+			<Parameter>
+				<ParameterName>p_EnergyUsageResolution</ParameterName>
+			</Parameter>
+			<Parameter>
+				<ParameterName>p_HouseholdsConsumptionProfiles</ParameterName>
+			</Parameter>
+			<Parameter>
+				<ParameterName>p_HouseholdsProductionProfiles</ParameterName>
+			</Parameter>
+			<Parameter>
+				<ParameterName>p_HouseholdPopulation</ParameterName>
+			</Parameter>
+			<Parameter>
+				<ParameterName>p_HouseholdsGridUsageTypes</ParameterName>
+			</Parameter>
+			<Parameter>
+				<ParameterName>p_ProsumerHouseholdRatio</ParameterName>
+			</Parameter>
+			<Parameter>
+				<ParameterName>p_NumberOfDailyTimeSteps</ParameterName>
+			</Parameter>
+		</Parameters>
+		<PresentationProperties>
+			<EnableZoomAndPanning>false</EnableZoomAndPanning>
+			<ExecutionMode>realTimeScaled</ExecutionMode>
+			<Title>Model_Paper1 : Simulation</Title>
+			<EnableDeveloperPanel>true</EnableDeveloperPanel>
+			<ShowDeveloperPanelOnStart>true</ShowDeveloperPanelOnStart>
+			<RealTimeScale>1.0</RealTimeScale>
+		</PresentationProperties>
+		<ModelTimeProperties>
+			<StopOption>Never</StopOption>
+			<InitialDate>1689206400000</InitialDate>
+			<InitialTime>0.0</InitialTime>
+			<FinalDate>1689207780000</FinalDate>
+			<FinalTime>23.0</FinalTime>
+		</ModelTimeProperties>
+		<BypassInitialScreen>true</BypassInitialScreen>
+	</SimulationExperiment>
+</Experiments>
