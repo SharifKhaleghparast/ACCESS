@@ -4,7 +4,7 @@
 	         AnyLogic Project File 
 *************************************************	         
 -->
-<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.8.6.202312140503" AlpVersion="8.8.3">
+<AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.9.0.202404161238" AlpVersion="8.9.0">
 <Model>
 	<Id>1689246676487</Id>
 	<Name><![CDATA[Model_Paper1]]></Name>
@@ -3629,14 +3629,14 @@ arg_MyPojoInScenario.f_Get_PojoIn_LVDistributionFeeders().forEach( currElectrici
 						<Id>1692038145668</Id>
 						<Name><![CDATA[statistics_ElectricityConsumption]]></Name>
 						<Type>sum</Type>
-						<Expression><![CDATA[item.f_GetInitialConsumptionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression>
+						<Expression><![CDATA[agent.f_GetInitialConsumptionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression>
 						<Condition><![CDATA[]]></Condition>
 					</StatisticsItem>
 					<StatisticsItem>
 						<Id>1692039726437</Id>
 						<Name><![CDATA[statistics_ElectricityProduction]]></Name>
 						<Type>sum</Type>
-						<Expression><![CDATA[item.f_GetInitialProductionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression>
+						<Expression><![CDATA[agent.f_GetInitialProductionProfile().get( (int) time( getEngine().getTimeUnit() ) ) ]]></Expression>
 						<Condition><![CDATA[]]></Condition>
 					</StatisticsItem>
 					<InEnvironment>true</InEnvironment>	
