@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Variables>
+	<Variable Class="PlainVariable">
+		<Id>1689863748025</Id>
+		<Name><![CDATA[v_Engine]]></Name>
+		<Description><![CDATA[This is the Anylogic engine that simulate a top-level Agent (root). 
+
+1) The Anylogic engine is created by an experiment. The top-level Agent is also created by that experiment. The Anylogic engine has already contained the top-level Agent when top-level Agent is On startup.
+
+2) The experiment has a function that passes the Anylogic engine to the top-level Agent at its startup:
+public A___ScenarioManager createRoot( Engine engine ) {
+    return new A___ScenarioManager( engine, null, null );
+}
+
+1,2) Thus, the Anylogic engine and the top-level Agent are bidirectionally linked to each other.
+
+3) The experiment pass the top-level Agent to the Anylogic engine, and ask the Anylogic engine to simulate the top-level Agent. The experiment does not contain the Anylogic model. Thus "getExperiment().getRoot();" does not exist.
+
+4) The experiment and the Anylogic engine are bidirectionally linked to each other, because both below functions exist:
+getEngine().getExperiment();
+getExperiment().getEngine();
+
+1,2,3,4) The top-level Agent has a link to the experiment, but not the opposite.
+
+6) The experiment may interact with an optimization engine (i.e. OptQuest, jMetal, etc.) as well. The optimization engine only interact with the experiment. The optimization engine does not interact with the Anylogic engine or the top-level Agent. 
+
+7) The sequence of the run initiation:
+1) Experiment --create--> Anylogic engine
+2) Experiment --create-->  top-level Agent
+3) Experiment --ask to simulate the  top-level Agent from--> Anylogic engine
+4) Anylogic engine --simulate--> top-level Agent
+]]></Description>
+		<X>530</X>
+		<Y>140</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true"
+              Constant="true"
+              AccessType="private"
+              StaticVariable="false">
+			<Type><![CDATA[Engine]]></Type>
+			<InitialValue Class="CodeValue">
+				<Code><![CDATA[getEngine()]]></Code>
+			</InitialValue>
+		</Properties>
+	</Variable>
+	<Variable Class="PlainVariable">
+		<Id>1690035690548</Id>
+		<Name><![CDATA[v_SelectedViewArea]]></Name>
+		<X>530</X>
+		<Y>160</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true"
+              Constant="false"
+              AccessType="private"
+              StaticVariable="false">
+			<Type><![CDATA[ViewArea]]></Type>
+			<InitialValue Class="CodeValue">
+				<Code><![CDATA[viewArea_Overview]]></Code>
+			</InitialValue>
+		</Properties>
+	</Variable>
+	<Variable Class="PlainVariable">
+		<Id>1690562757756</Id>
+		<Name><![CDATA[v_HouseholdConsumptionProfileCB]]></Name>
+		<X>530</X>
+		<Y>200</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true"
+              Constant="false"
+              AccessType="private"
+              StaticVariable="false">
+			<Type><![CDATA[ShapeComboBox]]></Type>
+		</Properties>
+	</Variable>
+	<Variable Class="PlainVariable">
+		<Id>1690562782453</Id>
+		<Name><![CDATA[v_HouseholdProductionProfileCB]]></Name>
+		<X>530</X>
+		<Y>220</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true"
+              Constant="false"
+              AccessType="private"
+              StaticVariable="false">
+			<Type><![CDATA[ShapeComboBox]]></Type>
+		</Properties>
+	</Variable>
+	<Variable Class="Parameter">
+		<Id>1690558786805</Id>
+		<Name><![CDATA[p_EnergyUsageResolution]]></Name>
+		<X>290</X>
+		<Y>140</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+			<Type><![CDATA[OL_EnergyUsageResolution]]></Type>
+			<UnitType>NONE</UnitType>
+			<SdArray>false</SdArray>
+			<ParameterEditor>
+				<Id>1690558786803</Id>
+				<EditorContolType>TEXT_BOX</EditorContolType>
+				<MinSliderValue>0</MinSliderValue>
+				<MaxSliderValue>100</MaxSliderValue>
+				<DelimeterType>NO_DELIMETER</DelimeterType>
+			</ParameterEditor>
+		</Properties>
+	</Variable>
+	<Variable Class="Parameter">
+		<Id>1690559676374</Id>
+		<Name><![CDATA[p_HouseholdsConsumptionProfiles]]></Name>
+		<X>290</X>
+		<Y>200</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+			<Type><![CDATA[ArrayList<ArrayList<Double>>]]></Type>
+			<UnitType>NONE</UnitType>
+			<SdArray>false</SdArray>
+			<ParameterEditor>
+				<Id>1690559676372</Id>
+				<Label><![CDATA[p_HouseholdsConsumptionProfiles]]></Label>
+				<EditorContolType>TEXT_BOX</EditorContolType>
+				<MinSliderValue>0</MinSliderValue>
+				<MaxSliderValue>100</MaxSliderValue>
+				<DelimeterType>NO_DELIMETER</DelimeterType>
+			</ParameterEditor>
+		</Properties>
+	</Variable>
+	<Variable Class="Parameter">
+		<Id>1690561618963</Id>
+		<Name><![CDATA[p_HouseholdsProductionProfiles]]></Name>
+		<X>290</X>
+		<Y>260</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+			<Type><![CDATA[ArrayList<ArrayList<Double>>]]></Type>
+			<UnitType>NONE</UnitType>
+			<SdArray>false</SdArray>
+			<ParameterEditor>
+				<Id>1690561618961</Id>
+				<Label><![CDATA[p_HouseholdProductionProfileCB]]></Label>
+				<EditorContolType>TEXT_BOX</EditorContolType>
+				<MinSliderValue>0</MinSliderValue>
+				<MaxSliderValue>100</MaxSliderValue>
+				<DelimeterType>NO_DELIMETER</DelimeterType>
+			</ParameterEditor>
+		</Properties>
+	</Variable>
+	<Variable Class="Parameter">
+		<Id>1690568577254</Id>
+		<Name><![CDATA[p_HouseholdPopulation]]></Name>
+		<X>290</X>
+		<Y>180</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+			<Type><![CDATA[int]]></Type>
+			<UnitType>NONE</UnitType>
+			<SdArray>false</SdArray>
+			<ParameterEditor>
+				<Id>1690568577252</Id>
+				<EditorContolType>TEXT_BOX</EditorContolType>
+				<MinSliderValue>0</MinSliderValue>
+				<MaxSliderValue>100</MaxSliderValue>
+				<DelimeterType>NO_DELIMETER</DelimeterType>
+			</ParameterEditor>
+		</Properties>
+	</Variable>
+	<Variable Class="Parameter">
+		<Id>1691585693291</Id>
+		<Name><![CDATA[p_HouseholdsGridUsageTypes]]></Name>
+		<X>290</X>
+		<Y>240</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+			<Type><![CDATA[List<OL_GridUsageType>]]></Type>
+			<UnitType>NONE</UnitType>
+			<SdArray>false</SdArray>
+			<ParameterEditor>
+				<Id>1691585693289</Id>
+				<EditorContolType>TEXT_BOX</EditorContolType>
+				<MinSliderValue>0</MinSliderValue>
+				<MaxSliderValue>100</MaxSliderValue>
+				<DelimeterType>NO_DELIMETER</DelimeterType>
+			</ParameterEditor>
+		</Properties>
+	</Variable>
+	<Variable Class="Parameter">
+		<Id>1691588920682</Id>
+		<Name><![CDATA[p_ProsumerHouseholdRatio]]></Name>
+		<X>290</X>
+		<Y>220</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+			<Type><![CDATA[double]]></Type>
+			<UnitType>NONE</UnitType>
+			<UnitOfValue Class="RateUnits">PER_SECOND</UnitOfValue>
+			<SdArray>false</SdArray>
+			<ParameterEditor>
+				<Id>1691588920680</Id>
+				<EditorContolType>TEXT_BOX</EditorContolType>
+				<MinSliderValue>0</MinSliderValue>
+				<MaxSliderValue>100</MaxSliderValue>
+				<DelimeterType>NO_DELIMETER</DelimeterType>
+			</ParameterEditor>
+		</Properties>
+	</Variable>
+	<Variable Class="Parameter">
+		<Id>1692107047223</Id>
+		<Name><![CDATA[p_NumberOfDailyTimeSteps]]></Name>
+		<X>290</X>
+		<Y>160</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+			<Type><![CDATA[int]]></Type>
+			<UnitType>NONE</UnitType>
+			<SdArray>false</SdArray>
+			<ParameterEditor>
+				<Id>1692107047221</Id>
+				<EditorContolType>TEXT_BOX</EditorContolType>
+				<MinSliderValue>0</MinSliderValue>
+				<MaxSliderValue>100</MaxSliderValue>
+				<DelimeterType>NO_DELIMETER</DelimeterType>
+			</ParameterEditor>
+		</Properties>
+	</Variable>
+	<Variable Class="CollectionVariable">
+		<Id>1689761039735</Id>
+		<Name><![CDATA[col_PojoInScenarios]]></Name>
+		<Description><![CDATA[@author Sharif_Khaleghparast
+@since 19_July_2023]]></Description>
+		<X>50</X>
+		<Y>140</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
+			<CollectionClass>ArrayList</CollectionClass>
+			<ElementClass>C_PojoIn__Scenario</ElementClass>
+			<ValueElementClass>String</ValueElementClass>
+		</Properties>
+	</Variable>
+	<Variable Class="CollectionVariable">
+		<Id>1689761799728</Id>
+		<Name><![CDATA[col_PojoOutScenarios]]></Name>
+		<Description><![CDATA[@author Sharif_Khaleghparast
+@since 19_July_2023]]></Description>
+		<X>50</X>
+		<Y>200</Y>
+		<Label>
+			<X>10</X>
+			<Y>0</Y>
+		</Label>
+		<PublicFlag>false</PublicFlag>
+		<PresentationFlag>true</PresentationFlag>
+		<ShowLabel>true</ShowLabel>
+		<Properties SaveInSnapshot="true" AccessType="private" StaticVariable="false">
+			<CollectionClass>ArrayList</CollectionClass>
+			<ElementClass>C_PojoOut__Scenario</ElementClass>
+			<ValueElementClass>String</ValueElementClass>
+		</Properties>
+	</Variable>
+</Variables>
