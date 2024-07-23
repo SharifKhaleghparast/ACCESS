@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ModelResources>
 	<Resource>
-		<Path>powsybl_starter-2023.2.4-jar-with-dependencies.jar</Path>
+		<Path>powsybl_starter-2024.2.0-jar-with-dependencies.jar</Path>
 		<ReferencedFromUserCode>false</ReferencedFromUserCode>
 		<Location>FILE_SYSTEM</Location>
 	</Resource>
