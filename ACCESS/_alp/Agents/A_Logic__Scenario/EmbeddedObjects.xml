@@ -36,7 +36,7 @@
 		</Replication>
 		<CollectionType>ARRAY_LIST_BASED</CollectionType>
 		<InEnvironment>true</InEnvironment>
-		<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+		<InitialLocationType>XYZ</InitialLocationType>
 		<XCode Class="CodeValue">
 			<Code><![CDATA[0]]></Code>
 		</XCode>
@@ -52,12 +52,6 @@
 		<RowCode Class="CodeValue">
 			<Code><![CDATA[0]]></Code>
 		</RowCode>
-		<LatitudeCode Class="CodeValue">
-			<Code><![CDATA[0]]></Code>
-		</LatitudeCode>
-		<LongitudeCode Class="CodeValue">
-			<Code><![CDATA[0]]></Code>
-		</LongitudeCode>
 		<LocationNameCode Class="CodeValue">
 			<Code><![CDATA[""]]></Code>
 		</LocationNameCode>
@@ -118,7 +112,7 @@
 			<Condition/>
 		</StatisticsItem>
 		<InEnvironment>true</InEnvironment>
-		<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+		<InitialLocationType>XYZ</InitialLocationType>
 		<XCode Class="CodeValue">
 			<Code><![CDATA[0]]></Code>
 		</XCode>
@@ -134,12 +128,6 @@
 		<RowCode Class="CodeValue">
 			<Code><![CDATA[0]]></Code>
 		</RowCode>
-		<LatitudeCode Class="CodeValue">
-			<Code><![CDATA[0]]></Code>
-		</LatitudeCode>
-		<LongitudeCode Class="CodeValue">
-			<Code><![CDATA[0]]></Code>
-		</LongitudeCode>
 		<LocationNameCode Class="CodeValue">
 			<Code><![CDATA[""]]></Code>
 		</LocationNameCode>
@@ -186,7 +174,7 @@
 		</Replication>
 		<CollectionType>ARRAY_LIST_BASED</CollectionType>
 		<InEnvironment>true</InEnvironment>
-		<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+		<InitialLocationType>XYZ</InitialLocationType>
 		<XCode Class="CodeValue">
 			<Code><![CDATA[0]]></Code>
 		</XCode>
@@ -202,12 +190,6 @@
 		<RowCode Class="CodeValue">
 			<Code><![CDATA[0]]></Code>
 		</RowCode>
-		<LatitudeCode Class="CodeValue">
-			<Code><![CDATA[0]]></Code>
-		</LatitudeCode>
-		<LongitudeCode Class="CodeValue">
-			<Code><![CDATA[0]]></Code>
-		</LongitudeCode>
 		<LocationNameCode Class="CodeValue">
 			<Code><![CDATA[""]]></Code>
 		</LocationNameCode>
@@ -254,7 +236,7 @@
 		</Replication>
 		<CollectionType>ARRAY_LIST_BASED</CollectionType>
 		<InEnvironment>true</InEnvironment>
-		<InitialLocationType>AT_ANIMATION_POSITION</InitialLocationType>
+		<InitialLocationType>XYZ</InitialLocationType>
 		<XCode Class="CodeValue">
 			<Code><![CDATA[0]]></Code>
 		</XCode>
@@ -270,12 +252,6 @@
 		<RowCode Class="CodeValue">
 			<Code><![CDATA[0]]></Code>
 		</RowCode>
-		<LatitudeCode Class="CodeValue">
-			<Code><![CDATA[0]]></Code>
-		</LatitudeCode>
-		<LongitudeCode Class="CodeValue">
-			<Code><![CDATA[0]]></Code>
-		</LongitudeCode>
 		<LocationNameCode Class="CodeValue">
 			<Code><![CDATA[""]]></Code>
 		</LocationNameCode>

@@ -69,9 +69,7 @@ f_SetInitialProductionProfile( pop_Logic_Households, f_GetNumberOfDailyTimeSteps
 		<RowsCountCode>100</RowsCountCode>
 		<NeigborhoodType>MOORE</NeigborhoodType>
 		<LayoutType>USER_DEF</LayoutType>
-		<LayoutTypeApplyOnStartup>true</LayoutTypeApplyOnStartup>
 		<NetworkType>USER_DEF</NetworkType>
-		<NetworkTypeApplyOnStartup>true</NetworkTypeApplyOnStartup>
 		<ConnectionsPerAgentCode>2</ConnectionsPerAgentCode>
 		<ConnectionsRangeCode>50</ConnectionsRangeCode>
 		<NeighborLinkFractionCode>0.95</NeighborLinkFractionCode>

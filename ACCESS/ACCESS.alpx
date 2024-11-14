@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <AnyLogicWorkspace splitVersion="1"
                    WorkspaceVersion="1.9"
-                   AnyLogicVersion="8.9.0.202404161238"
-                   AlpVersion="8.9.0">
+                   AnyLogicVersion="8.9.2.202410172110"
+                   AlpVersion="8.9.2">
 	<Model>
 		<Id>1689246676487</Id>
 		<Name><![CDATA[ACCESS]]></Name>
@@ -88,6 +88,7 @@ Each model in ACCESS has a purpose: showing the effect of bottom-up collaboratio
 				</Option>
 			</OptionList>
 		</OptionLists>
+		<Folders/>
 		<ActiveObjectClasses/>
 		<DifferentialEquationsMethod>EULER</DifferentialEquationsMethod>
 		<MixedEquationsMethod>RK45_NEWTON</MixedEquationsMethod>
@@ -210,7 +211,7 @@ Each model in ACCESS has a purpose: showing the effect of bottom-up collaboratio
 		<ClassPathEntry>
 			<ResourceReference>
 				<PackageName>access</PackageName>
-				<ClassName>powsybl_starter-2024.2.0-jar-with-dependencies.jar</ClassName>
+				<ClassName>powsybl_starter-2024.3.1-jar-with-dependencies.jar</ClassName>
 			</ResourceReference>
 			<Imported>true</Imported>
 			<Folder>false</Folder>
